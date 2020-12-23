@@ -9,7 +9,7 @@ export default function ModelList() {
     return (
       <InputGroup>
     <FormControl
-      placeholder="Recipient's username"
+      placeholder="Model"
       aria-label="Recipient's username"
       aria-describedby="basic-addon2"
     />

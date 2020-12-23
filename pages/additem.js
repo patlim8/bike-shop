@@ -30,6 +30,18 @@ export default function AddItem() {
         </h1>
 
         <div>
+
+        <InputGroup className="mb-3">
+    <InputGroup.Prepend>
+      <InputGroup.Text id="basic-addon1">ID</InputGroup.Text>
+    </InputGroup.Prepend>
+    <FormControl
+      placeholder="ID"
+      aria-label="Item name"
+      aria-describedby="basic-addon1"
+    />
+  </InputGroup>
+    
   <InputGroup className="mb-3">
     <InputGroup.Prepend>
       <InputGroup.Text id="basic-addon1">Item</InputGroup.Text>
@@ -51,6 +63,8 @@ export default function AddItem() {
       aria-describedby="basic-addon1"
     />
   </InputGroup>
+
+
 
   <BrandList/>
   <ModelList/>

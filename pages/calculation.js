@@ -9,6 +9,7 @@ import ModelList from '../components/modelList'
 import AvailableList from '../components/availableList'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -30,6 +31,28 @@ export default function Calculation() {
         </h1>
 
         <div>
+        <InputGroup className="mb-3">
+    <InputGroup.Prepend>
+      <InputGroup.Text id="basic-addon1">Order ID</InputGroup.Text>
+    </InputGroup.Prepend>
+    <FormControl
+      placeholder="Item name"
+      aria-label="Item name"
+      aria-describedby="basic-addon1"
+    />
+  </InputGroup>
+
+  <InputGroup className="mb-3">
+    <InputGroup.Prepend>
+      <InputGroup.Text id="basic-addon1">ID</InputGroup.Text>
+    </InputGroup.Prepend>
+    <FormControl
+      placeholder="Item name"
+      aria-label="Item name"
+      aria-describedby="basic-addon1"
+    />
+  </InputGroup>
+
   <InputGroup className="mb-3">
     <InputGroup.Prepend>
       <InputGroup.Text id="basic-addon1">Item</InputGroup.Text>
@@ -66,16 +89,38 @@ export default function Calculation() {
     />
   </InputGroup>
 
-  <InputGroup className="mb-3">
-    <InputGroup.Prepend>
-      <InputGroup.Text id="basic-addon1">initial price</InputGroup.Text>
-    </InputGroup.Prepend>
-    <FormControl
-      placeholder="price"
-      aria-label="Item name"
-      aria-describedby="basic-addon1"
-    />
-  </InputGroup>
+  <div>
+  <Table striped bordered hover size="sm">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td colSpan="2">Larry the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</Table>
+  </div>
+  </div>
 
   <InputGroup className="mb-3">
     <InputGroup.Prepend>
@@ -88,23 +133,26 @@ export default function Calculation() {
     />
   </InputGroup>
 
+  <Form.Group controlId="formBasicCheckbox">
+    <Form.Check type="checkbox" label="Fixing Cost" />
+  </Form.Group>
+
   <InputGroup className="mb-3">
     <InputGroup.Prepend>
-      <InputGroup.Text id="basic-addon1">Limit number</InputGroup.Text>
+      <InputGroup.Text id="basic-addon1">Cost</InputGroup.Text>
     </InputGroup.Prepend>
     <FormControl
-      placeholder="Limit number"
+      placeholder="Cost"
       aria-label="Item name"
       aria-describedby="basic-addon1"
     />
   </InputGroup>
-  </div>
 
       </main>
 
       <Button variant="outline-primary">Scan Barcode</Button>{' '}
   <Button variant="outline-secondary">Delete Item</Button>{' '}
-  <Button>Confirm</Button>{' '}
+  <Button href="/payment">Confirm</Button>{' '}
   <Button>Cancel</Button>{' '}
 
       

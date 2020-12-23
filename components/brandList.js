@@ -9,7 +9,7 @@ export default function BrandList() {
     return (
       <InputGroup>
     <FormControl
-      placeholder="Recipient's username"
+      placeholder="Brands"
       aria-label="Recipient's username"
       aria-describedby="basic-addon2"
     />
