@@ -3,11 +3,11 @@ import styles from '../styles/Home.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../components/buttonBar';
 
-export default function Home() {
+export default function Sale() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Bike Shop</title>
+        <title>Sale</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -16,7 +16,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Bike Shop 
+          Sale 
         </h1>
 
         {/* <p className={styles.description}>
@@ -25,31 +25,15 @@ export default function Home() {
         </p> */}
 
         <div className={styles.grid}>
-          <a href="/inventory" className={styles.card}>
-            <h1>Inventory</h1>
+          <a href="/calculation" className={styles.card}>
+            <h1>Normal Customer</h1>
             </a>
 
-          <a href="/sale" className={styles.card}>
-            <h1>Sale</h1>
+          <a href="/calculation" className={styles.card}>
+            <h1>VIP Customer</h1>
             </a>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h1>Accounts </h1>
-            {/* <p>Discover and deploy boilerplate example Next.js projects.</p> */}
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h1>Notification</h1>
-            {/* <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p> */}
-          </a>
+          
         </div>
       </main>
 
