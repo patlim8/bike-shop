@@ -11,12 +11,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar/>
-      
+      <ButtonBar />
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Bike Shop 
+          Bike Shop
         </h1>
 
         {/* <p className={styles.description}>
@@ -27,28 +26,19 @@ export default function Home() {
         <div className={styles.grid}>
           <a href="/inventory" className={styles.card}>
             <h1>Inventory</h1>
-            </a>
+          </a>
 
           <a href="/sale" className={styles.card}>
             <h1>Sale</h1>
-            </a>
+          </a>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
+          <a href="#" className={styles.card}>
             <h1>Accounts </h1>
-            {/* <p>Discover and deploy boilerplate example Next.js projects.</p> */}
           </a>
 
           <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
+            href="#" className={styles.card}>
             <h1>Notification</h1>
-            {/* <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p> */}
           </a>
         </div>
       </main>

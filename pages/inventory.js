@@ -20,70 +20,70 @@ export default function Inventory() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar/>
-        
-      
+      <ButtonBar />
+
+
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Stock Manangement 
+          Stock Manangement
         </h1>
 
         <div>
-  <InputGroup className="mb-3">
-    <InputGroup.Prepend>
-      <InputGroup.Text id="basic-addon1">Search</InputGroup.Text>
-    </InputGroup.Prepend>
-    <FormControl
-      placeholder="Item name"
-      aria-label="Item name"
-      aria-describedby="basic-addon1"
-    />
-  </InputGroup>
+          <InputGroup className="mb-3">
+            <InputGroup.Prepend>
+              <InputGroup.Text id="basic-addon1">Search</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              placeholder="Item name"
+              aria-label="Item name"
+              aria-describedby="basic-addon1"
+            />
+          </InputGroup>
 
-  <BrandList/>
-  <ModelList/>
-  <AvailableList/>
+          <BrandList />
+          <ModelList />
+          <AvailableList />
 
-  </div>
+        </div>
 
-  <div>
-  <Table striped bordered hover size="sm">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Username</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td colSpan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</Table>
-  </div>
+        <div>
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td colSpan="2">Larry the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
       </main>
 
-      <Button variant="outline-primary" href="/additem">Add Item</Button>{' '}
-  <Button variant="outline-secondary">Scan Barcode</Button>{' '}
+      <Button variant="outline-primary" href="/additem" size="sm">Add Item</Button>{' '}
+      <Button variant="outline-secondary" size="sm">Scan Barcode</Button>{' '}
 
-      
+
     </div>
   )
 }
