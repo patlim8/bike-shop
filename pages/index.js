@@ -25,20 +25,20 @@ export default function Home() {
 
         <div className={styles.grid}>
           <a href="/inventory" className={styles.card}>
-            <h1>Inventory</h1>
+            <h1>สินค้า</h1>
           </a>
 
           <a href="/sale" className={styles.card}>
-            <h1>Sale</h1>
+            <h1>ขาย</h1>
           </a>
 
           <a href="#" className={styles.card}>
-            <h1>Accounts </h1>
+            <h1>บัญชี </h1>
           </a>
 
           <a
             href="#" className={styles.card}>
-            <h1>Notification</h1>
+            <h1>แจ้งเตือน</h1>
           </a>
         </div>
       </main>

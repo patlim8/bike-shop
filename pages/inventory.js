@@ -32,10 +32,10 @@ export default function Inventory() {
         <div>
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Search</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">ค้นหา</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              placeholder="Item name"
+              placeholder="ชื่อสินค้า"
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
@@ -80,8 +80,8 @@ export default function Inventory() {
         </div>
       </main>
 
-      <Button variant="outline-primary" href="/additem" size="sm">Add Item</Button>{' '}
-      <Button variant="outline-secondary" size="sm">Scan Barcode</Button>{' '}
+      <Button variant="outline-primary" href="/additem" size="sm">เพิ่มสินค้า</Button>{' '}
+      <Button variant="outline-secondary" size="sm">สแกนบาร์โค้ด</Button>{' '}
 
 
     </div>

@@ -9,7 +9,7 @@ export default function AvailableList() {
     return (
       <InputGroup>
     <FormControl
-      placeholder="Recipient's username"
+      placeholder="รุ่นที่ใช้ได้"
       aria-label="Recipient's username"
       aria-describedby="basic-addon2"
     />

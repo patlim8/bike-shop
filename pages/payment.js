@@ -96,8 +96,8 @@ export default function Payment() {
 
       </main>
 
-  <Button>Confirm</Button>{' '}
-  <Button>Cancel</Button>{' '}
+  <Button>ยืนยัน</Button>{' '}
+  <Button>ยกเลิก</Button>{' '}
 
       
     </div>

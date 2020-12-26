@@ -6,8 +6,6 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import BrandList from '../components/brandList';
 import ModelList from '../components/modelList'
-import AvailableList from '../components/availableList'
-import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
@@ -44,10 +42,10 @@ export default function AddItem() {
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Item</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              placeholder="Item name"
+              placeholder="ชื่อสินค้า"
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
@@ -55,10 +53,10 @@ export default function AddItem() {
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Item Code</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              placeholder="Item Code"
+              placeholder="รหัสสินค้า"
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
@@ -82,10 +80,10 @@ export default function AddItem() {
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">initial price</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">ราคาซื้อ</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              placeholder="price"
+              placeholder="ราคาซื้อ"
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
@@ -93,10 +91,10 @@ export default function AddItem() {
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Amount</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              placeholder="Amount"
+              placeholder="จำนวน"
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
@@ -104,10 +102,10 @@ export default function AddItem() {
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Limit number</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">จำนวนขั้นต่ำ</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              placeholder="Limit number"
+              placeholder="จำนวนขั้นต่ำ"
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
@@ -116,10 +114,10 @@ export default function AddItem() {
 
       </main>
 
-      <Button variant="outline-primary">Scan Barcode</Button>{' '}
-      <Button variant="outline-secondary">Delete Item</Button>{' '}
-      <Button>Confirm</Button>{' '}
-      <Button>Cancel</Button>{' '}
+      <Button variant="outline-primary">สแกนบาร์โค้ด</Button>{' '}
+      <Button variant="outline-secondary">ลบสินค้า</Button>{' '}
+      <Button>ยืนยัน</Button>{' '}
+      <Button>กลับ</Button>{' '}
 
 
     </div>

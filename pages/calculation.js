@@ -55,10 +55,10 @@ export default function Calculation() {
 
   <InputGroup className="mb-3">
     <InputGroup.Prepend>
-      <InputGroup.Text id="basic-addon1">Item</InputGroup.Text>
+      <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
     </InputGroup.Prepend>
     <FormControl
-      placeholder="Item name"
+      placeholder="ชื่อสินค้า"
       aria-label="Item name"
       aria-describedby="basic-addon1"
     />
@@ -66,10 +66,10 @@ export default function Calculation() {
 
   <InputGroup className="mb-3">
     <InputGroup.Prepend>
-      <InputGroup.Text id="basic-addon1">Item Code</InputGroup.Text>
+      <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
     </InputGroup.Prepend>
     <FormControl
-      placeholder="Item Code"
+      placeholder="รหัสสินค้า"
       aria-label="Item name"
       aria-describedby="basic-addon1"
     />
@@ -124,25 +124,25 @@ export default function Calculation() {
 
   <InputGroup className="mb-3">
     <InputGroup.Prepend>
-      <InputGroup.Text id="basic-addon1">Amount</InputGroup.Text>
+      <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
     </InputGroup.Prepend>
     <FormControl
-      placeholder="Amount"
+      placeholder="จำนวน"
       aria-label="Item name"
       aria-describedby="basic-addon1"
     />
   </InputGroup>
 
   <Form.Group controlId="formBasicCheckbox">
-    <Form.Check type="checkbox" label="Fixing Cost" />
+    <Form.Check type="checkbox" label="ค่าถอดประกอบ" />
   </Form.Group>
 
   <InputGroup className="mb-3">
     <InputGroup.Prepend>
-      <InputGroup.Text id="basic-addon1">Cost</InputGroup.Text>
+      <InputGroup.Text id="basic-addon1">ราคา</InputGroup.Text>
     </InputGroup.Prepend>
     <FormControl
-      placeholder="Cost"
+      placeholder="ราคา"
       aria-label="Item name"
       aria-describedby="basic-addon1"
     />
@@ -150,10 +150,10 @@ export default function Calculation() {
 
       </main>
 
-      <Button variant="outline-primary">Scan Barcode</Button>{' '}
-  <Button variant="outline-secondary">Delete Item</Button>{' '}
-  <Button href="/payment">Confirm</Button>{' '}
-  <Button>Cancel</Button>{' '}
+      <Button variant="outline-primary">สแกนบาร์โค้ด</Button>{' '}
+  {/* <Button variant="outline-secondary">Delete Item</Button>{' '} */}
+  <Button href="/payment">จ่าย</Button>{' '}
+  <Button>ยกเลิก</Button>{' '}
 
       
     </div>

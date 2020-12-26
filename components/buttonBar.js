@@ -16,16 +16,16 @@ export default function ButtonBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="/index">Home</Nav.Link>
-            <Nav.Link href="/inventory">Inventory</Nav.Link>
-            <Nav.Link href="/sale">Sale</Nav.Link>
-            <NavDropdown title="Account" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/totalSale">Total Sale</NavDropdown.Item>
-              <NavDropdown.Item href="/balance">Account Balance</NavDropdown.Item>
+            <Nav.Link href="/">หน้าแรก</Nav.Link>
+            <Nav.Link href="/inventory">สินค้า</Nav.Link>
+            <Nav.Link href="/sale">ขาย</Nav.Link>
+            <NavDropdown title="บัญชี" id="basic-nav-dropdown">
+              <NavDropdown.Item href="/totalSale">บัญชีรายการขาย</NavDropdown.Item>
+              <NavDropdown.Item href="/balance">บัญชี-Balance</NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Notification" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/needItem">Need Item</NavDropdown.Item>
-              <NavDropdown.Item href="/stock">Stock</NavDropdown.Item>
+            <NavDropdown title="การแจ้งเตือน" id="basic-nav-dropdown">
+              <NavDropdown.Item href="/needItem">สินค้าที่ต้องเพิ่ม</NavDropdown.Item>
+              <NavDropdown.Item href="/stock">สินค้าค้างสต็อค</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

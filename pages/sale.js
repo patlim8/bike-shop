@@ -26,11 +26,11 @@ export default function Sale() {
 
         <div className={styles.grid}>
           <a href="/calculation" className={styles.card}>
-            <h1>Normal Customer</h1>
+            <h1>ลูกค้าหน้าร้าน</h1>
             </a>
 
           <a href="/calculation" className={styles.card}>
-            <h1>VIP Customer</h1>
+            <h1>ลูกค้าช่าง</h1>
             </a>
 
           

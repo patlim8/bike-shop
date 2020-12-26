@@ -32,7 +32,7 @@ export default function TotalSale() {
 
         <InputGroup className="mb-3">
           <InputGroup.Prepend>
-            <InputGroup.Text id="basic-addon1">Current Month</InputGroup.Text>
+            <InputGroup.Text id="basic-addon1">เดือน</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
             placeholder=""
