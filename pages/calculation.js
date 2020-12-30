@@ -152,8 +152,8 @@ export default function Calculation() {
 
       <Button variant="outline-primary">สแกนบาร์โค้ด</Button>{' '}
   {/* <Button variant="outline-secondary">Delete Item</Button>{' '} */}
-  <Button href="/payment">จ่าย</Button>{' '}
-  <Button>ยกเลิก</Button>{' '}
+      <Button href="/payment">จ่าย</Button>{' '}
+      <Button>ยกเลิก</Button>{' '}
 
       
     </div>
