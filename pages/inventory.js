@@ -6,9 +6,10 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import BrandList from '../components/brandList';
 import ModelList from '../components/modelList'
-import AvailableList from '../components/availableList'
+import AvailableList from '../components/availableList';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -28,6 +29,8 @@ export default function Inventory() {
         <h1 className={styles.title}>
           Stock Manangement
         </h1>
+
+        <br></br><br></br>
 
         <div>
           <InputGroup className="mb-3">
@@ -80,9 +83,10 @@ export default function Inventory() {
         </div>
       </main>
 
-      <Button variant="outline-primary" href="/additem" size="sm">เพิ่มสินค้า</Button>{' '}
-      <Button variant="outline-secondary" size="sm">สแกนบาร์โค้ด</Button>{' '}
-
+      <ButtonGroup horizontal>
+        <Button variant="primary" href="/additem" size="sm">เพิ่มสินค้า</Button>{' '}
+        <Button variant="secondary" size="sm">สแกนบาร์โค้ด</Button>{' '}
+      </ButtonGroup>
 
     </div>
   )

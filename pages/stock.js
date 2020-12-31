@@ -25,6 +25,7 @@ export default function Stock() {
           Notification - สินค้าค้างสต็อค
         </h1>
 
+        <br></br><br></br>
 
         <div>
           <Table striped bordered hover size="sm">
@@ -57,12 +58,13 @@ export default function Stock() {
             </tbody>
           </Table>
         </div>
-
-        <ButtonGroup horizontal>
-          <Button variant="outline-primary">Save as Excel</Button>{' '}
-          <Button variant="outline-secondary">Print</Button>{' '}
-        </ButtonGroup>
       </main>
+
+      <ButtonGroup horizontal>
+        <Button variant="success">Save as Excel</Button>{' '}
+        <Button variant="secondary">Print</Button>{' '}
+      </ButtonGroup>
+
     </div>
   )
 }

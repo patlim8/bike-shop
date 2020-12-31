@@ -4,12 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../components/buttonBar';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import BrandList from '../components/brandList';
-import ModelList from '../components/modelList'
-import AvailableList from '../components/availableList'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -96,9 +94,10 @@ export default function Payment() {
 
       </main>
 
-      <Button href="/money_change">ยืนยัน</Button>{' '}
-      <Button>ยกเลิก</Button>{' '}
-
+      <ButtonGroup horizontal>
+        <Button href="/money_change">ยืนยัน</Button>{' '}
+        <Button href="/cancel_payment">ยกเลิก</Button>{' '}
+      </ButtonGroup>
 
     </div>
   )

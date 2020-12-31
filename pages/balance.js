@@ -24,8 +24,9 @@ export default function Balance() {
         <h1 className={styles.title}>
           Account - Balance
         </h1>
-
-
+        
+        <br></br><br></br>
+        
         <div>
           <Table striped bordered hover size="sm">
             <thead>
@@ -60,8 +61,8 @@ export default function Balance() {
       </main>
 
       <ButtonGroup horizontal>
-        <Button variant="outline-primary">Save as Excel</Button>{' '}
-        <Button variant="outline-secondary">Print</Button>{' '}
+        <Button variant="success">Save as Excel</Button>{' '}
+        <Button variant="secondary">Print</Button>{' '}
       </ButtonGroup>
 
 

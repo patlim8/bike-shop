@@ -13,7 +13,7 @@ export default function Home() {
 
       <ButtonBar />
 
-      <main className={styles.main}>
+      <main className={styles.main2}>
         <h1 className={styles.title}>
           Bike Shop
         </h1>

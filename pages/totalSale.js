@@ -30,6 +30,8 @@ export default function TotalSale() {
           Account - Total Sale
         </h1>
 
+        <br></br><br></br>
+
         <InputGroup className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">เดือน</InputGroup.Text>
@@ -75,8 +77,8 @@ export default function TotalSale() {
       </main>
 
       <ButtonGroup horizontal>
-        <Button variant="outline-primary">Save as Excel</Button>{' '}
-        <Button variant="outline-secondary">Print</Button>{' '}
+        <Button variant="success">Save as Excel</Button>{' '}
+        <Button variant="secondary">Print</Button>{' '}
       </ButtonGroup>
 
 
