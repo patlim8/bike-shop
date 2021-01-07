@@ -7,6 +7,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import BrandList from '../components/brandList';
 import ModelList from '../components/modelList'
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -114,12 +115,12 @@ export default function AddItem() {
 
       </main>
 
-      <Button variant="outline-primary">สแกนบาร์โค้ด</Button>{' '}
-      <Button variant="outline-secondary">ลบสินค้า</Button>{' '}
-      <Button>ยืนยัน</Button>{' '}
-      <Button>กลับ</Button>{' '}
-
-
+      <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
+      <Button variant="danger">ลบสินค้า</Button>{' '}
+      <ButtonGroup>
+        <Button>ยืนยัน</Button>{' '}
+        <Button variant="dark">กลับ</Button>{' '}
+      </ButtonGroup>
     </div>
   )
 }

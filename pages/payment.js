@@ -96,7 +96,7 @@ export default function Payment() {
 
       <ButtonGroup horizontal>
         <Button href="/money_change">ยืนยัน</Button>{' '}
-        <Button href="/cancel_payment">ยกเลิก</Button>{' '}
+        <Button variant="danger" href="/cancel_payment">ยกเลิก</Button>{' '}
       </ButtonGroup>
 
     </div>
