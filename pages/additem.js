@@ -8,12 +8,41 @@ import BrandList from '../components/brandList';
 import ModelList from '../components/modelList'
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { connectToDatabase } from "../util/mongodb"
+import { useForm } from "react-hook-form";
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function AddItem() {
+export default function AddItem({ item }) {
+
+  const { register, handleSubmit, watch, errors } = useForm();
+  const onSubmit = (data) => {
+    console.log(data)
+
+    fetch('/api/item', {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert("Response from server "+data.message)
+      });
+
+  }
+
   return (
-    <div className={styles.container}>
+    // <div className={styles.container}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>Add/Edit</title>
         <link rel="icon" href="/favicon.ico" />
@@ -28,9 +57,9 @@ export default function AddItem() {
           Add/Edit
         </h1>
 
-        <div>
+        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
 
-          <InputGroup className="mb-3">
+          {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ID</InputGroup.Text>
             </InputGroup.Prepend>
@@ -39,9 +68,9 @@ export default function AddItem() {
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
-          </InputGroup>
+          </InputGroup> */}
 
-          <InputGroup className="mb-3">
+          {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -50,9 +79,11 @@ export default function AddItem() {
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
-          </InputGroup>
+          </InputGroup> */}
 
-          <InputGroup className="mb-3">
+          ชื่อสินค้า: <input type="text" name="product_name" ref={register({ required: true })} /><br/>
+
+          {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -61,11 +92,13 @@ export default function AddItem() {
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
-          </InputGroup>
+          </InputGroup> */}
 
-
+          รหัสสินค้า: <input type="text" name="code" ref={register} /><br/>
 
           <BrandList />
+
+          
           <ModelList />
 
           <InputGroup className="mb-3">
@@ -111,16 +144,34 @@ export default function AddItem() {
               aria-describedby="basic-addon1"
             />
           </InputGroup>
-        </div>
+          
+          
 
       </main>
 
       <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
       <Button variant="danger">ลบสินค้า</Button>{' '}
       <ButtonGroup>
-        <Button>ยืนยัน</Button>{' '}
+        <Button type="submit">ยืนยัน</Button>{' '}
         <Button variant="dark">กลับ</Button>{' '}
       </ButtonGroup>
-    </div>
+    </form>
   )
+}
+
+export async function getServerSideProps() {
+  const { db } = await connectToDatabase();
+
+  const item = await db
+    .collection("item")
+    .find({})
+    .sort({})
+    .limit(20)
+    .toArray();
+
+  return {
+    props: {
+      item: JSON.parse(JSON.stringify(item)),
+    },
+  };
 }
