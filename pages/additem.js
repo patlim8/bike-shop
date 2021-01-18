@@ -19,9 +19,10 @@ export default function AddItem({ item }) {
   const onSubmit = (data) => {
     console.log(data)
 
+
     document.getElementById('buttons').addEventListener('click', function (evt) {
       var target = evt.target;
-      if (target.name === 'add_item') {
+      if (target.id === 'add_item') {
         fetch('/api/item', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
@@ -40,7 +41,7 @@ export default function AddItem({ item }) {
             console.log(data);
             alert("Response from server " + data.message)
           });
-      } else if (target.name === 'del_item') {
+      } else if (target.id === 'del_item') {
         fetch('/api/item', {
           method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
@@ -85,7 +86,6 @@ export default function AddItem({ item }) {
   }
 
   return (
-    // <div className={styles.container}>
     <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>Add/Edit</title>
@@ -195,8 +195,8 @@ export default function AddItem({ item }) {
 
       <div id ="buttons">
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
-        <Button variant="danger" type="submit" value="DELETE" name="del_item">ลบสินค้า</Button>{' '}
-        <Button type="submit" value="POST" name="add_item">ยืนยัน</Button>{' '}
+        <Button variant="danger" type="submit" value="DELETE" id="del_item">ลบสินค้า</Button>{' '}
+        <Button type="submit" value="POST" id="add_item">ยืนยัน</Button>{' '}
         <Button variant="dark">กลับ</Button>{' '}
       </div>
     </form>
