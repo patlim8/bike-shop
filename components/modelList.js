@@ -8,24 +8,18 @@ import FormControl from 'react-bootstrap/FormControl';
 export default function ModelList() {
     return (
       <InputGroup>
-    <FormControl
-      placeholder="รุ่นสินค้า"
-      aria-label="Recipient's username"
-      aria-describedby="basic-addon2"
-    />
-
-    <DropdownButton
-      as={InputGroup.Append}
-      variant="outline-secondary"
-      title="Dropdown"
-      id="input-group-dropdown-2"
-    >
-      <Dropdown.Item href="#">Action</Dropdown.Item>
-      <Dropdown.Item href="#">Another action</Dropdown.Item>
-      <Dropdown.Item href="#">Something else here</Dropdown.Item>
-      <Dropdown.Divider />
-      <Dropdown.Item href="#">Separated link</Dropdown.Item>
-    </DropdownButton>
-  </InputGroup>
+      รุ่นสินค้า: <DropdownButton
+        as={InputGroup.Append}
+        variant="outline-secondary"
+        title="Dropdown"
+        id="input-group-dropdown-2"
+      >
+        <Dropdown.Item href="#">Action</Dropdown.Item>
+        <Dropdown.Item href="#">Another action</Dropdown.Item>
+        <Dropdown.Item href="#">Something else here</Dropdown.Item>
+        <Dropdown.Divider />
+        <Dropdown.Item href="#">Separated link</Dropdown.Item>
+      </DropdownButton>
+    </InputGroup>
     );
 }

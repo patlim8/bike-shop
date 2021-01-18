@@ -6,6 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import BrandList from '../components/brandList';
 import ModelList from '../components/modelList'
+import AvailableList from '../components/availableList'
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { connectToDatabase } from "../util/mongodb"
@@ -81,7 +82,19 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
 
-          ชื่อสินค้า: <input type="text" name="product_name" ref={register({ required: true })} /><br/>
+          {/* ชื่อสินค้า: <input type="text" name="product_name" ref={register({ required: true })} /><br/> */}
+
+          <InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              placeholder="ชื่อสินค้า"
+              aria-label="Item name"
+              aria-describedby="basic-addon1"
+              type="text" name="product_name" ref={register({ required: true })}
+            />
+          </InputGroup>
 
           {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -94,14 +107,29 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
 
-          รหัสสินค้า: <input type="text" name="code" ref={register} /><br/>
+          {/* รหัสสินค้า: <input type="text" name="code" ref={register} /><br/> */}
+          
+          <InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              placeholder="รหัสสินค้า"
+              aria-label="Item name"
+              aria-describedby="basic-addon1"
+              type="text" name="code" ref={register({ required: true })}
+            />
+          </InputGroup>
 
-          <BrandList />
+          <BrandList type="text" name="brand" ref={register({ required: true })}/>
 
           
-          <ModelList />
+          <ModelList type="text" name="model" ref={register({ required: true })}/>
 
-          <InputGroup className="mb-3">
+          <AvailableList type="text" name="avi_model" ref={register({ required: true })} />
+
+
+          <InputGroup>
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
             </InputGroup.Prepend>
@@ -109,6 +137,7 @@ export default function AddItem({ item }) {
               placeholder="Barcode ID"
               aria-label="Item name"
               aria-describedby="basic-addon1"
+              type="text" name="barcode_id" ref={register({ required: true })}
             />
           </InputGroup>
 
@@ -120,6 +149,7 @@ export default function AddItem({ item }) {
               placeholder="ราคาซื้อ"
               aria-label="Item name"
               aria-describedby="basic-addon1"
+              type="double" name="purchase_price" ref={register({ required: true })}
             />
           </InputGroup>
 
@@ -131,6 +161,7 @@ export default function AddItem({ item }) {
               placeholder="จำนวน"
               aria-label="Item name"
               aria-describedby="basic-addon1"
+              type="int32" name="amount" ref={register({ required: true })}
             />
           </InputGroup>
 
@@ -142,6 +173,7 @@ export default function AddItem({ item }) {
               placeholder="จำนวนขั้นต่ำ"
               aria-label="Item name"
               aria-describedby="basic-addon1"
+              type="int32" name="limit_amount" ref={register({ required: true })}
             />
           </InputGroup>
           

@@ -8,13 +8,7 @@ import FormControl from 'react-bootstrap/FormControl';
 export default function BrandList() {
     return (
       <InputGroup>
-    <FormControl
-      placeholder="ยี่ห้อสินค้า"
-      aria-label="Recipient's username"
-      aria-describedby="basic-addon2"
-    />
-
-    <DropdownButton
+    ยี่ห้อสินค้า: <DropdownButton
       as={InputGroup.Append}
       variant="outline-secondary"
       title="Dropdown"

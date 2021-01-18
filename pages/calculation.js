@@ -10,12 +10,39 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { useForm } from "react-hook-form";
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Calculation() {
+export default function Calculation({order}) {
+
+  const { register, handleSubmit, watch, errors } = useForm();
+  const onSubmit = (data) => {
+    console.log(data)
+
+    fetch('/api/order', {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert("Response from server "+data.message)
+      });
+
+  }
+
   return (
-    <div className={styles.container}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>Calculation</title>
         <link rel="icon" href="/favicon.ico" />
@@ -30,7 +57,12 @@ export default function Calculation() {
           Sale - Calculation
         </h1>
 
+        
+
         <div>
+        
+
+        
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">Order ID</InputGroup.Text>
@@ -89,40 +121,7 @@ export default function Calculation() {
             />
           </InputGroup>
 
-          <div>
-            <Table striped bordered hover size="sm">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Username</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td colSpan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
-        </div>
-
-        <InputGroup className="mb-3">
+          <InputGroup className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
           </InputGroup.Prepend>
@@ -132,6 +131,55 @@ export default function Calculation() {
             aria-describedby="basic-addon1"
           />
         </InputGroup>
+
+          <button>confirm</button>
+          
+
+          
+          <div>
+            <Table striped bordered hover size="sm">
+              <thead>
+                <tr>
+                  <th>id</th>
+                  <th>ชื่อสินค้า</th>
+                  <th>รหัสสินค้า</th>
+                  <th>ยี่ห้อสินค้า</th>
+                  <th>รุ่นสินค้า</th>
+                  <th>จำนวน</th>
+                  <th>ราคา</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td></td>
+                  <td></td>
+                  <td>@</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td></td>
+                  <td></td>
+                  <td>@</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td colSpan="2">Larry the Bird</td>
+                  <td>@twitter</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </Table>
+          </div>
+          
+        </div>
+
+        
 
         <Form.Group controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="ค่าถอดประกอบ" />
@@ -152,11 +200,11 @@ export default function Calculation() {
 
       <ButtonGroup horizontal>
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
-        <Button href="/payment">จ่าย</Button>{' '}
+        <Button href="/payment" type="submit">จ่าย</Button>{' '}
         <Button variant="danger" href="/sale">ย้อนกลับ</Button>{' '}
       </ButtonGroup>
 
 
-    </div>
+    </form>
   )
 }
