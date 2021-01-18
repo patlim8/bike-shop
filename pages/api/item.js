@@ -20,6 +20,7 @@ export default async (req, res) => {
     // let metacritic = data.metacritic;
 
     let { product_name, code, brand, model, avi_model, purchase_price, amount, limit_amount, barcode_id, date } = data;
+    //let delete_product = document.getElementsByName('delete_item');
 
     // console.log("Received Debit:", balance_debit)
     // console.log("Received Date:", balance_date)
@@ -44,5 +45,13 @@ export default async (req, res) => {
       ) // if update non-existing record, insert instead.
 
     res.json({ message: 'OK' });
+  } else if (req.method === 'DELETE') {
+    let data = req.body
+    let { product_name } = data;
+    const { db } = await connectToDatabase();
+    let doc = await db 
+      .collection('item')
+      .deleteOne({ product_name: product_name})
+    res.json({delete: true, message: 'Delete data', data: {}})
   }
 }

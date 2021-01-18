@@ -19,24 +19,68 @@ export default function AddItem({ item }) {
   const onSubmit = (data) => {
     console.log(data)
 
-    fetch('/api/item', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        alert("Response from server "+data.message)
-      });
+    document.getElementById('buttons').addEventListener('click', function (evt) {
+      var target = evt.target;
+      if (target.name === 'add_item') {
+        fetch('/api/item', {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            alert("Response from server " + data.message)
+          });
+      } else if (target.name === 'del_item') {
+        fetch('/api/item', {
+          method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            alert("Response from server " + data.message)
+          });
+      }
+    }, false);
+    //if ()
+
+      // fetch('/api/item', {
+      //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      //   mode: 'cors', // no-cors, *cors, same-origin
+      //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      //   credentials: 'same-origin', // include, *same-origin, omit
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //     // 'Content-Type': 'application/x-www-form-urlencoded',
+      //   },
+      //   redirect: 'follow', // manual, *follow, error
+      //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      //   body: JSON.stringify(data) // body data type must match "Content-Type" header
+      // })
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     console.log(data);
+      //     alert("Response from server " + data.message)
+      //   });
 
   }
 
@@ -59,7 +103,7 @@ export default function AddItem({ item }) {
 
         {/* <form onSubmit={handleSubmit(onSubmit)}> */}
 
-          {/* <InputGroup className="mb-3">
+        {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ID</InputGroup.Text>
             </InputGroup.Prepend>
@@ -70,7 +114,7 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
 
-          {/* <InputGroup className="mb-3">
+        {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -81,9 +125,9 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
 
-          ชื่อสินค้า: <input type="text" name="product_name" ref={register({ required: true })} /><br/>
+          ชื่อสินค้า: <input type="text" name="product_name" ref={register({ required: true })} /><br />
 
-          {/* <InputGroup className="mb-3">
+        {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -94,67 +138,67 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
 
-          รหัสสินค้า: <input type="text" name="code" ref={register} /><br/>
+          รหัสสินค้า: <input type="text" name="code" ref={register} /><br />
 
-          <BrandList />
+        <BrandList />
 
-          
-          <ModelList />
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="Barcode ID"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-            />
-          </InputGroup>
+        <ModelList />
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">ราคาซื้อ</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="ราคาซื้อ"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-            />
-          </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="Barcode ID"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+          />
+        </InputGroup>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="จำนวน"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-            />
-          </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">ราคาซื้อ</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="ราคาซื้อ"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+          />
+        </InputGroup>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">จำนวนขั้นต่ำ</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="จำนวนขั้นต่ำ"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-            />
-          </InputGroup>
-          
-          
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="จำนวน"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+          />
+        </InputGroup>
+
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">จำนวนขั้นต่ำ</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="จำนวนขั้นต่ำ"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+          />
+        </InputGroup>
+
+
 
       </main>
 
-      <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
-      <Button variant="danger">ลบสินค้า</Button>{' '}
-      <ButtonGroup>
-        <Button type="submit">ยืนยัน</Button>{' '}
+      <div id ="buttons">
+        <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
+        <Button variant="danger" type="submit" value="DELETE" name="del_item">ลบสินค้า</Button>{' '}
+        <Button type="submit" value="POST" name="add_item">ยืนยัน</Button>{' '}
         <Button variant="dark">กลับ</Button>{' '}
-      </ButtonGroup>
+      </div>
     </form>
   )
 }
