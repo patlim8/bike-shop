@@ -16,9 +16,9 @@ export default function Home({ balance }) {
     console.log(data)
 
     fetch('/api/balance', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      cache: 'no-cache', // *defsault, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, *same-origin, omit
       headers: {
         'Content-Type': 'application/json'
@@ -47,13 +47,9 @@ export default function Home({ balance }) {
       <ButtonBar />
 
       <main className={styles.main2}>
-        <b>Insert Balance</b>
-
+        <b>Delete Balance</b>
         <form onSubmit={handleSubmit(onSubmit)}>
-          Name: <input type="text" name="balance_name" ref={register({ required: true })} /><br/>
-          Debit: <input type="number" name="balance_debit" ref={register({ required: true })} /><br/>
-          Crebit: <input type="number" name="balance_crebit" ref={register({ required: true })} /><br/>
-          Date: <input type="date" name="balance_date" ref={register({ required: true })}/><br/>
+          Name: <input type="date" name="balance_date" ref={register({ required: true })} /><br/>
           <input type="submit" />
         </form>
       </main>

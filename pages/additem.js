@@ -22,24 +22,69 @@ export default function AddItem({ item }) {
   const onSubmit = (data) => {
     console.log(data)
 
-    fetch('/api/item', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        alert("Response from server "+data.message)
-      });
+
+    document.getElementById('buttons').addEventListener('click', function (evt) {
+      var target = evt.target;
+      if (target.id === 'add_item') {
+        fetch('/api/item', {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            alert("Response from server " + data.message)
+          });
+      } else if (target.id === 'del_item') {
+        fetch('/api/item', {
+          method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            alert("Response from server " + data.message)
+          });
+      }
+    }, false);
+    //if ()
+
+      // fetch('/api/item', {
+      //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      //   mode: 'cors', // no-cors, *cors, same-origin
+      //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      //   credentials: 'same-origin', // include, *same-origin, omit
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //     // 'Content-Type': 'application/x-www-form-urlencoded',
+      //   },
+      //   redirect: 'follow', // manual, *follow, error
+      //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      //   body: JSON.stringify(data) // body data type must match "Content-Type" header
+      // })
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     console.log(data);
+      //     alert("Response from server " + data.message)
+      //   });
 
   }
   const formatGroupLabel = data => (
@@ -52,7 +97,6 @@ export default function AddItem({ item }) {
   
 
   return (
-    // <div className={styles.container}>
     <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>Add/Edit</title>
@@ -70,7 +114,7 @@ export default function AddItem({ item }) {
 
         {/* <form onSubmit={handleSubmit(onSubmit)}> */}
 
-          {/* <InputGroup className="mb-3">
+        {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ID</InputGroup.Text>
             </InputGroup.Prepend>
@@ -81,7 +125,7 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
 
-          {/* <InputGroup className="mb-3">
+        {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -106,7 +150,7 @@ export default function AddItem({ item }) {
             />
           </InputGroup>
 
-          {/* <InputGroup className="mb-3">
+        {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -245,12 +289,12 @@ export default function AddItem({ item }) {
 
       </main>
 
-      <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
-      <Button variant="danger">ลบสินค้า</Button>{' '}
-      <ButtonGroup>
-        <Button type="submit">ยืนยัน</Button>{' '}
+      <div id ="buttons">
+        <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
+        <Button variant="danger" type="submit" value="DELETE" id="del_item">ลบสินค้า</Button>{' '}
+        <Button type="submit" value="POST" id="add_item">ยืนยัน</Button>{' '}
         <Button variant="dark">กลับ</Button>{' '}
-      </ButtonGroup>
+      </div>
     </form>
   )
 }
