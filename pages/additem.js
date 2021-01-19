@@ -10,13 +10,15 @@ import AvailableList from '../components/availableList'
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { connectToDatabase } from "../util/mongodb"
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import Select from 'react-select';
+import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../components/data';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
 export default function AddItem({ item }) {
 
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, control, watch, errors } = useForm();
   const onSubmit = (data) => {
     console.log(data)
 
@@ -40,6 +42,14 @@ export default function AddItem({ item }) {
       });
 
   }
+  const formatGroupLabel = data => (
+    <div style={groupStyles}>
+      <span>{data.label}</span>
+      <span style={groupBadgeStyles}>{data.options.length}</span>
+    </div>
+  );
+
+  
 
   return (
     // <div className={styles.container}>
@@ -117,16 +127,70 @@ export default function AddItem({ item }) {
               placeholder="รหัสสินค้า"
               aria-label="Item name"
               aria-describedby="basic-addon1"
-              type="text" name="code" ref={register({ required: true })}
+              type="text" name="code" ref={register}
             />
           </InputGroup>
 
-          <BrandList type="text" name="brand" ref={register({ required: true })}/>
+          {/* <InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text id="basic-addon1">ยี่ห้อสินค้า</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              placeholder="ยี่ห้อ"
+              aria-label="Item name"
+              aria-describedby="basic-addon1"
+              type="text" name="brand" ref={register({ required: true })}
+            />
+          </InputGroup> */}
+          ยี่ห้อสินค้า: <select name="brand" ref={register}>
+        <option value="female">female</option>
+        <option value="male">male</option>
+        <option value="other">other</option>
+        </select>
 
+          {/* <div>
+              ยี่ห้อสินค้า: 
+              <Select
+                options={groupedOptions}
+                formatGroupLabel={formatGroupLabel}
+                name="brand" ref={register({ required: true })}
+            />
+            </div> */}
           
+          รุ่นสินค้า: <select name="model" ref={register}>
+        <option value="female">female</option>
+        <option value="male">male</option>
+        <option value="other">other</option>
+        </select>
+
+        {/* รุ่นที่ใช้ได้: <Select
+            name="avi_model"
+            components={animatedComponents}
+            isMulti
+            options={options}
+            inputRef={register} /> */}
+
+<Controller
+    name="avi_model"
+    type="select"
+    control={control}
+    
+
+    render={({ onChange, onBlur, value }) => (
+        <Select
+             onChange={onChange}
+             onBlur={onBlur}
+             value={value}  // this is what you need to do
+             isMulti
+             options={options}
+             ref={register}
+        />
+    )}
+/> 
+{/*           
           <ModelList type="text" name="model" ref={register({ required: true })}/>
 
-          <AvailableList type="text" name="avi_model" ref={register({ required: true })} />
+          <AvailableList type="text" name="avi_model" ref={register({ required: true })} /> */}
 
 
           <InputGroup>
@@ -137,7 +201,7 @@ export default function AddItem({ item }) {
               placeholder="Barcode ID"
               aria-label="Item name"
               aria-describedby="basic-addon1"
-              type="text" name="barcode_id" ref={register({ required: true })}
+              type="text" name="barcode_id" ref={register}
             />
           </InputGroup>
 
@@ -149,7 +213,7 @@ export default function AddItem({ item }) {
               placeholder="ราคาซื้อ"
               aria-label="Item name"
               aria-describedby="basic-addon1"
-              type="double" name="purchase_price" ref={register({ required: true })}
+              type="double" name="purchase_price" ref={register}
             />
           </InputGroup>
 
@@ -161,7 +225,7 @@ export default function AddItem({ item }) {
               placeholder="จำนวน"
               aria-label="Item name"
               aria-describedby="basic-addon1"
-              type="int32" name="amount" ref={register({ required: true })}
+              type="int32" name="amount" ref={register}
             />
           </InputGroup>
 
@@ -173,7 +237,7 @@ export default function AddItem({ item }) {
               placeholder="จำนวนขั้นต่ำ"
               aria-label="Item name"
               aria-describedby="basic-addon1"
-              type="int32" name="limit_amount" ref={register({ required: true })}
+              type="int32" name="limit_amount" ref={register}
             />
           </InputGroup>
           
