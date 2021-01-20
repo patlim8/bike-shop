@@ -19,72 +19,137 @@ import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedC
 export default function AddItem({ item }) {
 
   const { register, handleSubmit, control, watch, errors } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = (data, e) => {
     console.log(data)
 
+    const submitterId = e.nativeEvent.submitter.id;
+    if (submitterId === 'add_item') {
+      fetch('/api/item', {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
+    } else if (submitterId == 'update_item') {
+      fetch('/api/item', {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
+    } else if (submitterId === 'del_item') {
+      fetch('/api/item', {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
+    }
 
-    document.getElementById('buttons').addEventListener('click', function (evt) {
-      var target = evt.target;
-      if (target.id === 'add_item') {
-        fetch('/api/item', {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            alert("Response from server " + data.message)
-          });
-      } else if (target.id === 'del_item') {
-        fetch('/api/item', {
-          method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            alert("Response from server " + data.message)
-          });
-      }
-    }, false);
-    //if ()
-
-      // fetch('/api/item', {
-      //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      //   mode: 'cors', // no-cors, *cors, same-origin
-      //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      //   credentials: 'same-origin', // include, *same-origin, omit
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //     // 'Content-Type': 'application/x-www-form-urlencoded',
-      //   },
-      //   redirect: 'follow', // manual, *follow, error
-      //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      //   body: JSON.stringify(data) // body data type must match "Content-Type" header
-      // })
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     console.log(data);
-      //     alert("Response from server " + data.message)
-      //   });
+    // document.getElementById('buttons').addEventListener('click', function (evt) {
+    //   var target = evt.target;
+    //   var count = 0
+    //   if (target.id === 'add_item') {
+    //     count++
+    //     fetch('/api/item', {
+    //       method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    //       mode: 'cors', // no-cors, *cors, same-origin
+    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //       credentials: 'same-origin', // include, *same-origin, omit
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //         // 'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //       redirect: 'follow', // manual, *follow, error
+    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
+    //     })
+    //       .then(response => response.json())
+    //       .then(data => {
+    //         console.log(data);
+    //         console.log('count:', count)
+    //         alert("Response from server " + data.message)
+    //       });
+    //   } else if (target.id === 'update_item') {
+    //     count++
+    //     fetch('/api/item', {
+    //       method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+    //       mode: 'cors', // no-cors, *cors, same-origin
+    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //       credentials: 'same-origin', // include, *same-origin, omit
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //         // 'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //       redirect: 'follow', // manual, *follow, error
+    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
+    //     })
+    //       .then(response => response.json())
+    //       .then(data => {
+    //         console.log(data);
+    //         console.log('count:', count)
+    //         alert("Response from server " + data.message)
+    //       });
+    //   } else if (target.id === 'del_item') {
+    //     count++
+    //     fetch('/api/item', {
+    //       method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+    //       mode: 'cors', // no-cors, *cors, same-origin
+    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //       credentials: 'same-origin', // include, *same-origin, omit
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //         // 'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //       redirect: 'follow', // manual, *follow, error
+    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
+    //     })
+    //       .then(response => response.json())
+    //       .then(data => {
+    //         console.log(data);
+    //         console.log('count:', count)
+    //         alert("Response from server " + data.message)
+    //       });
+    //   }
+    // }, false);
 
   }
   const formatGroupLabel = data => (
@@ -94,7 +159,7 @@ export default function AddItem({ item }) {
     </div>
   );
 
-  
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -112,7 +177,8 @@ export default function AddItem({ item }) {
           Add/Edit
         </h1>
 
-        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+
+        {/* <form onSubmit={handleSubmit(onSubmit)}> in case of error*/}
 
         {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -136,19 +202,19 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
 
-          {/* ชื่อสินค้า: <input type="text" name="product_name" ref={register({ required: true })} /><br/> */}
+        {/* ชื่อสินค้า: <input type="text" name="product_name" ref={register({ required: true })} /><br/> */}
 
-          <InputGroup>
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="ชื่อสินค้า"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              type="text" name="product_name" ref={register({ required: true })}
-            />
-          </InputGroup>
+        <InputGroup>
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="ชื่อสินค้า"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+            type="text" name="product_name" ref={register({ required: true })}
+          />
+        </InputGroup>
 
         {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -161,21 +227,21 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
 
-          {/* รหัสสินค้า: <input type="text" name="code" ref={register} /><br/> */}
-          
-          <InputGroup>
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="รหัสสินค้า"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              type="text" name="code" ref={register}
-            />
-          </InputGroup>
+        {/* รหัสสินค้า: <input type="text" name="code" ref={register} /><br/> */}
 
-          {/* <InputGroup>
+        <InputGroup>
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="รหัสสินค้า"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+            type="text" name="code" ref={register}
+          />
+        </InputGroup>
+
+        {/* <InputGroup>
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ยี่ห้อสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -187,12 +253,12 @@ export default function AddItem({ item }) {
             />
           </InputGroup> */}
           ยี่ห้อสินค้า: <select name="brand" ref={register}>
-        <option value="female">female</option>
-        <option value="male">male</option>
-        <option value="other">other</option>
+          <option value="female">female</option>
+          <option value="male">male</option>
+          <option value="other">other</option>
         </select>
 
-          {/* <div>
+        {/* <div>
               ยี่ห้อสินค้า: 
               <Select
                 options={groupedOptions}
@@ -200,11 +266,11 @@ export default function AddItem({ item }) {
                 name="brand" ref={register({ required: true })}
             />
             </div> */}
-          
+
           รุ่นสินค้า: <select name="model" ref={register}>
-        <option value="female">female</option>
-        <option value="male">male</option>
-        <option value="other">other</option>
+          <option value="female">female</option>
+          <option value="male">male</option>
+          <option value="other">other</option>
         </select>
 
         {/* รุ่นที่ใช้ได้: <Select
@@ -214,85 +280,86 @@ export default function AddItem({ item }) {
             options={options}
             inputRef={register} /> */}
 
-<Controller
-    name="avi_model"
-    type="select"
-    control={control}
-    
+        <Controller
+          name="avi_model"
+          type="select"
+          control={control}
 
-    render={({ onChange, onBlur, value }) => (
-        <Select
-             onChange={onChange}
-             onBlur={onBlur}
-             value={value}  // this is what you need to do
-             isMulti
-             options={options}
-             ref={register}
+
+          render={({ onChange, onBlur, value }) => (
+            <Select
+              onChange={onChange}
+              onBlur={onBlur}
+              value={value}  // this is what you need to do
+              isMulti
+              options={options}
+              ref={register}
+            />
+          )}
         />
-    )}
-/> 
-{/*           
+        {/*           
           <ModelList type="text" name="model" ref={register({ required: true })}/>
 
           <AvailableList type="text" name="avi_model" ref={register({ required: true })} /> */}
 
 
-          <InputGroup>
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="Barcode ID"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              type="text" name="barcode_id" ref={register}
-            />
-          </InputGroup>
+        <InputGroup>
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="Barcode ID"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+            type="text" name="barcode_id" ref={register}
+          />
+        </InputGroup>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">ราคาซื้อ</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="ราคาซื้อ"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              type="double" name="purchase_price" ref={register}
-            />
-          </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">ราคาซื้อ</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="ราคาซื้อ"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+            type="double" name="purchase_price" ref={register}
+          />
+        </InputGroup>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="จำนวน"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              type="int32" name="amount" ref={register}
-            />
-          </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="จำนวน"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+            type="int32" name="amount" ref={register}
+          />
+        </InputGroup>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">จำนวนขั้นต่ำ</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="จำนวนขั้นต่ำ"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              type="int32" name="limit_amount" ref={register}
-            />
-          </InputGroup>
-          
-          
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">จำนวนขั้นต่ำ</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="จำนวนขั้นต่ำ"
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+            type="int32" name="limit_amount" ref={register}
+          />
+        </InputGroup>
+
+
 
       </main>
 
-      <div id ="buttons">
+      <div id="buttons">
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         <Button variant="danger" type="submit" value="DELETE" id="del_item">ลบสินค้า</Button>{' '}
         <Button type="submit" value="POST" id="add_item">ยืนยัน</Button>{' '}
+        <Button variant="warning" type="submit" value="PUT" id="update_item">อัพเดต</Button>{' '}
         <Button variant="dark">กลับ</Button>{' '}
       </div>
     </form>

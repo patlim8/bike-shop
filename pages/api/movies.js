@@ -15,10 +15,6 @@ export default async (req, res) => {
   } else if (req.method === 'POST') {
     console.log("Movies REQ", req.body)
     let data = req.body;
-    // data = JSON.parse(data);
-    // let title = data.title;
-    // let metacritic = data.metacritic;
-
     let { title, metacritic } = data;
 
     console.log("Received Title:", title)
