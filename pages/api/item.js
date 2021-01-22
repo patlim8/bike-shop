@@ -48,10 +48,13 @@ export default async (req, res) => {
   } else if (req.method === 'PUT') {
     let data = req.body
     let {product_name, code, brand, model, avi_model, purchase_price, amount, limit_amount, barcode_id, date} = data;
+    console.log({data})
     const { db } = await connectToDatabase();
     let doc = await db
-      .collection('item')
-      .updateOne({product_name: product_name}, { $set: data },
+    .collection('item')
+    .updateOne({product_name: product_name}, { $set: data },
+      // Option 1: use updateOne {_id: ObjectID(id)}
+      // Option 2: use findByIdAndUpdate, findByIdAndUpdate(ObjectID(id), {....})
         {
           new: true,
           runValidators: true

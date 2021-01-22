@@ -25,6 +25,16 @@ export default function Calculation({ order }) {
   const [productList, setProductList] = useState([]);
 
 
+  const onSubmitToDatabase = (data) => {
+    // productList << array of Json
+    console.log({productList})
+    fetch('/api/stock',
+    {
+      method: 'post',
+      body: productList
+    })
+  }
+
   const onSubmit = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
 
