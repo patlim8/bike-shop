@@ -49,6 +49,8 @@ export default async (req, res) => {
     let data = req.body
     let {product_name, code, brand, model, avi_model, purchase_price, amount, limit_amount, barcode_id, date} = data;
     console.log({data})
+    // not sure, _id is in data, let {_id, xxxx} = data
+    // or data.id() or data._id
     const { db } = await connectToDatabase();
     let doc = await db
     .collection('item')
