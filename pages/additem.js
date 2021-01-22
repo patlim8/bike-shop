@@ -280,7 +280,7 @@ export default function AddItem({ item }) {
             options={options}
             inputRef={register} /> */}
 
-        <Controller
+        รุ่นที่ใช้ได้: <Controller
           name="avi_model"
           type="select"
           control={control}
