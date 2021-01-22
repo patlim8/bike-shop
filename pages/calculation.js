@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,32 +16,77 @@ import { useForm } from "react-hook-form";
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Calculation({order}) {
+export default function Calculation({ order }) {
 
   const { register, handleSubmit, watch, errors } = useForm();
-  const onSubmit = (data) => {
-    console.log(data)
 
-    fetch('/api/order', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
+
+  const [jsxProductList, setJsxProductList] = useState(<tr></tr>);
+  const [productList, setProductList] = useState([]);
+
+
+  const onSubmit = (data) => {
+    // console.log("เพิ่มในรายการขาย",data)
+
+
+    let p = { productName: data.productName, code: data.code, brand: 'Honda', model: 'CBR150', qty: data.qty, unitPrice: 100 }
+    productList.push(p)
+    console.log("productList",productList.length)
+    let newList = productList.map(p => {
+      console.log("Update JSX",p)
+      return (
+        <tr>
+          <td>{p.productName}</td>
+          <td>{p.code}</td>
+          <td>{p.brand}</td>
+          <td>{p.model}</td>
+          <td>{p.qty}</td>
+          <td>{p.unitPrice}</td>
+        </tr>
+      )
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        alert("Response from server "+data.message)
-      });
+    setProductList(productList)
+    setJsxProductList(newList)
+
+
+    // fetch('/api/order', {
+    //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    //   mode: 'cors', // no-cors, *cors, same-origin
+    //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //   credentials: 'same-origin', // include, *same-origin, omit
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //     // 'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    //   redirect: 'follow', // manual, *follow, error
+    //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //   body: JSON.stringify(data) // body data type must match "Content-Type" header
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     alert("Response from server " + data.message)
+    //   });
 
   }
+
+
+  // Add some dummy data
+  // let p = { productName: 'กรองอากาศ', code: 'A1234', brand: 'Honda', model: 'CBR150', qty: 10, unitPrice: 100 }
+  // productList.push(p)
+  // let jsxProductList = productList.map(p => {
+  //   return (
+  //     <tr>
+  //       <td>{p.productName}</td>
+  //       <td>{p.code}</td>
+  //       <td>{p.brand}</td>
+  //       <td>{p.model}</td>
+  //       <td>{p.qty}</td>
+  //       <td>{p.unitPrice}</td>
+  //     </tr>
+  //   )
+  // })
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -57,12 +104,12 @@ export default function Calculation({order}) {
           Sale - Calculation
         </h1>
 
-        
+
 
         <div>
-        
 
-        
+
+
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">Order ID</InputGroup.Text>
@@ -79,9 +126,11 @@ export default function Calculation({order}) {
               <InputGroup.Text id="basic-addon1">ID</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              placeholder="Item name"
+              placeholder="ID"
+              name="id"
               aria-label="Item name"
               aria-describedby="basic-addon1"
+              ref={register}
             />
           </InputGroup>
 
@@ -90,6 +139,7 @@ export default function Calculation({order}) {
               <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
+              name="productName" ref={register}
               placeholder="ชื่อสินค้า"
               aria-label="Item name"
               aria-describedby="basic-addon1"
@@ -101,6 +151,7 @@ export default function Calculation({order}) {
               <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
+              name="code" ref={register}
               placeholder="รหัสสินค้า"
               aria-label="Item name"
               aria-describedby="basic-addon1"
@@ -122,20 +173,21 @@ export default function Calculation({order}) {
           </InputGroup>
 
           <InputGroup className="mb-3">
-          <InputGroup.Prepend>
-            <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            placeholder="จำนวน"
-            aria-label="Item name"
-            aria-describedby="basic-addon1"
-          />
-        </InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              name="qty" ref={register}
+              placeholder="จำนวน"
+              aria-label="Item name"
+              aria-describedby="basic-addon1"
+            />
+          </InputGroup>
 
-          <button>confirm</button>
-          
+          <button>เพิ่มในรายการขาย</button>
 
-          
+
+
           <div>
             <Table striped bordered hover size="sm">
               <thead>
@@ -147,39 +199,18 @@ export default function Calculation({order}) {
                   <th>รุ่นสินค้า</th>
                   <th>จำนวน</th>
                   <th>ราคา</th>
-                  
+
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td></td>
-                  <td></td>
-                  <td>@</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td></td>
-                  <td></td>
-                  <td>@</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td colSpan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                  <td></td>
-                </tr>
+                {jsxProductList}
               </tbody>
             </Table>
           </div>
-          
+
         </div>
 
-        
+
 
         <Form.Group controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="ค่าถอดประกอบ" />
