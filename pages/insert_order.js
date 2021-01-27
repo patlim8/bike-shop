@@ -9,14 +9,14 @@ import Link from 'next/link'
 
 
 
-export default function Home({ balance }) {
+export default function Home({ order }) {
 
   const { register, handleSubmit, watch, errors } = useForm();
   const onSubmit = (data) => {
     console.log(data)
 
-    fetch('/api/balance', {
-      method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+    fetch('/api/order', {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, *same-origin, omit
@@ -47,13 +47,12 @@ export default function Home({ balance }) {
       <ButtonBar />
 
       <main className={styles.main2}>
-        <b>Update Balance</b>
+        <b>Insert Order</b>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          Name: <input type="text" name="balance_name" ref={register({ required: true })} /><br/>
-          Debit: <input type="number" name="balance_debit" ref={register({ required: true })} /><br/>
-          Crebit: <input type="number" name="balance_crebit" ref={register({ required: true })} /><br/>
-          Date: <input type="date" name="balance_date" ref={register({ required: true })}/><br/>
+          Code: <input type="text" name="code" ref={register({ required: true })} /><br/>
+          Price: <input type="number" name="price" ref={register({ required: true })} /><br/>
+          Unit: <input type="number" name="unit" ref={register({ required: true })}/><br/>
           <input type="submit" />
         </form>
       </main>
@@ -66,8 +65,8 @@ export default function Home({ balance }) {
 export async function getServerSideProps() {
   const { db } = await connectToDatabase();
 
-  const balance = await db
-    .collection("balance")
+  const order = await db
+    .collection("order")
     .find({})
     .sort({})
     .limit(20)
@@ -75,7 +74,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      balance: JSON.parse(JSON.stringify(balance)),
+      order: JSON.parse(JSON.stringify(order)),
     },
   };
 }

@@ -11,7 +11,7 @@ export default async (req, res) => {
       .sort({})
       .limit(20)
       .toArray();
-    res.json(balance);
+    res.json(item);
   } else if (req.method === 'POST') {
     console.log("item REQ", req.body)
     let data = req.body;

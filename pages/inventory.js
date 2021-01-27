@@ -10,10 +10,17 @@ import AvailableList from '../components/availableList';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { connectToDatabase } from "../util/mongodb";
+
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Inventory() {
+export default function Inventory({ item }) {
+
+  console.log("item: ", item)
+
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -51,44 +58,39 @@ export default function Inventory() {
         </div>
 
         <div>
-        <Table striped bordered hover size="sm">
-              <thead>
-                <tr>
-                  <th>id</th>
-                  <th>ชื่อสินค้า</th>
-                  <th>รหัสสินค้า</th>
-                  <th>ยี่ห้อสินค้า</th>
-                  <th>รุ่นสินค้า</th>
-                  <th>จำนวน</th>
-                  <th>ราคา</th>
-                  
-                </tr>
-              </thead>
-              <tbody>
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>ชื่อสินค้า</th>
+                <th>รหัสสินค้า</th>
+                <th>ยี่ห้อสินค้า</th>
+                <th>รุ่นสินค้า</th>
+                
+                <th>Barcode ID</th>
+                <th>จำนวน</th>
+                <th>จำนวนจำกัด</th>
+                <th>ราคา</th>
+                <th>วันที่บันทึก</th>
+              </tr>
+            </thead>
+            <tbody>
+              {item.map((items) => (
                 <tr>
                   <td>1</td>
-                  <td></td>
-                  <td></td>
-                  <td>@</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{items.product_name}</td>
+                  <td>{items.code}</td>
+                  <td>{items.brand}</td>
+                  <td>{items.model}</td>
+                  
+                  <td>{items.barcode_id}</td>
+                  <td>{items.amount}</td>
+                  <td>{items.limit_amount}</td>
+                  <td>{items.purchase_price}</td>
                 </tr>
-                <tr>
-                  <td>2</td>
-                  <td></td>
-                  <td></td>
-                  <td>@</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td colSpan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </Table>
+              ))}
+            </tbody>
+          </Table>
         </div>
       </main>
 
@@ -99,4 +101,21 @@ export default function Inventory() {
 
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  const { db } = await connectToDatabase();
+
+  const item = await db
+    .collection("item")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
+
+  return {
+    props: {
+      item: JSON.parse(JSON.stringify(item)),
+    },
+  };
 }

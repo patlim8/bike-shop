@@ -13,6 +13,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useForm } from "react-hook-form";
+import { connectToDatabase } from "../util/mongodb";
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -27,26 +28,31 @@ export default function Calculation({ order }) {
 
   const onSubmitToDatabase = (data) => {
     // productList << array of Json
-    console.log({productList})
+    console.log({ productList })
     fetch('/api/stock',
-    {
-      method: 'post',
-      body: productList
-    })
+      {
+        method: 'post',
+        body: productList
+      })
   }
 
   const onSubmit = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
+    let j = 1
+    for (let i = 1; i <= productList.length; i++) {
+      j++
+    }
 
-
-    let p = { productName: data.productName, code: data.code, brand: 'Honda', model: 'CBR150', qty: data.qty, unitPrice: 100 }
+    var start_item_id = j
+    let p = { id: start_item_id, product_name: data.product_name, code: data.code, brand: 'Honda', model: 'CBR150', qty: data.qty, unitPrice: 100 }
     productList.push(p)
-    console.log("productList",productList.length)
+    console.log("productList", productList.length)
     let newList = productList.map(p => {
-      console.log("Update JSX",p)
+      console.log("Update JSX", p)
       return (
         <tr>
-          <td>{p.productName}</td>
+          <td>{p.id}</td>
+          <td>{p.product_name}</td>
           <td>{p.code}</td>
           <td>{p.brand}</td>
           <td>{p.model}</td>
@@ -57,6 +63,25 @@ export default function Calculation({ order }) {
     })
     setProductList(productList)
     setJsxProductList(newList)
+
+    const product_code = []
+    const product_price = []
+    const product_unit = []
+    productList.map(p => {
+      product_code.push(p.code)
+      product_price.push(p.unitPrice)
+      product_unit.push(p.qty)
+    })
+
+    let total_unit = 0
+    product_unit.map(h => {
+      h.parseInt
+    })
+
+
+    // console.log(product_code)
+    // console.log(product_price)
+    console.log((product_unit))
 
 
     // fetch('/api/order', {
@@ -131,7 +156,7 @@ export default function Calculation({ order }) {
             />
           </InputGroup>
 
-          <InputGroup className="mb-3">
+          {/*<InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ID</InputGroup.Text>
             </InputGroup.Prepend>
@@ -142,14 +167,14 @@ export default function Calculation({ order }) {
               aria-describedby="basic-addon1"
               ref={register}
             />
-          </InputGroup>
+  </InputGroup>*/}
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              name="productName" ref={register}
+              name="product_name" ref={register}
               placeholder="ชื่อสินค้า"
               aria-label="Item name"
               aria-describedby="basic-addon1"
@@ -218,6 +243,7 @@ export default function Calculation({ order }) {
             </Table>
           </div>
 
+
         </div>
 
 
@@ -248,4 +274,27 @@ export default function Calculation({ order }) {
 
     </form>
   )
+}
+
+export async function getServerSideProps() {
+  const { db } = await connectToDatabase();
+  // const { item_id } = query
+
+  // const item = await db
+  //   .collection("item")
+  //   .findOne(item_id)
+
+  const order = await db
+    .collection("order")
+    .find({})
+    .sort({})
+    .limit(20)
+    .toArray();
+
+  return {
+    props: {
+      //item: JSON.parse(JSON.stringify(item)),
+      order: JSON.parse(JSON.stringify(order))
+    },
+  };
 }
