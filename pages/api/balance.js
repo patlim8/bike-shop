@@ -20,6 +20,7 @@ export default async (req, res) => {
     // let metacritic = data.metacritic;
 
     let { balance_name, balance_debit, balance_credit, balance_date } = data;
+    
 
     console.log("Received Debit:", balance_debit)
     console.log("Received Date:", balance_date)
@@ -30,7 +31,7 @@ export default async (req, res) => {
         {
           balance_name: balance_name,
           balance_debit: balance_debit,
-          balance_credit: balance_credit,
+          //balance_credit: balance_credit,
           balance_date: balance_date
         },
         { $set: data },

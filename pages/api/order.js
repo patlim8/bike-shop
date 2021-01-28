@@ -4,16 +4,19 @@ export default async (req, res) => {
   console.log("order API method " + req.method)
 
   //(How to data from other api to here and store it as data)
+  
 
   if (req.method === 'GET') {
     const { db } = await connectToDatabase();
+
     const order = await db
-      .collection("order")
+      .collection('order')
       .find({})
       .sort({})
       .limit(20)
       .toArray();
     res.json(order);
+
   } else if (req.method === 'POST') {
     console.log("order REQ", req.body)
     let data = req.body;

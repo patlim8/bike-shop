@@ -10,7 +10,7 @@ export default function ButtonBar() {
   return (
     <div>
       <Navbar bg="dark" variant="dark" >
-        <Navbar.Brand href="/index">Bike Shop Inventory Management System</Navbar.Brand>
+        <Navbar.Brand href="/">Bike Shop Inventory Management System</Navbar.Brand>
       </Navbar>
       <Navbar bg="light" variant="light" expand="lg">
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
