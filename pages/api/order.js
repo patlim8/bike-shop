@@ -20,14 +20,14 @@ export default async (req, res) => {
   } else if (req.method === 'POST') {
     console.log("order REQ", req.body)
     let data = req.body;
-    let { code, unit, price } = data;
+    let { item_code, unit, price } = data;
 
     const { db } = await connectToDatabase();
     let doc = await db
       .collection('order')
       .updateOne(
         {
-          code: code,
+          item_code: item_code,
           unit: unit,
           price: price
         },
@@ -38,24 +38,24 @@ export default async (req, res) => {
     res.json({ message: 'OK' });
   } else if (req.method === 'PUT') {
     let data = req.body
-    let { code, unit, price } = data;
+    let { _id, item_code, unit, price } = data;
     const { db } = await connectToDatabase();
     let doc = await db
       .collection('order')
-      .updateOne({code: code}, { $set: data },
+      .updateOne({_id: ObjectID(id)}, { $set: data },
         {
           new: true,
           runValidators: true
         },
       )
-    res.json({message: 'Update data', data: data });
+    res.json({message: 'Update data', data: data});
   } else if (req.method === 'DELETE') {
     let data = req.body
     let { product_name } = data;
     const { db } = await connectToDatabase();
     let doc = await db
       .collection('order')
-      .deleteOne({ code: code})
+      .deleteOne({ item_code: item_code})
     res.json({ delete: true, message: 'Delete data', data: {} })
   }
 }
