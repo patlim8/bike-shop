@@ -105,7 +105,7 @@ export default function AddItem({ item }) {
       <main className={styles.main}>
         <h1 className={styles.title}>
           Add/Edit
-        </h1>
+        </h1> <br></br><br></br><br></br> 
 
 
         {/* <form onSubmit={handleSubmit(onSubmit)}> in case of error*/}
@@ -144,7 +144,7 @@ export default function AddItem({ item }) {
             aria-describedby="basic-addon1"
             type="text" name="product_name" ref={register({ required: true })}
           />
-        </InputGroup>
+        </InputGroup><br></br>
 
         {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -169,7 +169,7 @@ export default function AddItem({ item }) {
             aria-describedby="basic-addon1"
             type="text" name="code" ref={register}
           />
-        </InputGroup>
+        </InputGroup><br></br>
 
         {/* <InputGroup>
             <InputGroup.Prepend>
@@ -186,7 +186,7 @@ export default function AddItem({ item }) {
           <option value="female">female</option>
           <option value="male">male</option>
           <option value="other">other</option>
-        </select>
+        </select><br></br>
 
         {/* <div>
               ยี่ห้อสินค้า: 
@@ -201,7 +201,7 @@ export default function AddItem({ item }) {
           <option value="female">female</option>
           <option value="male">male</option>
           <option value="other">other</option>
-        </select>
+        </select><br></br>
 
         {/* รุ่นที่ใช้ได้: <Select
             name="avi_model"
@@ -210,7 +210,7 @@ export default function AddItem({ item }) {
             options={options}
             inputRef={register} /> */}
 
-        รุ่นที่ใช้ได้: <Controller
+        รุ่นที่ใช้ได้<Controller
           name="avi_model"
           type="select"
           control={control}
@@ -226,7 +226,7 @@ export default function AddItem({ item }) {
               ref={register}
             />
           )}
-        />
+        /><br></br>
         {/*           
           <ModelList type="text" name="model" ref={register({ required: true })}/>
 
@@ -243,7 +243,7 @@ export default function AddItem({ item }) {
             aria-describedby="basic-addon1"
             type="text" name="barcode_id" ref={register}
           />
-        </InputGroup>
+        </InputGroup><br></br>
 
         <InputGroup className="mb-3">
           <InputGroup.Prepend>

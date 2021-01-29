@@ -1,4 +1,5 @@
 import { connectToDatabase } from "../../util/mongodb";
+import { ObjectID } from "mongodb";
 
 export default async (req, res) => {
   console.log("Balance API method " + req.method)
@@ -40,11 +41,11 @@ export default async (req, res) => {
     res.json({ message: 'OK' });
   } else if (req.method === 'PUT') {
     let data = req.body
-    let { balance_name, balance_debit, balance_credit, balance_date } = data;
+    let { _id, balance_name, balance_debit, balance_credit, balance_date } = data;
     const { db } = await connectToDatabase();
     let doc = await db
       .collection('balance')
-      .updateOne({balance_name: balance_name}, { $set: data },
+      .updateOne({_id: ObjectID(id)}, { $set: data },
         {
           new: true,
           runValidators: true
@@ -57,7 +58,7 @@ export default async (req, res) => {
     const { db } = await connectToDatabase();
     let doc = await db 
       .collection('balance')
-      .deleteMany({ balance_date: balance_date})
+      .deleteMany({_id: ObjectID(id)})
     res.json({delete: true, message: 'Delete data', data: {}})
   } 
 }

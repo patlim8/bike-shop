@@ -14,10 +14,11 @@ import Form from 'react-bootstrap/Form'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useForm } from "react-hook-form";
 import { connectToDatabase } from "../util/mongodb";
+import { ObjectID } from "mongodb";
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Calculation({ order }) {
+export default function Calculation({ item, order }) {
 
   const { register, handleSubmit, watch, errors } = useForm();
 
@@ -73,35 +74,70 @@ export default function Calculation({ order }) {
       product_unit.push(p.qty)
     })
 
+    const new_product_unit = product_unit.map(h => parseInt(h));
+    const new_product_price = product_price.map(h => parseInt(h));
+
     let total_unit = 0
-    product_unit.map(h => {
-      h.parseInt
-    })
+    for (let k = 0; k < new_product_unit.length; k++) {
+      total_unit = total_unit + new_product_unit[k]
+    }
 
-
+    let total_price = 0
+    for (let k = 0; k < new_product_price.length; k++) {
+      total_price = total_price + new_product_price[k]
+    }
     // console.log(product_code)
     // console.log(product_price)
-    console.log((product_unit))
+    // console.log(new_product_unit)
+    console.log("Total Unit",total_unit)
+    console.log("Total Price",total_price)
 
+    let new_order = {item_code: product_code, unit: total_unit, price: total_price}
+    if (productList.length = 1) {
+      fetch('/api/order', {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(new_order) // body data type must match "Content-Type" header
+      })
+        .then(response => response.json())
+        .then(new_order => {
+          console.log(new_order);
+          alert("Response from server "+ new_order.message)
+        });
+  
+    } else if (productList.length < 1) {
+      fetch('/api/order', {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(new_order) // body data type must match "Content-Type" header
+      })
+        .then(response => response.json())
+        .then(new_order => {
+          console.log(new_order);
+          alert("Response from server "+ new_order.message)
+        });
+    }
 
-    // fetch('/api/order', {
-    //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    //   mode: 'cors', // no-cors, *cors, same-origin
-    //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //   credentials: 'same-origin', // include, *same-origin, omit
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //   },
-    //   redirect: 'follow', // manual, *follow, error
-    //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //   body: JSON.stringify(data) // body data type must match "Content-Type" header
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     alert("Response from server " + data.message)
-    //   });
+    // let new_order = []
+    // total_pay.push(new_order)
+    // total_pay.push(new_order)
+    // console.log("new_order",new_order)
 
   }
 
@@ -142,9 +178,6 @@ export default function Calculation({ order }) {
 
 
         <div>
-
-
-
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">Order ID</InputGroup.Text>
@@ -263,6 +296,34 @@ export default function Calculation({ order }) {
           />
         </InputGroup>
 
+        
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">จำนวนที่ต้องชำระ</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder={order.price}
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+          />
+        </InputGroup>
+
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder=""
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+          />
+        </InputGroup>
+
+        <Form.Group controlId="formBasicCheckbox">
+          <Form.Check type="checkbox" label="ปริ้นใบเสร็จ" />
+        </Form.Group>
+
+
       </main>
 
       <ButtonGroup horizontal>
@@ -276,25 +337,25 @@ export default function Calculation({ order }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({query}) {
   const { db } = await connectToDatabase();
-  // const { item_id } = query
+  const { item_id } = query
+  console.log(`getServerSideProps: ${item_id}`)
 
-  // const item = await db
-  //   .collection("item")
-  //   .findOne(item_id)
+  const item = await db
+    .collection("item")
+    .findOne(ObjectID(item_id))
 
   const order = await db
     .collection("order")
-    .find({})
-    .sort({})
-    .limit(20)
-    .toArray();
+    .find({"item_code": ObjectID(item_id)})
+    .toArray()
 
+    console.log(ObjectID(item_id))
   return {
     props: {
-      //item: JSON.parse(JSON.stringify(item)),
-      order: JSON.parse(JSON.stringify(order))
+      item: JSON.parse(JSON.stringify(item)),
+      order: JSON.parse(JSON.stringify(order)),
     },
   };
 }

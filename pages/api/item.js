@@ -1,3 +1,4 @@
+import { ObjectID } from "mongodb";
 import { connectToDatabase } from "../../util/mongodb";
 
 export default async (req, res) => {
@@ -47,14 +48,14 @@ export default async (req, res) => {
     res.json({ message: 'OK' });
   } else if (req.method === 'PUT') {
     let data = req.body
-    let {product_name, code, brand, model, avi_model, purchase_price, amount, limit_amount, barcode_id, date} = data;
+    let {_id, product_name, code, brand, model, avi_model, purchase_price, amount, limit_amount, barcode_id, date} = data;
     console.log({data})
     // not sure, _id is in data, let {_id, xxxx} = data
     // or data.id() or data._id
     const { db } = await connectToDatabase();
     let doc = await db
     .collection('item')
-    .updateOne({product_name: product_name}, { $set: data },
+    .updateOne({_id: ObjectID(id)}, { $set: data },
       // Option 1: use updateOne {_id: ObjectID(id)}
       // Option 2: use findByIdAndUpdate, findByIdAndUpdate(ObjectID(id), {....})
         {

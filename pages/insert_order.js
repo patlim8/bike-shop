@@ -13,10 +13,12 @@ export default function Home({ order }) {
 
   const { register, handleSubmit, watch, errors } = useForm();
   const onSubmit = (data) => {
+    let oi = [202,205]
+    data.item_code = oi
     console.log(data)
 
     fetch('/api/order', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      method: 'PUT', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, *same-origin, omit
@@ -50,7 +52,7 @@ export default function Home({ order }) {
         <b>Insert Order</b>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          Code: <input type="text" name="code" ref={register({ required: true })} /><br/>
+          Code: <input type="text" name="item_code" ref={register({ required: true })} /><br/>
           Price: <input type="number" name="price" ref={register({ required: true })} /><br/>
           Unit: <input type="number" name="unit" ref={register({ required: true })}/><br/>
           <input type="submit" />
