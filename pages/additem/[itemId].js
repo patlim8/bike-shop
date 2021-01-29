@@ -20,48 +20,39 @@ import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedC
 // import Dropdown from 'react-bootstrap/Dropdown';
 
 export default function AddItem({ item }) {
-  
-  console.log({item})
 
-  const dummyData = {
-    _id: '',
-    product_name: 'น้ำมันเครื่อง',
-    avi_model: [],
-    code: 'DW001',
-    brand: 'ptt',
-    model: '5w40',
-    barcode_id: '865406549874981987',
-    purchase_price: 100,
-    qty: 10,
-    minStock: 4
+  console.log("AddItem", { item })
+  var data = item;
+
+  if (item === null) {
+    // Add new item, prepare blank form
+    // in this case, use dummyData
+    const dummyData = {
+      _id: 'new',
+      product_name: 'น้ำมันเครื่อง',
+      avi_model: [],
+      code: 'DW001',
+      brand: 'ptt',
+      model: '5w40',
+      barcode_id: '865406549874981987',
+      purchase_price: 100,
+      qty: 10,
+      minStock: 4
+    }
+
+    data = dummyData
   }
 
-
-
-  // const data = {
-  // _id: '',
-  //   product_name: '',
-  //   code: '',
-  //   brand: '',
-  //   model: '',
-  //   barcode_id: '',
-  //   purchase_price: 0,
-  //   qty: 0,
-  //   minStock: 0
-  // }
-  
-  // const data = dummyData
-  const data = item
 
   const { register, handleSubmit, control, watch, errors } = useForm();
   const onSubmit = (data, e) => {
     // TODO avi model is not yet implemented
     data['avi_model'] = []
     console.log(data)
-    
-    
+
+
     const submitterId = e.nativeEvent.submitter.id;
-    console.log({submitterId})
+    console.log({ submitterId })
 
     if (submitterId === 'add_item') {
       fetch('/api/item', {
@@ -134,7 +125,9 @@ export default function AddItem({ item }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
-        <title>Add/Edit</title>
+        <title>
+          {data._id === 'new' ? 'New Item' : 'Edit'}
+        </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -144,8 +137,8 @@ export default function AddItem({ item }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Add/Edit
-        </h1> <br></br><br></br><br></br> 
+        {data._id === 'new' ? 'New Item' : 'Edit'}
+        </h1> <br></br><br></br><br></br>
 
 
         {/* <form onSubmit={handleSubmit(onSubmit)}> in case of error*/}
@@ -184,7 +177,7 @@ export default function AddItem({ item }) {
             aria-label="ID"
             aria-describedby="_id"
             type="text"
-            name="_id" 
+            name="_id"
             defaultValue={data._id}
             ref={register()}
           />
@@ -199,7 +192,7 @@ export default function AddItem({ item }) {
             aria-label="Item name"
             aria-describedby="basic-addon1"
             type="text"
-            name="product_name" 
+            name="product_name"
             defaultValue={data.product_name}
             ref={register({ required: true })}
           />
@@ -226,7 +219,7 @@ export default function AddItem({ item }) {
             placeholder="รหัสสินค้า"
             aria-label="Item name"
             aria-describedby="basic-addon1"
-            type="text" name="code" 
+            type="text" name="code"
             defaultValue={data.code}
             ref={register}
           />
@@ -303,8 +296,8 @@ export default function AddItem({ item }) {
             aria-describedby="basic-addon1"
             type="text"
             name="barcode_id"
-             ref={register}
-             defaultValue={data.barcode_id}
+            ref={register}
+            defaultValue={data.barcode_id}
           />
         </InputGroup><br></br>
 
@@ -316,7 +309,7 @@ export default function AddItem({ item }) {
             placeholder="ราคาซื้อ"
             aria-label="Item name"
             aria-describedby="basic-addon1"
-            type="double" name="purchase_price" 
+            type="double" name="purchase_price"
             ref={register}
             defaultValue={data.purchase_price}
           />
@@ -355,8 +348,8 @@ export default function AddItem({ item }) {
       <div id="buttons">
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         <Button variant="danger" type="submit" id="del_item">ลบสินค้า</Button>{' '}
-        <Button type="submit"  id="add_item">เพิ่ม</Button>{' '}
-        <Button variant="warning" type="submit"  id="update_item">อัพเดต</Button>{' '}
+        <Button type="submit" id="add_item">เพิ่ม</Button>{' '}
+        <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>{' '}
         <Button variant="dark">กลับ</Button>{' '}
       </div>
     </form>
@@ -364,21 +357,31 @@ export default function AddItem({ item }) {
 }
 
 export async function getServerSideProps(props) {
-  // console.log({props})
+  // console.log({props})  
   const itemId = props.params.itemId
-  console.log('_ID',itemId)
-  const { db } = await connectToDatabase()
+  console.log('_ID', { itemId })
+  if (itemId === 'new') {
+    console.log("Request to add new item, ignore search existing item from database.")
+    return {
+      props: {
+        item: null
+      }
+    }
+  } else {
 
-  const item = await db
-    .collection("item")
-    .findOne(
-       {_id: ObjectId(itemId)}
-    )
+    const { db } = await connectToDatabase()
 
-  console.log({item})
-  return {
-    props: {
-      item: JSON.parse(JSON.stringify(item)),
-    },
-  };
+    const item = await db
+      .collection("item")
+      .findOne(
+        { _id: ObjectId(itemId) }
+      )
+
+    console.log("Found", { item })
+    return {
+      props: {
+        item: JSON.parse(JSON.stringify(item)),
+      },
+    };
+  }
 }
