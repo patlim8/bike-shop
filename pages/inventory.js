@@ -7,19 +7,68 @@ import FormControl from 'react-bootstrap/FormControl';
 import BrandList from '../components/brandList';
 import ModelList from '../components/modelList'
 import AvailableList from '../components/availableList';
+import SearchBar from './test/search_name'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { connectToDatabase } from "../util/mongodb";
+import { useForm, Controller } from "react-hook-form";
+import Select from 'react-select';
+import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../components/data';
 
+import React, { useState, useEffect } from 'react';
+import ItemList from './test/itemList'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
+export async function getServerSideProps() {
+  const { db } = await connectToDatabase();
+
+  const item = await db
+    .collection("item")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
+  
+    
+  return {
+    props: {
+      item: JSON.parse(JSON.stringify(item)),
+      
+    },
+    
+    
+  };
+  
+}
+
+
 export default function Inventory({ item }) {
 
-  console.log("item: ", item)
+  const { register, handleSubmit, control, watch, errors } = useForm();
+
+  const [input, setInput] = useState('');
+  const [itemListDefault, setItemListDefault] = useState();
+  const [itemList, setItemList] = useState();
+    
+      
 
 
+  const updateInput = async (input) => {
+    const filtered = itemListDefault.filter(item => {
+     return item.product_name.toLowerCase().includes(input.toLowerCase())
+    })
+    setInput(input);
+    setItemList(filtered);
+ }
+
+ 
+
+ useEffect( () => {
+   setItemList(item)
+   setItemListDefault(item)
+ },[]);
 
   return (
     <div className={styles.container}>
@@ -40,7 +89,7 @@ export default function Inventory({ item }) {
         <br></br><br></br>
 
         <div>
-          <InputGroup className="mb-3">
+          {/* <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ค้นหา</InputGroup.Text>
             </InputGroup.Prepend>
@@ -48,49 +97,39 @@ export default function Inventory({ item }) {
               placeholder="ชื่อสินค้า"
               aria-label="Item name"
               aria-describedby="basic-addon1"
+              input={input} 
+              onChange={updateInput}
             />
-          </InputGroup>
-
+          </InputGroup> */}
+          <SearchBar input={input} 
+                      onChange={updateInput} />
+          
+          
           <BrandList />
           <ModelList />
-          <AvailableList />
+          
+          รุ่นที่ใช้ได้: <Controller
+          name="avi_model"
+          type="select"
+          control={control}
+
+
+          render={({ onChange, onBlur, value }) => (
+            <Select
+              onChange={onChange}
+              onBlur={onBlur}
+              value={value}  // this is what you need to do
+              isMulti
+              options={options}
+              ref={register}
+            />
+          )}
+        />
 
         </div>
 
         <div>
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>id</th>
-                <th>ชื่อสินค้า</th>
-                <th>รหัสสินค้า</th>
-                <th>ยี่ห้อสินค้า</th>
-                <th>รุ่นสินค้า</th>
-                
-                <th>Barcode ID</th>
-                <th>จำนวน</th>
-                <th>จำนวนจำกัด</th>
-                <th>ราคา</th>
-                <th>วันที่บันทึก</th>
-              </tr>
-            </thead>
-            <tbody>
-              {item.map((items) => (
-                <tr>
-                  <td>1</td>
-                  <td>{items.product_name}</td>
-                  <td>{items.code}</td>
-                  <td>{items.brand}</td>
-                  <td>{items.model}</td>
-                  
-                  <td>{items.barcode_id}</td>
-                  <td>{items.amount}</td>
-                  <td>{items.limit_amount}</td>
-                  <td>{items.purchase_price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+        <ItemList ItemList={itemList}/>
         </div>
       </main>
 
@@ -103,19 +142,49 @@ export default function Inventory({ item }) {
   )
 }
 
-export async function getServerSideProps() {
-  const { db } = await connectToDatabase();
+// {item.map((items) => (
+//   <tr>
+//     <td>1</td>
+//     <td>{items.product_name}</td>
+//     <td>{items.code}</td>
+//     <td>{items.brand}</td>
+//     <td>{items.model}</td>
+    
+//     <td>{items.barcode_id}</td>
+//     <td>{items.amount}</td>
+//     <td>{items.limit_amount}</td>
+//     <td>{items.purchase_price}</td>
+//   </tr>
+// ))}
+// </tbody>
+// </Table>
+// </div>
+// </main>
 
-  const item = await db
-    .collection("item")
-    .find()
-    .sort({})
-    .limit(20)
-    .toArray();
+// <ButtonGroup horizontal>
+// <Button variant="primary" href="/additem" size="sm">เพิ่มสินค้า</Button>{' '}
+// <Button variant="secondary" size="sm">สแกนบาร์โค้ด</Button>{' '}
+// </ButtonGroup>
 
-  return {
-    props: {
-      item: JSON.parse(JSON.stringify(item)),
-    },
-  };
-}
+// </div>
+// )
+// }
+
+
+
+// export async function getServerSideProps() {
+//   const { db } = await connectToDatabase();
+
+//   const item = await db
+//     .collection("item")
+//     .find()
+//     .sort({})
+//     .limit(20)
+//     .toArray();
+
+//   return {
+//     props: {
+//       item: JSON.parse(JSON.stringify(item)),
+//     },
+//   };
+// }
