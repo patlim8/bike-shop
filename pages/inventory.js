@@ -11,15 +11,18 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { connectToDatabase } from "../util/mongodb";
+import Link from 'next/link'
 
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Inventory({ item }) {
+export default function Inventory({ item: items }) {
 
-  console.log("item: ", item)
+  console.log("item: ", items)
 
-
+  const edit = (itemId) => {
+    console.log({itemId})
+  }
 
   return (
     <div className={styles.container}>
@@ -75,18 +78,25 @@ export default function Inventory({ item }) {
               </tr>
             </thead>
             <tbody>
-              {item.map((items) => (
+              {items.map((p) => (
                 <tr>
-                  <td>1</td>
-                  <td>{items.product_name}</td>
-                  <td>{items.code}</td>
-                  <td>{items.brand}</td>
-                  <td>{items.model}</td>
+                  <td>
+                  <Link href={`/additem/${p._id}`}>
+            <a>
+              Edit
+                    {p._id}
+            </a>
+          </Link>
+                    </td>
+                  <td>{p.product_name}</td>
+                  <td>{p.code}</td>
+                  <td>{p.brand}</td>
+                  <td>{p.model}</td>
                   
-                  <td>{items.barcode_id}</td>
-                  <td>{items.amount}</td>
-                  <td>{items.limit_amount}</td>
-                  <td>{items.purchase_price}</td>
+                  <td>{p.barcode_id}</td>
+                  <td>{p.amount}</td>
+                  <td>{p.limit_amount}</td>
+                  <td>{p.purchase_price}</td>
                 </tr>
               ))}
             </tbody>
