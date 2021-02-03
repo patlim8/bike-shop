@@ -27,6 +27,12 @@ export const colourOptions = [
     { value: 'strawberry', label: 'Strawberry', rating: 'wild' },
     { value: 'salted-caramel', label: 'Salted Caramel', rating: 'crazy' },
   ];
+
+  export const brandOptions = [
+    { value: 'ptt', label: 'ptt', rating: 'safe' },
+    { value: 'female', label: 'female', rating: 'good' },
+    
+  ];
   
   export const stateOptions = [
     { value: 'AL', label: 'Alabama' },
@@ -124,6 +130,10 @@ export const colourOptions = [
     {
       label: 'Flavours',
       options: flavourOptions,
+    },
+    {
+      label: 'ยี่ห้อ',
+      options: brandOptions,
     },
   ];
 

@@ -14,13 +14,13 @@ export default async (req, res) => {
       .toArray();
     res.json(item);
   } else if (req.method === 'POST') {
-    console.log("item REQ", req.body)
+    console.log("ADDING ", req.body)
     let data = req.body;
     // data = JSON.parse(data);
     // let title = data.title;
     // let metacritic = data.metacritic;
 
-    let { product_name, code, brand, model, avi_model, purchase_price, amount, limit_amount, barcode_id, date } = data;
+    let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date } = data;
     //let delete_product = document.getElementsByName('delete_item');
 
     // console.log("Received Debit:", balance_debit)
@@ -30,25 +30,26 @@ export default async (req, res) => {
       .collection('item')
       .updateOne(
         {
-          product_name: product_name,
-          code: code,
-          brand: brand,
-          model: model,
-          avi_model: avi_model,
-          purchase_price: purchase_price,
-          amount: amount,
-          limit_amount: limit_amount,
-          barcode_id: barcode_id,
-          date: date
+          _id: _id
+          // product_name: product_name,
+          // code: code,
+          // brand: brand,
+          // model: model,
+          // avi_model: avi_model,
+          // purchase_price: purchase_price,
+          // qty: qty,
+          // limit_qty: limit_qty,
+          // barcode_id: barcode_id,
+          // date: date
         },
         { $set: data },
         { upsert: true }
       ) // if update non-existing record, insert instead.
-
+        console.log(doc)
     res.json({ message: 'OK' });
   } else if (req.method === 'PUT') {
     let data = req.body
-    let {_id, product_name, code, brand, model, avi_model, purchase_price, amount, limit_amount, barcode_id, date} = data;
+    let {_id, product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date} = data;
     console.log({data})
     // not sure, _id is in data, let {_id, xxxx} = data
     // or data.id() or data._id

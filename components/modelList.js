@@ -36,7 +36,7 @@ export default function ModelList() {
   return (
       
           <div>
-        ยี่ห้อสินค้า: <Select
+        รุ่นสินค้า: <Select
         
         options={groupedOptions}
         formatGroupLabel={formatGroupLabel}
