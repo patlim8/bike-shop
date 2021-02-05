@@ -28,7 +28,7 @@ export default function AddItem({ item }) {
     // Add new item, prepare blank form
     // in this case, use dummyData
     const dummyData = {
-      _id: 'new',
+      // _id: 'new',
       product_name: 'น้ำมันเครื่อง',
       avi_model: [],
       code: 'DW001',
@@ -179,7 +179,7 @@ export default function AddItem({ item }) {
             type="text"
             name="_id"
             defaultValue={data._id}
-            ref={register()}
+            // ref={register()}
           />
         </InputGroup><br></br>
 

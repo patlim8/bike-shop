@@ -15,17 +15,20 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useForm } from "react-hook-form";
 import { connectToDatabase } from "../util/mongodb";
 import { ObjectID } from "mongodb";
+import { ObjectId } from 'bson';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Calculation({ item, order }) {
+export default function Calculation({ item: items, order }) {
+
+  console.log("items: ", items)
 
   const { register, handleSubmit, watch, errors } = useForm();
 
 
   const [jsxProductList, setJsxProductList] = useState(<tr></tr>);
   const [productList, setProductList] = useState([]);
-
+  
 
   const onSubmitToDatabase = (data) => {
     // productList << array of Json
@@ -39,32 +42,66 @@ export default function Calculation({ item, order }) {
 
   const onSubmit = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
-    let j = 1
-    for (let i = 1; i <= productList.length; i++) {
-      j++
-    }
+    // let j = 1
+    // for (let i = 1; i <= productList.length; i++) {
+    //   j++
+    // }
 
-    var start_item_id = j
-    let p = { id: start_item_id, product_name: data.product_name, code: data.code, brand: 'Honda', model: 'CBR150', qty: data.qty, unitPrice: 100 }
-    productList.push(p)
-    console.log("productList", productList.length)
-    let newList = productList.map(p => {
-      console.log("Update JSX", p)
-      return (
-        <tr>
-          <td>{p.id}</td>
-          <td>{p.product_name}</td>
-          <td>{p.code}</td>
-          <td>{p.brand}</td>
-          <td>{p.model}</td>
-          <td>{p.qty}</td>
-          <td>{p.unitPrice}</td>
-        </tr>
-      )
+    // var start_item_id = j
+    let p = { id: "1", product_name: data.product_name, code: data.code, brand: 'ptt', model: 'CBR150', qty: data.qty, unitPrice: 100 }
+    // var totalprice = productList.map(product =>{
+    //   totalprice += product.qty * product.purchase_price
+    // })
+    let totalprice = 0
+    
+    
+    console.log("ใน product list", productList)
+    let check_items = items.map(r => {
+      
+    
+      if(r.product_name == p.product_name){
+        // console.log("สินค้า", r.product_name)
+        // console.log("ราคาสินค้า", r.purchase_price)
+        // console.log("จำนวนสินค้า", r.qty)
+        r.qty = p.qty
+        productList.push(r)
+        // console.log("productList", productList)
+
+        
+      }
     })
+
+    // productList.push(p)
+    let newList = productList.map(p => {
+          console.log("Update JSX", p)
+          return (
+            <tr>
+              <td>{p.id}</td>
+              <td>{p.product_name}</td>
+              <td>{p.code}</td>
+              <td>{p.brand}</td>
+              <td>{p.model}</td>
+              <td>{p.qty}</td>
+              <td>{p.unitPrice}</td>
+            </tr>
+          )
+        })
+      
     setProductList(productList)
     setJsxProductList(newList)
 
+    const calculate = productList.map(product =>{
+      totalprice += product.qty * product.purchase_price
+    })
+
+  
+  // console.log("ราคารวม", totalprice)
+    console.log("ราคาสินค้า", totalprice)
+
+    console.log(newList)
+
+    
+    
     const product_code = []
     const product_price = []
     const product_unit = []
@@ -77,62 +114,73 @@ export default function Calculation({ item, order }) {
     const new_product_unit = product_unit.map(h => parseInt(h));
     const new_product_price = product_price.map(h => parseInt(h));
 
-    let total_unit = 0
-    for (let k = 0; k < new_product_unit.length; k++) {
-      total_unit = total_unit + new_product_unit[k]
-    }
+    // let total_unit = 0
+    // for (let k = 0; k < new_product_unit.length; k++) {
+    //   total_unit = total_unit + new_product_unit[k]
+    // }
 
-    let total_price = 0
+    // let total_price = 0
+    // for (let k = 0; k < new_product_price.length; k++) {
+    //   total_price = total_price + new_product_price[k]
+    // }
+    // // console.log(product_code)
+    // // console.log(product_price)
+    // // console.log(new_product_unit)
+    // console.log("Total Unit",total_unit)
+    // console.log("Total Price",total_price)
+
+    let totalProductPrice = 0
     for (let k = 0; k < new_product_price.length; k++) {
-      total_price = total_price + new_product_price[k]
+      let tempt = new_product_unit[k] * new_product_price[k]
+      totalProductPrice = totalProductPrice + tempt
     }
-    // console.log(product_code)
-    // console.log(product_price)
-    // console.log(new_product_unit)
-    console.log("Total Unit",total_unit)
-    console.log("Total Price",total_price)
+    console.log(product_code)
+    console.log(new_product_unit)
+    console.log(new_product_price)
+    // console.log("Total Unit",total_unit)
+    console.log("totalProductPrice",totalProductPrice)
 
-    let new_order = {item_code: product_code, unit: total_unit, price: total_price}
-    if (productList.length = 1) {
-      fetch('/api/order', {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-          'Content-Type': 'application/json'
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(new_order) // body data type must match "Content-Type" header
-      })
-        .then(response => response.json())
-        .then(new_order => {
-          console.log(new_order);
-          alert("Response from server "+ new_order.message)
-        });
+    // let new_order = {item_code: product_code, unit: total_unit, price: total_price}
+    // if (productList.length = 1) {
+    //   fetch('/api/order', {
+    //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    //     mode: 'cors', // no-cors, *cors, same-origin
+    //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //     credentials: 'same-origin', // include, *same-origin, omit
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //       // 'Content-Type': 'application/x-www-form-urlencoded',
+    //     },
+    //     redirect: 'follow', // manual, *follow, error
+    //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //     body: JSON.stringify(new_order) // body data type must match "Content-Type" header
+    //   })
+    //     .then(response => response.json())
+    //     .then(new_order => {
+    //       console.log(new_order);
+    //       alert("Response from server "+ new_order.message)
+    //     });
   
-    } else if (productList.length < 1) {
-      fetch('/api/order', {
-        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-          'Content-Type': 'application/json'
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(new_order) // body data type must match "Content-Type" header
-      })
-        .then(response => response.json())
-        .then(new_order => {
-          console.log(new_order);
-          alert("Response from server "+ new_order.message)
-        });
-    }
+    // } else if (productList.length < 1) {
+    //   fetch('/api/order', {
+    //     method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+    //     mode: 'cors', // no-cors, *cors, same-origin
+    //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //     credentials: 'same-origin', // include, *same-origin, omit
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //       // 'Content-Type': 'application/x-www-form-urlencoded',
+    //     },
+    //     redirect: 'follow', // manual, *follow, error
+    //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //     body: JSON.stringify(new_order) // body data type must match "Content-Type" header
+    //   })
+    //     .then(response => response.json())
+    //     .then(new_order => {
+    //       console.log(new_order);
+    //       alert("Response from server "+ new_order.message)
+    //     });
+    // }
 
     // let new_order = []
     // total_pay.push(new_order)
@@ -308,6 +356,7 @@ export default function Calculation({ item, order }) {
           />
         </InputGroup>
 
+
         <InputGroup className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
@@ -344,7 +393,10 @@ export async function getServerSideProps({query}) {
 
   const item = await db
     .collection("item")
-    .findOne(ObjectID(item_id))
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
 
   const order = await db
     .collection("order")

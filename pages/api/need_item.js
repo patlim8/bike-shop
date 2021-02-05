@@ -2,17 +2,17 @@ import { ObjectID } from "mongodb";
 import { connectToDatabase } from "../../util/mongodb";
 
 export default async (req, res) => {
-  console.log("item API method ++++++" + req.method)
+  console.log("need_item API method " + req.method)
 
   if (req.method === 'GET') {
     const { db } = await connectToDatabase();
-    const item = await db
-      .collection("item")
+    const items = await db
+      .collection("need_item")
       .find({})
       .sort({})
       .limit(20)
       .toArray();
-    res.json(item);
+    res.json(items);
   } else if (req.method === 'POST') {
     console.log("ADDING ", req.body)
     let data = req.body;
@@ -20,19 +20,18 @@ export default async (req, res) => {
     // let title = data.title;
     // let metacritic = data.metacritic;
 
-    // let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date } = data;
-    
-    
-    // จะได้ objectID ถ้าใช้โค้ดล่าง อันบนเหมือนจะสร้าง _id เองได้
-    let { product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date } = data;
+    let { _id, product_name, code, brand, model, purchase_price, qty, limit_qty } = data;
+    //let delete_product = document.getElementsByName('delete_item');
 
+    // console.log("Received Debit:", balance_debit)
+    // console.log("Received Date:", balance_date)
     const { db } = await connectToDatabase();
     let doc = await db
-      .collection('item')
+      .collection('need_item')
       .updateOne(
         {
-          // _id: _id,
-          product_name: product_name
+          _id: _id
+          // product_name: product_name,
           // code: code,
           // brand: brand,
           // model: model,
