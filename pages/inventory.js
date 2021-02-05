@@ -80,7 +80,11 @@ export default function Inventory({ item: items }) {
     
  }
 
- 
+ // filter is a JSON object having brand and model
+ let [filter,setFilter] = useState({
+   brand: 'ptt',
+  //  model: '0w20'
+ })
 
  useEffect( () => {
    setItemList(items)
@@ -89,6 +93,10 @@ export default function Inventory({ item: items }) {
 
   const edit = (itemId) => {
     console.log({itemId})
+  }
+
+  const handleBrandChange = (value) => {
+    setFilter({brand: value})
   }
 
   return (
@@ -126,7 +134,7 @@ export default function Inventory({ item: items }) {
                       onChange={updateInput} />
           
           
-          <BrandList />
+          <BrandList brandChange={handleBrandChange}/>
           <ModelList />
           
           รุ่นที่ใช้ได้: <Controller
@@ -150,7 +158,7 @@ export default function Inventory({ item: items }) {
         </div>
 
         <div>
-        <ItemList ItemList={itemList}/>
+        <ItemList ItemList={itemList} filter={filter}/>
 
           {/* <Table striped bordered hover size="sm">
             <thead>

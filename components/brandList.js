@@ -8,7 +8,7 @@ import Select from 'react-select';
 import { colourOptions, groupedOptions } from './data';
 
 
-export default function BrandList() {
+export default function BrandList({brandChange}) {
 
   const groupStyles = {
     display: 'flex',
@@ -28,6 +28,11 @@ export default function BrandList() {
     textAlign: 'center',
   };
   
+  const handleOnChange = e => {
+    console.log(e.value)
+    brandChange(e.value)
+  }
+  
   const formatGroupLabel = data => (
     <div style={groupStyles}>
       <span>{data.label}</span>
@@ -40,6 +45,7 @@ export default function BrandList() {
     
     options={groupedOptions}
     formatGroupLabel={formatGroupLabel}
+    onChange={handleOnChange}
   />
   </div>
     );
