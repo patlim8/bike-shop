@@ -8,7 +8,7 @@ export default async (req, res) => {
   if (req.method === 'GET') {
     const { db } = await connectToDatabase();
     const item = await db
-      .collection("item")
+      .collection("sale item")
       .find({})
       .sort({})
       .limit(20)
@@ -21,7 +21,7 @@ export default async (req, res) => {
     // let title = data.title;
     // let metacritic = data.metacritic;
 
-    let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date } = data;
+    let {  product_name, brand, model, qty, date } = data;
     
     
     // จะได้ objectID ถ้าใช้โค้ดล่าง อันบนเหมือนจะสร้าง _id เองได้
@@ -29,12 +29,12 @@ export default async (req, res) => {
     // console.log(data._id)
     const { db } = await connectToDatabase();
     let doc = await db
-      .collection('item')
+      .collection('sale item')
       .updateOne(
         {
           // _id: ObjectId(_id)
-          _id: _id
-          // product_name: product_name
+        //   _id: _id
+          product_name: product_name
           // code: code,
           // brand: brand,
           // model: model,
@@ -45,7 +45,7 @@ export default async (req, res) => {
           // barcode_id: barcode_id,
           // date: date
         },
-        { $set: data },
+        { $inc: {qty: + data.qty} },
         { upsert: true }
       ) // if update non-existing record, insert instead.
         console.log(doc)
@@ -87,7 +87,7 @@ export default async (req, res) => {
     
     
     // จะได้ objectID ถ้าใช้โค้ดล่าง อันบนเหมือนจะสร้าง _id เองได้
-    let {  product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date } = data;
+    let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date } = data;
     // console.log(data._id)
     const { db } = await connectToDatabase();
     let doc = await db

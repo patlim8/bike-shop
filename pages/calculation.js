@@ -66,34 +66,62 @@ export default function Calculation({ item: items, order }) {
         });
       })
     // console.log("new order ", newOrder)
-    newOrder.map(data => {
-      console.log(data)
-    
-      fetch('/api/order',
-        {
-          method: 'POST',
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          alert("Response from server " + data.message)
-        });
-      })
 
-    newOrder2.map(data => {
+
+    // newOrder.map(data => {
+    //   console.log(data)
+    
+    //   fetch('/api/order',
+    //     {
+    //       method: 'POST',
+    //       mode: 'cors', // no-cors, *cors, same-origin
+    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //       credentials: 'same-origin', // include, *same-origin, omit
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //         // 'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //       redirect: 'follow', // manual, *follow, error
+    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log(data);
+    //       alert("Response from server " + data.message)
+    //     });
+    //   })
+
+
+
+    // newOrder2.map(data => {
+    //   console.log(data)
+    
+    //   fetch('/api/order2',
+    //     {
+    //       method: 'POST',
+    //       mode: 'cors', // no-cors, *cors, same-origin
+    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //       credentials: 'same-origin', // include, *same-origin, omit
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //         // 'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //       redirect: 'follow', // manual, *follow, error
+    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log(data);
+    //       alert("Response from server " + data.message)
+    //     });
+    //   })
+
+    productList.map(data => {
       console.log(data)
     
-      fetch('/api/order2',
+      fetch('/api/saleItem',
         {
           method: 'POST',
           mode: 'cors', // no-cors, *cors, same-origin
@@ -199,21 +227,21 @@ export default function Calculation({ item: items, order }) {
     console.log("ข้างใน q", newOrder)
     setNewOrder(newOrder)
 
-    let s = { order_id: data.order_id, totalprice_order: 0, fix_service_price: 0, 
-      total: 0, receive: data.receive, change: 0}
+    // let s = { order_id: data.order_id, totalprice_order: 0, fix_service_price: 0, 
+    //   total: 0, receive: data.receive, change: 0}
 
-    // s.totalprice_order = parseInt(q.totalprice_order)
-    s.fix_service_price += data.fix_service_price
-    s.total = q.totalprice_order + s.fix_service_price
-    s.change = s.receive - s.total
-    console.log("ค่าซ่อม ", data.fix_service_price)
-    console.log("รวม ", s.total)
-    console.log("เงินทอน ", s.change)
+    // // s.totalprice_order = parseInt(q.totalprice_order)
+    // s.fix_service_price += data.fix_service_price
+    // s.total = q.totalprice_order + s.fix_service_price
+    // s.change = s.receive - s.total
+    // console.log("ค่าซ่อม ", data.fix_service_price)
+    // console.log("รวม ", s.total)
+    // console.log("เงินทอน ", s.change)
 
-    newOrder2.push(s)
-    console.log("ข้างใน s", newOrder2)
+    // newOrder2.push(s)
+    // console.log("ข้างใน s", newOrder2)
 
-    setNewOrder2(newOrder2)
+    // setNewOrder2(newOrder2)
 
    
 

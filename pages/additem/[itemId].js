@@ -22,13 +22,14 @@ import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedC
 export default function AddItem({ item }) {
 
   console.log("AddItem", { item })
+
   var data = item;
 
   if (item === null) {
     // Add new item, prepare blank form
     // in this case, use dummyData
     const dummyData = {
-      // _id: 'new',
+      _id: 'new',
       product_name: 'น้ำมันเครื่อง',
       avi_model: [],
       code: 'DW001',
@@ -41,7 +42,10 @@ export default function AddItem({ item }) {
     }
 
     data = dummyData
+
   }
+
+  console.log(data._id)
 
 
   const { register, handleSubmit, control, watch, errors } = useForm();
@@ -172,14 +176,14 @@ export default function AddItem({ item }) {
             <InputGroup.Text id="_id">_ID</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
-            readOnly
+            // readOnly
             placeholder="_ID"
             aria-label="ID"
             aria-describedby="_id"
             type="text"
             name="_id"
             defaultValue={data._id}
-            // ref={register()}
+            ref={register()}
           />
         </InputGroup><br></br>
 
@@ -348,8 +352,10 @@ export default function AddItem({ item }) {
       <div id="buttons">
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         <Button variant="danger" type="submit" id="del_item">ลบสินค้า</Button>{' '}
-        <Button type="submit" id="add_item">เพิ่ม</Button>{' '}
-        <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>{' '}
+
+        {data._id === 'new' ? <Button type="submit" id="add_item">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>}
+        
+        
         <Button variant="dark">กลับ</Button>{' '}
       </div>
     </form>
@@ -374,7 +380,7 @@ export async function getServerSideProps(props) {
     const item = await db
       .collection("item")
       .findOne(
-        { _id: ObjectId(itemId) }
+        { _id: itemId }
       )
 
     console.log("Found", { item })

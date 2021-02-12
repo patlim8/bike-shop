@@ -12,8 +12,12 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
+import { connectToDatabase } from "../util/mongodb";
 
-export default function TotalSale() {
+
+
+export default function TotalSale( { item: items } ) {
+  console.log(items)
   return (
     <div className={styles.container}>
       <Head>
@@ -47,30 +51,25 @@ export default function TotalSale() {
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+                <th>id</th>
+                <th>ชื่อสินค้า</th>
+                <th>ยี่ห้อสินค้า</th>
+                <th>รุ่นสินค้า</th>
+                <th>จำนวนที่ขายได้</th>
               </tr>
             </thead>
             <tbody>
+              {items.map(data =>{
+                return(
               <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+                <td>{data.id}</td>
+                <td>{data.product_name}</td>
+                <td>{data.brand}</td>
+                <td>{data.model}</td>
+                <td>{data.qty}</td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td colSpan="2">Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
+                )
+              })}
             </tbody>
           </Table>
         </div>
@@ -84,4 +83,26 @@ export default function TotalSale() {
 
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  const { db } = await connectToDatabase();
+
+  const item = await db
+    .collection("sale item")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
+  
+    
+  return {
+    props: {
+      item: JSON.parse(JSON.stringify(item)),
+      
+    },
+    
+    
+  };
+  
 }
