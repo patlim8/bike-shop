@@ -5,7 +5,7 @@ import ButtonBar from '../components/buttonBar';
 import { connectToDatabase } from "../util/mongodb"
 import Link from 'next/link'
 
-export default function Home({movies}) {
+export default function Home({ movies }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -24,27 +24,23 @@ export default function Home({movies}) {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p> */}
-      <ul>
-        {movies.map((movie) => (
-          <li>
-            <h2>
-              <Link href={`/movie/${movie._id}`}>
-                {movie.title}
-              </Link>
-            </h2>
-            <h3>{movie.metacritic}</h3>
-            {/* <h3>{movie._id}</h3> */}
-            <p>{movie.plot}</p>
-          </li>
-        ))}
-      </ul>
+        <ul>
+          {movies.map((movie) => (
+            <li>
+              <h2>
+                <Link href={`/movie/${movie._id}`}>
+                  {movie.title}
+                </Link>
+              </h2>
+              <h3>{movie.metacritic}</h3>
+              {/* <h3>{movie._id}</h3> */}
+              <p>{movie.plot}</p>
+            </li>
+          ))}
+        </ul>
 
 
         <div className={styles.grid}>
-          <a href="/inventory" className={styles.card}>
-            <h1>สินค้า</h1>
-          </a>
-
           <a href="/sale" className={styles.card}>
             <h1>ขาย</h1>
           </a>
@@ -53,9 +49,17 @@ export default function Home({movies}) {
             <h1>บัญชี </h1>
           </a>
 
+          <a href="/inventory" className={styles.card}>
+            <h1>สินค้า</h1>
+          </a>
+
           <a
             href="#" className={styles.card}>
             <h1>แจ้งเตือน</h1>
+          </a>
+
+          <a href="/model_mgnt" className={styles.card}>
+            <h1>จัดการรุ่นสินค้า</h1>
           </a>
         </div>
       </main>

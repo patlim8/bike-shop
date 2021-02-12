@@ -149,7 +149,7 @@ export default function Inventory({ item: items }) {
               onBlur={onBlur}
               value={value}  // this is what you need to do
               isMulti
-              options={options}
+              options={groupedOptions}
               ref={register}
             />
           )}
@@ -203,10 +203,10 @@ export default function Inventory({ item: items }) {
         </div>
       </main>
 
-      <ButtonGroup horizontal>
-        <Button variant="primary" href="/additem/new" size="sm">เพิ่มสินค้า</Button>{' '}
-        <Button variant="secondary" size="sm">สแกนบาร์โค้ด</Button>{' '}
-      </ButtonGroup>
+      <div class="button">
+        <Button variant="primary" href="/additem/new" size="lg">เพิ่มสินค้า</Button>{' '}
+        <Button variant="secondary" size="lg">สแกนบาร์โค้ด</Button>{' '}
+      </div>
 
     </div>
   )

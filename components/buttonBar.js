@@ -19,6 +19,7 @@ export default function ButtonBar() {
             <Nav.Link href="/">หน้าแรก</Nav.Link>
             <Nav.Link href="/inventory">สินค้า</Nav.Link>
             <Nav.Link href="/sale">ขาย</Nav.Link>
+            <Nav.Link href="/model_mgnt">จัดการรุ่นสินค้า</Nav.Link>
             <NavDropdown title="บัญชี" id="basic-nav-dropdown">
               <NavDropdown.Item href="/totalSale">บัญชีรายการขาย</NavDropdown.Item>
               <NavDropdown.Item href="/balance">บัญชี-Balance</NavDropdown.Item>

@@ -37,10 +37,9 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
             <td>{data.code}</td>
             <td>{data.brand}</td>
             <td>{data.model}</td>
-
             <td>{data.barcode_id}</td>
-            <td>{data.amount}</td>
-            <td>{data.limit_amount}</td>
+            <td>{data.qty}</td>
+            <td>{data.minStock}</td>
             <td>{data.purchase_price}</td>
           </tr>
 

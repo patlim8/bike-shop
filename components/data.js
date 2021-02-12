@@ -2,6 +2,30 @@ import makeAnimated from 'react-select/animated';
 
 export const animatedComponents = makeAnimated();
 
+export async function getServerSideProps() {
+  const { db } = await connectToDatabase();
+  const brand = await db
+    .collection("brand")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
+
+  const model = await db
+    .collection("model")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
+
+  return {
+    props: {
+      brand: JSON.parse(JSON.stringify(brand)),
+      model: JSON.parse(JSON.stringify(model)),
+    },
+  };
+}
+
 export const options = [
   { value: 'chocolate', label: 'Chocolate' },
   { value: 'strawberry', label: 'Strawberry' },

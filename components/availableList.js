@@ -7,14 +7,11 @@ import FormControl from 'react-bootstrap/FormControl';
 import React, { Component } from 'react'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
+import { groupedOptions } from './data';
 
 const animatedComponents = makeAnimated();
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-]
+const options = {groupedOptions}
 
 export default function AvailableList() {
     return (

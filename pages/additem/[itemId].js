@@ -183,7 +183,7 @@ export default function AddItem({ item }) {
             type="text"
             name="_id"
             defaultValue={data._id}
-            ref={register()}
+            ref={register({id: data._id})}
           />
         </InputGroup><br></br>
 
