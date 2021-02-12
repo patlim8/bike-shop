@@ -25,22 +25,101 @@ export default function Calculation({ item: items, order }) {
 
   const { register, handleSubmit, watch, errors } = useForm();
 
+  const { register: register2, handleSubmit: handleSubmit2, watch: watch2, errors:errors2 } = useForm();
+
 
   const [jsxProductList, setJsxProductList] = useState(<tr></tr>);
   const [productList, setProductList] = useState([]);
+  // const newOrder = [];
+  const [newOrder, setNewOrder] = useState([]);
+  const [newOrder2, setNewOrder2] = useState([]);
+
   
 
-  const onSubmitToDatabase = (data) => {
+  const onSubmitToDatabase = () => {
     // productList << array of Json
-    console.log({ productList })
-    fetch('/api/stock',
-      {
-        method: 'post',
-        body: productList
+    // let data = productList[0]
+    
+    
+
+    productList.map(data => {
+      console.log(data)
+    
+      fetch('/api/item',
+        {
+          method: 'DELETE',
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
       })
+    // console.log("new order ", newOrder)
+    newOrder.map(data => {
+      console.log(data)
+    
+      fetch('/api/order',
+        {
+          method: 'POST',
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
+      })
+
+    newOrder2.map(data => {
+      console.log(data)
+    
+      fetch('/api/order2',
+        {
+          method: 'POST',
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
+      })
+
+    
+
+        
   }
 
-  const onSubmit = (data) => {
+  const addItems = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
     // let j = 1
     // for (let i = 1; i <= productList.length; i++) {
@@ -48,28 +127,46 @@ export default function Calculation({ item: items, order }) {
     // }
 
     // var start_item_id = j
-    let p = { id: "1", product_name: data.product_name, code: data.code, brand: 'ptt', model: 'CBR150', qty: data.qty, unitPrice: 100 }
+    let p = { product_name: data.product_name, code: '', brand: '', model: '', qty: data.qty ,purchase_price: 0}
+    let q = { _id: data.order_id, items_code: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
+    
+
+
+
     // var totalprice = productList.map(product =>{
     //   totalprice += product.qty * product.purchase_price
     // })
-    let totalprice = 0
+    // let totalprice = 0
+    // let temp = [];
     
     
-    console.log("ใน product list", productList)
-    let check_items = items.map(r => {
+    // console.log("ใน product list", productList)
+
+    // productList.push(p)
+    // let check_item = 
+    items.map(r => {
+      
       
     
       if(r.product_name == p.product_name){
-        // console.log("สินค้า", r.product_name)
-        // console.log("ราคาสินค้า", r.purchase_price)
-        // console.log("จำนวนสินค้า", r.qty)
-        r.qty = p.qty
-        productList.push(r)
-        // console.log("productList", productList)
+        p.code = r.code
+        p.brand = r.brand
+        p.model = r.model
+        p.purchase_price = r.purchase_price
+      
+        
+        
+        productList.push(p)
+        q.items_code.push(p.code)
+        
+        console.log("ข้างใน", productList)
 
         
       }
-    })
+      
+    }
+    
+    )
 
     // productList.push(p)
     let newList = productList.map(p => {
@@ -85,107 +182,40 @@ export default function Calculation({ item: items, order }) {
               <td>{p.unitPrice}</td>
             </tr>
           )
+
         })
       
     setProductList(productList)
     setJsxProductList(newList)
 
+
     const calculate = productList.map(product =>{
-      totalprice += product.qty * product.purchase_price
+      q.totalprice_order += product.qty * product.purchase_price
     })
 
-  
-  // console.log("ราคารวม", totalprice)
-    console.log("ราคาสินค้า", totalprice)
+    newOrder.push(q)
 
-    console.log(newList)
+    console.log("ราคาสินค้า", q.totalprice_order)
+    console.log("ข้างใน q", newOrder)
+    setNewOrder(newOrder)
 
-    
-    
-    const product_code = []
-    const product_price = []
-    const product_unit = []
-    productList.map(p => {
-      product_code.push(p.code)
-      product_price.push(p.unitPrice)
-      product_unit.push(p.qty)
-    })
+    let s = { order_id: data.order_id, totalprice_order: 0, fix_service_price: 0, 
+      total: 0, receive: data.receive, change: 0}
 
-    const new_product_unit = product_unit.map(h => parseInt(h));
-    const new_product_price = product_price.map(h => parseInt(h));
+    // s.totalprice_order = parseInt(q.totalprice_order)
+    s.fix_service_price += data.fix_service_price
+    s.total = q.totalprice_order + s.fix_service_price
+    s.change = s.receive - s.total
+    console.log("ค่าซ่อม ", data.fix_service_price)
+    console.log("รวม ", s.total)
+    console.log("เงินทอน ", s.change)
 
-    // let total_unit = 0
-    // for (let k = 0; k < new_product_unit.length; k++) {
-    //   total_unit = total_unit + new_product_unit[k]
-    // }
+    newOrder2.push(s)
+    console.log("ข้างใน s", newOrder2)
 
-    // let total_price = 0
-    // for (let k = 0; k < new_product_price.length; k++) {
-    //   total_price = total_price + new_product_price[k]
-    // }
-    // // console.log(product_code)
-    // // console.log(product_price)
-    // // console.log(new_product_unit)
-    // console.log("Total Unit",total_unit)
-    // console.log("Total Price",total_price)
+    setNewOrder2(newOrder2)
 
-    let totalProductPrice = 0
-    for (let k = 0; k < new_product_price.length; k++) {
-      let tempt = new_product_unit[k] * new_product_price[k]
-      totalProductPrice = totalProductPrice + tempt
-    }
-    console.log(product_code)
-    console.log(new_product_unit)
-    console.log(new_product_price)
-    // console.log("Total Unit",total_unit)
-    console.log("totalProductPrice",totalProductPrice)
-
-    // let new_order = {item_code: product_code, unit: total_unit, price: total_price}
-    // if (productList.length = 1) {
-    //   fetch('/api/order', {
-    //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    //     mode: 'cors', // no-cors, *cors, same-origin
-    //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //     credentials: 'same-origin', // include, *same-origin, omit
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //       // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     redirect: 'follow', // manual, *follow, error
-    //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //     body: JSON.stringify(new_order) // body data type must match "Content-Type" header
-    //   })
-    //     .then(response => response.json())
-    //     .then(new_order => {
-    //       console.log(new_order);
-    //       alert("Response from server "+ new_order.message)
-    //     });
-  
-    // } else if (productList.length < 1) {
-    //   fetch('/api/order', {
-    //     method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-    //     mode: 'cors', // no-cors, *cors, same-origin
-    //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //     credentials: 'same-origin', // include, *same-origin, omit
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //       // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     redirect: 'follow', // manual, *follow, error
-    //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //     body: JSON.stringify(new_order) // body data type must match "Content-Type" header
-    //   })
-    //     .then(response => response.json())
-    //     .then(new_order => {
-    //       console.log(new_order);
-    //       alert("Response from server "+ new_order.message)
-    //     });
-    // }
-
-    // let new_order = []
-    // total_pay.push(new_order)
-    // total_pay.push(new_order)
-    // console.log("new_order",new_order)
+   
 
   }
 
@@ -208,7 +238,8 @@ export default function Calculation({ item: items, order }) {
 
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <div>
+    <form onSubmit={handleSubmit(addItems)}>
       <Head>
         <title>Calculation</title>
         <link rel="icon" href="/favicon.ico" />
@@ -231,7 +262,8 @@ export default function Calculation({ item: items, order }) {
               <InputGroup.Text id="basic-addon1">Order ID</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              placeholder="Item name"
+              name="order_id" ref={register}
+              placeholder="New Order"
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
@@ -295,11 +327,11 @@ export default function Calculation({ item: items, order }) {
             <FormControl
               name="qty" ref={register}
               placeholder="จำนวน"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
+              type="number"
             />
           </InputGroup>
 
+          
           <button>เพิ่มในรายการขาย</button>
 
 
@@ -327,8 +359,12 @@ export default function Calculation({ item: items, order }) {
 
         </div>
 
+      </main>
+    </form>
 
+    <form onSubmit={handleSubmit2(onSubmitToDatabase)}>
 
+      <div>
         <Form.Group controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="ค่าถอดประกอบ" />
         </Form.Group>
@@ -338,9 +374,9 @@ export default function Calculation({ item: items, order }) {
             <InputGroup.Text id="basic-addon1">ราคา</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
+            name="fix_service_price" ref={register}
             placeholder="ราคา"
-            aria-label="Item name"
-            aria-describedby="basic-addon1"
+            type="number"
           />
         </InputGroup>
 
@@ -362,9 +398,9 @@ export default function Calculation({ item: items, order }) {
             <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
+            name="receive" ref={register}
             placeholder=""
-            aria-label="Item name"
-            aria-describedby="basic-addon1"
+            type="number"
           />
         </InputGroup>
 
@@ -373,16 +409,21 @@ export default function Calculation({ item: items, order }) {
         </Form.Group>
 
 
-      </main>
+      </div>
 
+      <div>
       <ButtonGroup horizontal>
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
-        <Button href="/payment" type="submit">จ่าย</Button>{' '}
+        {/* <Button href="/payment" type="submit">จ่าย</Button>{' '} */}
+        <button>จ่าย</button>{' '}
         <Button variant="danger" href="/sale">ย้อนกลับ</Button>{' '}
       </ButtonGroup>
 
+      {/* <button>จ่าย</button> */}
+      </div>
 
     </form>
+    </div>
   )
 }
 

@@ -20,16 +20,17 @@ export default async (req, res) => {
   } else if (req.method === 'POST') {
     console.log("order REQ", req.body)
     let data = req.body;
-    let { item_code, unit, price } = data;
+    let { _id, items_code, totalprice_order, unit } = data;
 
     const { db } = await connectToDatabase();
     let doc = await db
       .collection('order')
       .updateOne(
         {
-          item_code: item_code,
-          unit: unit,
-          price: price
+          _id: _id
+          // item_code: items_code,
+          // unit: unit,
+          // price: totalprice_order
         },
         { $set: data },
         { upsert: true }

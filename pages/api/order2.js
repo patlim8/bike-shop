@@ -19,7 +19,7 @@ export default async (req, res) => {
     // let title = data.title;
     // let metacritic = data.metacritic;
 
-    let { id, price, fix_service_price, total_price, receive, change } = data;
+    let { id, totalprice_order, fix_service_price, total, receive, change } = data;
 
     // console.log("Received Debit:", balance_debit)
     // console.log("Received Date:", balance_date)
@@ -28,12 +28,12 @@ export default async (req, res) => {
       .collection('order2')
       .updateOne(
         {
-            _id: id, 
-            price: price, 
-            fix_service_price: fix_service_price,
-            total_price: total_price, 
-            receive: receive, 
-            change: change
+            _id: id 
+            // price: totalprice_order, 
+            // fix_service_price: fix_service_price,
+            // total_price: total, 
+            // receive: receive, 
+            // change: change
         },
         { $set: data },
         { upsert: true }
