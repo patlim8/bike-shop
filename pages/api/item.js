@@ -1,5 +1,6 @@
 import { ObjectID } from "mongodb";
 import { ObjectId } from 'bson';
+import { ObjectId} from "bson";
 import { connectToDatabase } from "../../util/mongodb";
 
 export default async (req, res) => {
@@ -21,16 +22,16 @@ export default async (req, res) => {
     // let title = data.title;
     // let metacritic = data.metacritic;
 
-    let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
-    
-    
+    // let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
+
+
     // จะได้ objectID ถ้าใช้โค้ดล่าง อันบนเหมือนจะสร้าง _id เองได้
-    // let { product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
+    let { product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
     // console.log(data._id)
     const { db } = await connectToDatabase();
     let doc = await db
       .collection('item')
-      .updateOne(
+      .insertOne(
         {
           // _id: ObjectId(_id)
           _id: _id
@@ -45,15 +46,14 @@ export default async (req, res) => {
           // barcode_id: barcode_id,
           // date: date
         },
-        { $set: data },
-        { upsert: true }
+
       ) // if update non-existing record, insert instead.
-        console.log(doc)
+    console.log(doc)
     res.json({ message: 'OK' });
   } else if (req.method === 'PUT') {
     let data = req.body
-    let {_id, product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date} = data;
-    console.log({data})
+    let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
+    console.log({ data })
     // not sure, _id is in data, let {_id, xxxx} = data
     // or data.id() or data._id
     const { db } = await connectToDatabase();
@@ -68,14 +68,14 @@ export default async (req, res) => {
           runValidators: true
         },
       )
-    res.json({message: 'Update data', data: data });
+    res.json({ message: 'Update data', data: data });
   } else if (req.method === 'DELETE') {
     let data = req.body
     let { _id } = data;
     const { db } = await connectToDatabase();
     let doc = await db
       .collection('item')
-      .deleteOne({ _id: ObjectID(_id)})
+      .deleteOne({ _id: ObjectID(_id) })
     res.json({ delete: true, message: 'Delete data', data: {} })
   }
 }

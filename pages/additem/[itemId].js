@@ -467,7 +467,7 @@ export async function getServerSideProps(props) {
     const item = await db
       .collection("item")
       .findOne(
-        { _id: itemId }
+        { _id: ObjectId(itemId) }
       )
 
     console.log("Found", { item })
