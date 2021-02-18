@@ -7,7 +7,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import React, { Component } from 'react'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-import { groupedOptions } from './data';
+import { groupedOptions } from '../pages/data';
 
 const animatedComponents = makeAnimated();
 

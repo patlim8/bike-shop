@@ -148,17 +148,9 @@ export const colourOptions = [
   
   export const groupedOptions = [
     {
-      label: 'Colours',
-      options: colourOptions,
-    },
-    {
-      label: 'Flavours',
-      options: flavourOptions,
-    },
-    {
       label: 'ยี่ห้อ',
       options: brandOptions,
-    },
+    }
   ];
 
   export const groupStyles = {

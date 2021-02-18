@@ -14,7 +14,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { connectToDatabase } from "../util/mongodb";
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
-import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../components/data';
+import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../pages/data';
 import Link from 'next/link'
 
 import React, { useState, useEffect } from 'react';

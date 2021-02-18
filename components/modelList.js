@@ -5,7 +5,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Select from 'react-select';
-import { colourOptions, groupedOptions } from './data';
+import { colourOptions, groupedOptions } from '../pages/data';
 
 export default function ModelList() {
   const groupStyles = {

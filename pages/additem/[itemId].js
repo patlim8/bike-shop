@@ -15,7 +15,7 @@ import { connectToDatabase } from "../../util/mongodb"
 import { ObjectId } from 'bson';
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
-import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../../components/data';
+import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../../pages/data';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
