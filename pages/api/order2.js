@@ -18,9 +18,13 @@ export default async (req, res) => {
     // data = JSON.parse(data);
     // let title = data.title;
     // let metacritic = data.metacritic;
+    if(data.type === "Buy"){
+      let { id, product_name, type,  qty, unit_price, expense, date} = data;
+    }else{
 
-    let { id, totalprice_order, fix_service_price, total, receive, change } = data;
-
+    
+    let { id, totalprice_order, fix_service_price,  total, receive, change, type, date} = data;
+    }
     // console.log("Received Debit:", balance_debit)
     // console.log("Received Date:", balance_date)
     const { db } = await connectToDatabase();
@@ -41,18 +45,46 @@ export default async (req, res) => {
 
     res.json({ message: 'OK' });
   }  else if (req.method === 'PUT') {
+    console.log("order2 update ++++++++++", req.body)
     let data = req.body
-    let { id, price, fix_service_price, total_price, receive, change } = data;
+    let data1 = req.body
+    let data2 = req.body
+
+    // if(data.type === "Buy"){
+    let { id, product_name, type,  qty, unit_price, expense, date} = data1;
+
+    console.log("ที่ได้ +++++++++++++++++++", data)
+    // }else{
+
+    
+    let { id2, totalprice_order, fix_service_price,  total, receive, change, type2, date2} = data2;
+    // }
+    // let { id, price, fix_service_price, total_price, receive, change } = data;
     const { db } = await connectToDatabase();
-    let doc = await db
-      .collection('order2')
-      .updateOne({_id: id}, { $set: data },
-        {
-          new: true,
-          runValidators: true
-        },
-      )
-    res.json({message: 'Update data', data: data });
+
+    if(data.type === "Buy"){
+      let doc = await db
+        .collection('order2')
+        .updateOne({_id: id}, { $set: data1 },
+          {
+            new: true,
+            runValidators: true,
+            upsert: true
+          },
+        )
+      res.json({message: 'Update data', data: data1 });
+    }else{
+      let doc = await db
+        .collection('order2')
+        .updateOne({_id: id2}, { $set: data2 },
+          {
+            new: true,
+            runValidators: true,
+            upsert: true
+          },
+        )
+      res.json({message: 'Update data', data: data2 });
+    }
   } else if (req.method === 'DELETE') {
     let data = req.body
     let { id } = data;

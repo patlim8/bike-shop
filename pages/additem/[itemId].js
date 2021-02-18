@@ -18,10 +18,25 @@ import Select from 'react-select';
 import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../../components/data';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
+import React, { useState } from 'react';
+// import _uniqueId from 'lodash/uniqueId';
+import { v4 as uuidv4 } from 'uuid';
+import { v1 as uuidv1 } from 'uuid';
 
-export default function AddItem({ item }) {
+
+
+export default function AddItem({ item  }) {
 
   console.log("AddItem", { item })
+
+  // const [id] = useState(_uniqueId('prefix-'));
+  
+  const [buyOrder, setBuyOrder] = useState([]);
+  const tempID = uuidv4();
+  console.log(tempID)
+  // console.log(item._id)
+  // console.log(ObjectId(item._id))
+
 
   var data = item;
 
@@ -29,7 +44,7 @@ export default function AddItem({ item }) {
     // Add new item, prepare blank form
     // in this case, use dummyData
     const dummyData = {
-      _id: 'new',
+      _id: tempID,
       product_name: 'น้ำมันเครื่อง',
       avi_model: [],
       code: 'DW001',
@@ -54,6 +69,30 @@ export default function AddItem({ item }) {
     data['avi_model'] = []
     console.log(data)
 
+    let p = { id: uuidv1(), product_name: data.product_name, type: "Buy", 
+              qty: 0, unit_price: data.purchase_price, expense: 0}
+
+
+    p.qty = data.qty - item.qty
+    // item.map(r => {
+
+    //   if(r._id == data._id){
+    //     p.qty = data.qty - r.qty
+        
+      
+    //     // productList.push(p)
+    //     // q.items_code.push(p.code)
+    //   }
+      
+    // }
+    
+    // )
+    p.expense = p.unit_price * p.qty
+
+    buyOrder.push(p)
+    setBuyOrder(buyOrder)
+
+
 
     const submitterId = e.nativeEvent.submitter.id;
     console.log({ submitterId })
@@ -77,6 +116,29 @@ export default function AddItem({ item }) {
           console.log(data);
           alert("Response from server " + data.message)
         });
+
+      buyOrder.map( order =>{
+        console.log(order)
+        fetch('/api/order2', {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(order) // body data type must match "Content-Type" header
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            alert("Response from server " + data.message)
+          });
+      }
+      )
     } else if (submitterId == 'update_item') {
       fetch('/api/item', {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
@@ -96,6 +158,29 @@ export default function AddItem({ item }) {
           console.log(data);
           alert("Response from server " + data.message)
         });
+
+        buyOrder.map( order =>{
+          console.log(order)
+          fetch('/api/order2', {
+            method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+              'Content-Type': 'application/json'
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(order) // body data type must match "Content-Type" header
+          })
+            .then(response => response.json())
+            .then(order => {
+              console.log(order);
+              alert("Response from server " + order.message)
+            });
+        }
+        )
     } else if (submitterId === 'del_item') {
       fetch('/api/item', {
         method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
@@ -124,13 +209,15 @@ export default function AddItem({ item }) {
     </div>
   );
 
+  
+
 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>
-          {data._id === 'new' ? 'New Item' : 'Edit'}
+          {data._id === tempID ? 'New Item' : 'Edit'}
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -141,7 +228,7 @@ export default function AddItem({ item }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-        {data._id === 'new' ? 'New Item' : 'Edit'}
+        {data._id === tempID ? 'New Item' : 'Edit'}
         </h1> <br></br><br></br><br></br>
 
 
@@ -176,7 +263,7 @@ export default function AddItem({ item }) {
             <InputGroup.Text id="_id">_ID</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
-            // readOnly
+            readOnly
             placeholder="_ID"
             aria-label="ID"
             aria-describedby="_id"
@@ -353,7 +440,7 @@ export default function AddItem({ item }) {
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         <Button variant="danger" type="submit" id="del_item">ลบสินค้า</Button>{' '}
 
-        {data._id === 'new' ? <Button type="submit" id="add_item">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>}
+        {data._id === tempID ? <Button type="submit" id="add_item">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>}
         
         
         <Button variant="dark">กลับ</Button>{' '}

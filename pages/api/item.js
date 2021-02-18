@@ -1,4 +1,5 @@
 import { ObjectID } from "mongodb";
+import { ObjectId } from 'bson';
 import { connectToDatabase } from "../../util/mongodb";
 
 export default async (req, res) => {
@@ -32,17 +33,17 @@ export default async (req, res) => {
       .updateOne(
         {
           // _id: ObjectId(_id)
-          // _id: _id
-          product_name: product_name,
-          code: code,
-          brand: brand,
-          model: model,
-          avi_model: avi_model,
-          purchase_price: purchase_price,
-          qty: qty,
-          limit_qty: limit_qty,
-          barcode_id: barcode_id,
-          date: date
+          _id: _id
+          // product_name: product_name,
+          // code: code,
+          // brand: brand,
+          // model: model,
+          // avi_model: avi_model,
+          // purchase_price: purchase_price,
+          // qty: qty,
+          // limit_qty: limit_qty,
+          // barcode_id: barcode_id,
+          // date: date
         },
         { $set: data },
         { upsert: true }
@@ -58,7 +59,8 @@ export default async (req, res) => {
     const { db } = await connectToDatabase();
     let doc = await db
     .collection('item')
-    .updateOne({_id: ObjectID(_id)}, { $set: data },
+    .updateOne({_id: _id}, 
+            { $set: data },
       // Option 1: use updateOne {_id: ObjectID(id)}
       // Option 2: use findByIdAndUpdate, findByIdAndUpdate(ObjectID(id), {....})
         {
