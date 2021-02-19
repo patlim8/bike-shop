@@ -15,35 +15,48 @@ export default async (req, res) => {
   } else if (req.method === 'POST') {
     console.log("order2 REQ", req.body)
     let data = req.body;
+    let data1 = req.body
+    let data2 = req.body
     // data = JSON.parse(data);
     // let title = data.title;
     // let metacritic = data.metacritic;
-    if(data.type === "Buy"){
-      let { id, product_name, type,  qty, unit_price, expense, date} = data;
-    }else{
+    let { id, product_name, type,  qty, unit_price, expense, date} = data1;
+
+    // console.log("ที่ได้ +++++++++++++++++++", data)
+    // }else{
 
     
-    let { id, totalprice_order, fix_service_price,  total, receive, change, type, date} = data;
-    }
+    let { order_id, totalprice_order, fix_service_price,  total, receive, change, type2, date2} = data2;
     // console.log("Received Debit:", balance_debit)
     // console.log("Received Date:", balance_date)
     const { db } = await connectToDatabase();
-    let doc = await db
-      .collection('order2')
-      .updateOne(
-        {
-            _id: id 
-            // price: totalprice_order, 
-            // fix_service_price: fix_service_price,
-            // total_price: total, 
-            // receive: receive, 
-            // change: change
-        },
-        { $set: data },
-        { upsert: true }
-      ) // if update non-existing record, insert instead.
+    
+    if(data.type === "Buy"){
+      let doc = await db
+        .collection('order2')
+        .updateOne({_id: id}, { $set: data1 },
+          {
+            new: true,
+            runValidators: true,
+            upsert: true
+          },
+        )
+      res.json({message: 'Update data', data: data1 });
+    }else{
+      let doc = await db
+        .collection('order2')
+        .updateOne({_id: order_id}, { $set: data2 },
+          {
+            new: true,
+            runValidators: true,
+            upsert: true
+          },
+        )
+      res.json({message: 'Update data2', data: data2 });
+    }
 
-    res.json({ message: 'OK' });
+
+
   }  else if (req.method === 'PUT') {
     console.log("order2 update ++++++++++", req.body)
     let data = req.body

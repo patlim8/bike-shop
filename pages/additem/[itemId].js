@@ -450,7 +450,7 @@ export default function AddItem({ item  }) {
 }
 
 export async function getServerSideProps(props) {
-  // console.log({props})  
+  console.log('props === ',{props})  
   const itemId = props.params.itemId
   console.log('_ID', { itemId })
   if (itemId === 'new') {

@@ -7,11 +7,16 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
+import React, { useState, useEffect } from 'react';
 
 function CustomToggle({ children, eventKey }) {
   const decoratedOnClick = useAccordionToggle(eventKey, () =>
-    console.log('totally custom!'),
+    // setPercent(eventKey.target.value),
+    console.log("working ")
   );
+
+  
+
 
   return (
     <button
@@ -25,6 +30,18 @@ function CustomToggle({ children, eventKey }) {
 }
 
 export default function Sale() {
+
+  const [percent, setPercent] = useState('')
+
+  // const updateInput = (e) => {
+    
+  //     // percent = e.target.value
+  //     // setPercent(percent)
+  //     console.log("percent ===", e.target.value)
+
+  // }
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -48,7 +65,7 @@ export default function Sale() {
         <div className={styles.grid}>
           <Card>
             <Card.Body>
-              <Card.Link href="/calculation">
+              <Card.Link href="/sell/normal">
                 <h1>ลูกค้าหน้าร้าน</h1>
               </Card.Link> 
             </Card.Body> 
@@ -64,9 +81,9 @@ export default function Sale() {
                 <Form>
                   <Form.Group>
                     <Form.Label>คิดราคาเพิ่ม(%)</Form.Label>
-                    <Form.Control type="text" placeholder="ใส่ % ที่ต้องการคิด" />
+                    <Form.Control type="text" placeholder="ใส่ % ที่ต้องการคิด" onChange={e => setPercent(e.target.value)} />
                   </Form.Group>
-                  <Button variant="primary" type="submit" href="/calculation">
+                  <Button variant="primary" type="submit" href={`/sell/specialx${percent}`} >
                     ตกลง
                   </Button>
                 </Form>

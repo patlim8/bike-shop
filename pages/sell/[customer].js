@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from '../../styles/Home.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ButtonBar from '../components/buttonBar';
+import ButtonBar from '../../components/buttonBar';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import BrandList from '../components/brandList';
-import ModelList from '../components/modelList'
+
+
+import BrandList from '../../components/brandList';
+import ModelList from '../../components/modelList'
+
+
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useForm } from "react-hook-form";
-import { connectToDatabase } from "../util/mongodb";
+import { connectToDatabase } from "../../util/mongodb";
 import { ObjectID } from "mongodb";
 import { ObjectId } from 'bson';
 
@@ -21,9 +25,11 @@ import { v1 as uuidv1 } from 'uuid';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Calculation({ item: items, order }) {
+export default function Calculation({ item: items, order, customer_price_multiply }) {
 
   console.log("items: ", items)
+
+  console.log("multiply === ", customer_price_multiply)
 
   const { register, handleSubmit, watch, errors } = useForm();
 
@@ -225,7 +231,7 @@ export default function Calculation({ item: items, order }) {
 
     newOrder.push(q)
 
-    console.log("ราคาสินค้า", q.totalprice_order)
+    console.log("ราคาสินค้า", q.totalprice_order*customer_price_multiply)
     console.log("ข้างใน q", newOrder)
     setNewOrder(newOrder)
 
@@ -457,10 +463,17 @@ export default function Calculation({ item: items, order }) {
   )
 }
 
-export async function getServerSideProps({query}) {
+export async function getServerSideProps({query}, props) {
   const { db } = await connectToDatabase();
   const { item_id } = query
+//   const customer_type = props.params.customer_type
+  console.log('type === ',query.customer)  
   console.log(`getServerSideProps: ${item_id}`)
+
+  // console.log('type2 === ',{query}) 
+
+  
+
 
   const item = await db
     .collection("item")
@@ -475,10 +488,34 @@ export async function getServerSideProps({query}) {
     .toArray()
 
     console.log(ObjectID(item_id))
-  return {
-    props: {
-      item: JSON.parse(JSON.stringify(item)),
-      order: JSON.parse(JSON.stringify(order)),
-    },
-  };
+
+    // return {
+    //     props: {
+    //     item: JSON.parse(JSON.stringify(item)),
+    //     order: JSON.parse(JSON.stringify(order)),
+        
+    //     },
+    // };
+  if(query.customer === 'normal'){  
+    return {
+        props: {
+        item: JSON.parse(JSON.stringify(item)),
+        order: JSON.parse(JSON.stringify(order)),
+        customer_price_multiply: 1.2
+        },
+    };
+}else{
+
+  let percent = query.customer
+  // percent.split("x")
+  console.log("percent === ", percent.split("x"))
+  console.log("number === ", percent.split("x")[1])
+    return {
+        props: {
+        item: JSON.parse(JSON.stringify(item)),
+        order: JSON.parse(JSON.stringify(order)),
+        customer_price_multiply: JSON.parse(Number(1 + Number(percent.split("x")[1])/100))
+        },
+    };
+}
 }
