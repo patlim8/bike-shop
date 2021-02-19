@@ -5,10 +5,18 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Select from 'react-select';
-import { groupedOptions } from '../pages/data';
+// import { groupedOptions } from '../pages/data';
 
 
-export default function BrandList({brandChange}) {
+export default function BrandList({brandChange, brand}) {
+
+  console.log('brand:', brand)
+  let brandOP = []
+  let element = {label: 'brand', options: []}
+  element.options = (brand.map((b) => ({
+    value: b.name, label: b.name, rating: 'good'
+  })))
+  brandOP.push(element)
 
   const groupStyles = {
     display: 'flex',
@@ -43,7 +51,7 @@ export default function BrandList({brandChange}) {
       <div>
     ยี่ห้อสินค้า: <Select
     
-    options={groupedOptions}
+    options={brandOP}
     formatGroupLabel={formatGroupLabel}
     onChange={handleOnChange}
   />

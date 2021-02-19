@@ -20,6 +20,7 @@ import { ObjectID } from 'bson';
 
 import React, { useState, useEffect } from 'react';
 import ItemList from '../components/itemList'
+import BrandOP from './data'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -138,8 +139,8 @@ export default function modelManager({ item: items, brand, model }) {
 
                 <div>
 
-                    <BrandList brandChange={handleBrandChange} />
-                    <ModelList />
+                    <BrandList brandChange={handleBrandChange} brand={brand} />
+                    <ModelList model={model}/>
 
           รุ่นที่ใช้ได้: <Controller
                         name="avi_model"

@@ -7,7 +7,16 @@ import FormControl from 'react-bootstrap/FormControl';
 import Select from 'react-select';
 import { colourOptions, groupedOptions } from '../pages/data';
 
-export default function ModelList() {
+export default function ModelList({ model }) {
+
+  console.log('model:', model)
+  let modelOP = []
+  let element = {label: 'brand', options: []}
+  element.options = (model.map((b) => ({
+    value: b.name, label: b.name, rating: 'good'
+  })))
+  modelOP.push(element)
+
   const groupStyles = {
     display: 'flex',
     alignItems: 'center',
@@ -25,22 +34,22 @@ export default function ModelList() {
     padding: '0.16666666666667em 0.5em',
     textAlign: 'center',
   };
-  
+
   const formatGroupLabel = data => (
     <div style={groupStyles}>
       <span>{data.label}</span>
       <span style={groupBadgeStyles}>{data.options.length}</span>
     </div>
   );
-     
+
   return (
-      
-          <div>
-        รุ่นสินค้า: <Select
-        
-        options={groupedOptions}
+
+    <div>
+      รุ่นสินค้า: <Select
+
+        options={modelOP}
         formatGroupLabel={formatGroupLabel}
       />
-      </div>
-    );
+    </div>
+  );
 }

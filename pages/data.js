@@ -1,4 +1,5 @@
 import makeAnimated from 'react-select/animated';
+import { connectToDatabase } from "../util/mongodb";
 
 export const animatedComponents = makeAnimated();
 
@@ -24,6 +25,11 @@ export async function getServerSideProps() {
       model: JSON.parse(JSON.stringify(model)),
     },
   };
+}
+
+export default function BrandOP({ brand }) {
+  console.log('brand', brand)
+  return (null)
 }
 
 export const options = [
