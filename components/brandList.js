@@ -14,7 +14,7 @@ export default function BrandList({brandChange, brand}) {
   let brandOP = []
   let element = {label: 'brand', options: []}
   element.options = (brand.map((b) => ({
-    value: b.name, label: b.name, rating: 'good'
+    value: b.name, label: b.name 
   })))
   brandOP.push(element)
 

@@ -22,10 +22,11 @@ import { ObjectID } from "mongodb";
 import { ObjectId } from 'bson';
 
 import { v1 as uuidv1 } from 'uuid';
+import { model } from 'mongoose';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Calculation({ item: items, order, customer_price_multiply }) {
+export default function Calculation({ item: items, order, customer_price_multiply  }) {
 
   console.log("items: ", items)
 
@@ -342,8 +343,8 @@ export default function Calculation({ item: items, order, customer_price_multipl
             />
           </InputGroup>
 
-          <BrandList />
-          <ModelList />
+          {/* <BrandList brand={brand} />
+          <ModelList model={model} /> */}
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -473,7 +474,19 @@ export async function getServerSideProps({query}, props) {
   // console.log('type2 === ',{query}) 
 
   
+  const brand = await db
+        .collection("brand")
+        .find()
+        .sort({})
+        .limit(20)
+        .toArray();
 
+    const model = await db
+        .collection("model")
+        .find()
+        .sort({})
+        .limit(20)
+        .toArray();
 
   const item = await db
     .collection("item")

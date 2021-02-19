@@ -13,7 +13,7 @@ export default function ModelList({ model }) {
   let modelOP = []
   let element = {label: 'brand', options: []}
   element.options = (model.map((b) => ({
-    value: b.name, label: b.name, rating: 'good'
+    value: b.name, label: b.name
   })))
   modelOP.push(element)
 
