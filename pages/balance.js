@@ -15,6 +15,25 @@ import Table from 'react-bootstrap/Table'
 import { connectToDatabase } from "../util/mongodb";
 
 export default function Balance( { balance: balances } ) {
+
+  console.log(balances)
+
+  let total_receive = 0
+  let total_balance = 0
+  let total_expense = 0
+
+  balances.map(data =>{
+    if(data.type === "Buy"){
+      console.log("ซื้อ ",data.expense)
+      total_balance -= data.expense
+      total_expense += data.expense
+    }else if(data.type === "Sale"){
+      console.log("ขาย ",data.total)
+      total_balance += data.total 
+      total_receive += data.total
+    }
+    
+  })
   return (
     <div className={styles.container}>
       <Head>
@@ -50,17 +69,47 @@ export default function Balance( { balance: balances } ) {
                 return(
               <tr>
                 <td>{data.id}</td>
-                <td>ซื้อ , {data.product_name}</td>
-                <td>{data.brand}</td>
-                <td>{data.model}</td>
-                <td>{data.qty}</td>
+                <td>ซื้อ {data.product_name}</td>
+                <td>0</td>
+                <td>{data.expense}</td>
+                <td></td>
               </tr>
-                )}
+                )}else if(data.type === "Sale"){
+                  return(
+                <tr>
+                  <td>{data.id}</td>
+                  <td>ขายสินค้า {data.date}</td>
+                  <td>{data.total}</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                )
+                }
               })}
             </tbody>
           </Table>
         </div>
 
+        <h4>
+        {/* Brand: {filter.brand ? filter.brand : '---'} */}
+        รวมรายรับ: {total_receive}
+        {/* รวมรายจ่าย: {total_expense} */}
+        {/* รวม: {total_balance} */}
+      </h4>
+      
+      <h4>
+        {/* Brand: {filter.brand ? filter.brand : '---'} */}
+        {/* รวมรายรับ: {total_receive} */}
+        รวมรายจ่าย: {total_expense}
+        {/* รวม: {total_balance} */}
+      </h4>
+
+      <h2>
+        {/* Brand: {filter.brand ? filter.brand : '---'} */}
+        {/* รวมรายรับ: {total_receive} */}
+        {/* รวมรายจ่าย: {total_expense} */}
+        รวม: {total_balance}
+      </h2>
       </main>
 
       <ButtonGroup horizontal>
