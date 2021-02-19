@@ -21,8 +21,6 @@ import { connectToDatabase } from "../../util/mongodb";
 import { ObjectID } from "mongodb";
 import { ObjectId } from 'bson';
 
-import { v1 as uuidv1 } from 'uuid';
-import { model } from 'mongoose';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -209,7 +207,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
     let newList = productList.map(p => {
           console.log("Update JSX", p)
           return (
-            <tr>
+            <tr key={p.id}>
               <td>{p.id}</td>
               <td>{p.product_name}</td>
               <td>{p.code}</td>
@@ -240,7 +238,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
       total: 0, receive: data.receive, change: 0, type: "Sale"}
 
     s.totalprice_order = parseInt(q.totalprice_order)
-    s.fix_service_price += data.fix_service_price
+    s.fix_service_price += parseFloat( data.fix_service_price)
     s.total = q.totalprice_order + s.fix_service_price
     s.change = s.receive - s.total
     console.log("ค่าซ่อม ", data.fix_service_price)
@@ -449,7 +447,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
       </div>
 
       <div>
-      <ButtonGroup horizontal>
+      <ButtonGroup>
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         {/* <Button href="/payment" type="submit">จ่าย</Button>{' '} */}
         <button>จ่าย</button>{' '}

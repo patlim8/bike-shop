@@ -442,7 +442,7 @@ export default function Calculation({ item: items, order }) {
       </div>
 
       <div>
-      <ButtonGroup horizontal>
+      <ButtonGroup>
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         {/* <Button href="/payment" type="submit">จ่าย</Button>{' '} */}
         <button>จ่าย</button>{' '}

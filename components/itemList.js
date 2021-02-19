@@ -24,7 +24,7 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
         // </tbody>
         <tbody>
 
-          <tr>
+          <tr key={data._id}>
             <td>
               <Link href={`/additem/${data._id}`}>
                 <a>

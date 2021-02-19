@@ -61,7 +61,7 @@ export default function Stock({ item: items }) {
         </div>
       </main>
 
-      <ButtonGroup horizontal>
+      <ButtonGroup>
         <Button variant="success">Save as Excel</Button>{' '}
         <Button variant="secondary">Print</Button>{' '}
       </ButtonGroup>

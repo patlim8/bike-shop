@@ -231,7 +231,7 @@ export default function Inventory({ item: items }) {
 // </div>
 // </main>
 
-// <ButtonGroup horizontal>
+// <ButtonGroup>
 // <Button variant="primary" href="/additem" size="sm">เพิ่มสินค้า</Button>{' '}
 // <Button variant="secondary" size="sm">สแกนบาร์โค้ด</Button>{' '}
 // </ButtonGroup>

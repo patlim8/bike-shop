@@ -5,18 +5,18 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Select from 'react-select';
-// import { groupedOptions } from '../pages/data';
+import { groupedOptions } from '../pages/data';
 
 
-export default function BrandList({brandChange, brand}) {
+export default function BrandList({ brandChange, brand }) {
 
-  console.log('brand:', brand)
-  let brandOP = []
-  let element = {label: 'brand', options: []}
-  element.options = (brand.map((b) => ({
-    value: b.name, label: b.name 
-  })))
-  brandOP.push(element)
+  // console.log('brand:', brand)
+  // let brandOP = []
+  // let element = { label: 'brand', options: [] }
+  // element.options = (brand.map((b) => ({
+  //   value: b.name, label: b.name
+  // })))
+  // brandOP.push(element)
 
   const groupStyles = {
     display: 'flex',
@@ -35,26 +35,27 @@ export default function BrandList({brandChange, brand}) {
     padding: '0.16666666666667em 0.5em',
     textAlign: 'center',
   };
-  
+
   const handleOnChange = e => {
     console.log(e.value)
     brandChange(e.value)
   }
-  
+
   const formatGroupLabel = data => (
     <div style={groupStyles}>
       <span>{data.label}</span>
       <span style={groupBadgeStyles}>{data.options.length}</span>
     </div>
   );
-    return (
-      <div>
-    ยี่ห้อสินค้า: <Select
-    
-    options={brandOP}
-    formatGroupLabel={formatGroupLabel}
-    onChange={handleOnChange}
-  />
-  </div>
-    );
+  return (
+    <div>
+      ยี่ห้อสินค้า: <Select
+
+        // options={brandOP}
+        options={groupedOptions}
+        formatGroupLabel={formatGroupLabel}
+        onChange={handleOnChange}
+      />
+    </div>
+  );
 }
