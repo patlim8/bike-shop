@@ -52,9 +52,9 @@ export default function Calculation({ item: items, order, customer_price_multipl
     productList.map(data => {
       console.log(data)
     
-      fetch('/api/item',
+      fetch('/api/item/qty',
         {
-          method: 'UPDATE_QTY',
+          method: 'PUT',
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
           credentials: 'same-origin', // include, *same-origin, omit
