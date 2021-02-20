@@ -20,39 +20,76 @@ export default async (req, res) => {
     // data = JSON.parse(data);
     // let title = data.title;
     // let metacritic = data.metacritic;
-    let { id, product_name, type,  qty, unit_price, expense, date} = data1;
+    let { product_name, type,  qty, unit_price, expense, date} = data1;
 
     // console.log("ที่ได้ +++++++++++++++++++", data)
     // }else{
 
     
-    let { order_id, totalprice_order, fix_service_price,  total, receive, change, type2, date2} = data2;
+    let {  totalprice_order, fix_service_price,  total, receive, change, type2, date2} = data2;
     // console.log("Received Debit:", balance_debit)
     // console.log("Received Date:", balance_date)
     const { db } = await connectToDatabase();
     
     if(data.type === "Buy"){
-      let doc = await db
+      await db
         .collection('order2')
-        .updateOne({_id: id}, { $set: data1 },
+        .insertOne(
           {
-            new: true,
-            runValidators: true,
-            upsert: true
+          
+            product_name: product_name,
+            type: type,
+            qty: qty,
+            unit_price: unit_price, // ก่อนเอาขึ้น database ต้องเอามาทำ % ก่อน (เฉพาะขาย ไม่ใช่ buy)
+            expense: expense,
+            date: date
+          
+          
           },
+          (err,result) => {
+            if (err) {
+              console.log(err)
+              res.json(err)
+            } else {
+              console.log('Newly inserted ID', result.insertedId)
+              res.json({
+                message: 'order2 added',
+                _id: result.insertedId,
+                data: data1
+              });        
+            }
+          }
         )
-      res.json({message: 'Update data', data: data1 });
     }else{
-      let doc = await db
+      await db
         .collection('order2')
-        .updateOne({_id: order_id}, { $set: data2 },
+        .insertOne(
           {
-            new: true,
-            runValidators: true,
-            upsert: true
+          
+            totalprice_order: totalprice_order, 
+            fix_service_price: fix_service_price,  
+            total: total, 
+            receive: receive, 
+            change: change, 
+            type: type2, 
+            date: date2
+          
+          
           },
+          (err,result) => {
+            if (err) {
+              console.log(err)
+              res.json(err)
+            } else {
+              console.log('Newly inserted ID', result.insertedId)
+              res.json({
+                message: 'order2 added',
+                _id: result.insertedId,
+                data: data2
+              });        
+            }
+          }
         )
-      res.json({message: 'Update data2', data: data2 });
     }
 
 

@@ -54,7 +54,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
     
       fetch('/api/item',
         {
-          method: 'DELETE',
+          method: 'UPDATE_QTY',
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
           credentials: 'same-origin', // include, *same-origin, omit
@@ -163,7 +163,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
     // var start_item_id = j
     let p = { product_name: data.product_name, code: '', brand: '', model: '', qty: data.qty ,purchase_price: 0}
-    let q = { _id: uuidv1(), items_code: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
+    let q = { items_ID: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
     
 
 
@@ -192,7 +192,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
         
         
         productList.push(p)
-        q.items_code.push(p._id)
+        q.items_ID.push(p._id)
         
         console.log("ข้างใน", productList)
 
@@ -234,7 +234,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
     console.log("ข้างใน q", newOrder)
     setNewOrder(newOrder)
 
-    let s = { order_id: uuidv1(), totalprice_order: 0, fix_service_price: 0, 
+    let s = { totalprice_order: 0, fix_service_price: 0, 
       total: 0, receive: data.receive, change: 0, type: "Sale"}
 
     s.totalprice_order = parseInt(q.totalprice_order)
@@ -512,7 +512,7 @@ export async function getServerSideProps({query}, props) {
         props: {
         item: JSON.parse(JSON.stringify(item)),
         order: JSON.parse(JSON.stringify(order)),
-        customer_price_multiply: 1.2
+        customer_price_multiply: JSON.parse(1.2)
         },
     };
 }else{

@@ -1,5 +1,5 @@
-import { ObjectID } from "mongodb";
-// import { ObjectId } from 'bson';
+// import { ObjectID } from "mongodb";
+import { ObjectId } from 'bson';
 // import { ObjectId} from "bson";
 import { connectToDatabase } from "../../util/mongodb";
 
@@ -63,23 +63,46 @@ export default async (req, res) => {
         ) // if update non-existing record, insert instead.
     } else if (req.method === 'PUT') {
       let data = req.body
-      let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
-      console.log({ data })
+      // let data1 = req.body
+
+      var ObjectID = require('mongodb').ObjectID;
+      let { product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
+      console.log("req body ใน PUT ========",{ data })
+
+      console.log("object id ==== ", ObjectId(data._id))
       // not sure, _id is in data, let {_id, xxxx} = data
       // or data.id() or data._id
       const { db } = await connectToDatabase();
       let doc = await db
         .collection('item')
-        .updateOne({ _id: _id },
+        .updateOne(
+          { 
+            
+            id : ObjectId(data._id)
+            // product_name: product_name
+        
+        },
           { $set: data },
           // Option 1: use updateOne {_id: ObjectID(id)}
           // Option 2: use findByIdAndUpdate, findByIdAndUpdate(ObjectID(id), {....})
           {
             new: true,
             runValidators: true
+            // upsert: true
           },
+          (err,result) => {
+            if (err) {
+              console.log(err)
+              res.json(err)
+            } else {
+              console.log('Newly inserted ID', result.insertedId)
+              res.json({
+                message: 'Update data', data: data , _id: data._id
+              });        
+            }
+          }
         )
-      res.json({ message: 'Update data', data: data });
+      // res.json({ message: 'Update data', data: data , _id: data._id});
     } else if (req.method === 'DELETE') {
       let data = req.body
       let { _id } = data;
@@ -88,5 +111,39 @@ export default async (req, res) => {
         .collection('item')
         .deleteOne({ _id: ObjectID(_id) })
       res.json({ delete: true, message: 'Delete data', data: {} })
+    } else if (req.method === 'UPDATE_QTY') {
+      let data = req.body
+      // let { _id } = data;
+      const { db } = await connectToDatabase();
+      let doc = await db
+        .collection('item')
+        .updateOne(
+          { 
+            
+            id : ObjectId(data._id)
+            // product_name: product_name
+        
+        },
+          { $inc: qty - data.qty },
+          // Option 1: use updateOne {_id: ObjectID(id)}
+          // Option 2: use findByIdAndUpdate, findByIdAndUpdate(ObjectID(id), {....})
+          {
+            new: true,
+            runValidators: true
+            // upsert: true
+          },
+          (err,result) => {
+            if (err) {
+              console.log(err)
+              res.json(err)
+            } else {
+              // console.log('Newly inserted ID', result.insertedId)
+              res.json({
+                message: 'Update qty'
+              });        
+            }
+          }
+        )
+      // res.json({ delete: true, message: 'Delete data', data: {} })
     }
 }
