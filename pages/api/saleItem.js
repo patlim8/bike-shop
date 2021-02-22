@@ -34,10 +34,10 @@ export default async (req, res) => {
         {
           // _id: ObjectId(_id)
         //   _id: _id
-          product_name: product_name
+          product_name: product_name,
           // code: code,
-          // brand: brand,
-          // model: model,
+          brand: brand,
+          model: model
           // avi_model: avi_model,
           // purchase_price: purchase_price,
           // qty: qty,
@@ -45,11 +45,11 @@ export default async (req, res) => {
           // barcode_id: barcode_id,
           // date: date
         },
-        { $inc: {qty: + data.qty} },
+        { $inc: {qty: + Number(data.qty)} },
         { upsert: true }
       ) // if update non-existing record, insert instead.
         console.log(doc)
-    res.json({ message: 'OK' });
+    res.json({ message: 'OK', data:data });
   } else if (req.method === 'PUT') {
     let data = req.body
     let {_id, product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date} = data;

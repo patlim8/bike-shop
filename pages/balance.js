@@ -129,7 +129,6 @@ export async function getServerSideProps() {
     .collection("order2")
     .find()
     .sort({})
-    .limit(20)
     .toArray();
   
     

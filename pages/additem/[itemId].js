@@ -53,7 +53,8 @@ export default function AddItem({ item  }) {
       barcode_id: '865406549874981987',
       purchase_price: 100,
       qty: 10,
-      minStock: 4
+      minStock: 4,
+      date: ""
     }
 
     data = dummyData
@@ -67,6 +68,7 @@ export default function AddItem({ item  }) {
   const onSubmit = (data, e) => {
     // TODO avi model is not yet implemented
     data['avi_model'] = []
+    data['date'] = new Date()
     console.log(data)
 
     let order = { product_name: data.product_name, type: "Buy", 
@@ -110,7 +112,7 @@ export default function AddItem({ item  }) {
           alert("Newly added _id",data._id)
         });
 
-      
+      if(order.qty != 0){
         console.log(order)
         fetch('/api/order2', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -131,6 +133,8 @@ export default function AddItem({ item  }) {
           alert("Add Order2 :\nResponse from server " + data.message)
           alert("Newly added _id in Order2",data._id)
           });
+      }
+        
       
       
     } else if (submitterId == 'update_item') {
@@ -153,27 +157,30 @@ export default function AddItem({ item  }) {
           alert("Response from server " + data.message)
         });
 
+      
+      if(order.qty != 0){
+        console.log(order)
+        fetch('/api/order2', {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(order) // body data type must match "Content-Type" header
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          alert("Add Order2 :\nResponse from server " + data.message)
+          alert("Newly added _id in Order2",data._id)
+          });
+      }
         
-          console.log(order)
-          fetch('/api/order2', {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, *cors, same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-              'Content-Type': 'application/json'
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            redirect: 'follow', // manual, *follow, error
-            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            body: JSON.stringify(order) // body data type must match "Content-Type" header
-          })
-            .then(response => response.json())
-            .then(data => {
-              console.log(data);
-              alert("Add Order2 :\nResponse from server " + data.message)
-              alert("Newly added _id in Order2",data._id)
-            });
         
     } else if (submitterId === 'del_item') {
       fetch('/api/item', {

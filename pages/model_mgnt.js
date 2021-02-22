@@ -173,13 +173,22 @@ export default function modelManager({ item: items, brand, model }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {brand.map((p) => (
+                            {brand.map((p) => (model.map((i) => (i.brand == p._id) ?
                                 <tr>
-                                    <td>{p._id}</td>
-                                    <td>{p.name}</td>
-                                    {model.map((i) => (i.brand == p._id) ? <td>{i.name}</td> : <td>Error</td>
-                                    )}
-                                </tr>
+                                     <td>{i._id}</td>
+                                     <td>{i.name}</td>
+                                     <td>{p.name}</td>
+                                     
+                                 </tr>
+                                 : null
+                            
+                            )
+                                // <tr>
+                                //     <td>{p._id}</td>
+                                //     <td>{p.name}</td>
+                                //     {model.map((i) => (i.brand == p._id) ? <td>{i.name}</td> : <td>Error</td>
+                                //     )}
+                                // </tr>
                             ))}
                         </tbody>
                     </Table>

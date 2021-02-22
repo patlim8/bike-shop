@@ -23,8 +23,8 @@ export default async (req, res) => {
       .update(
         { _id: _id },
         {
-          $set: {
-            qty: data.qty
+          $inc: {
+            qty: - Number(data.qty)
           }
         },
         (err, result) => {

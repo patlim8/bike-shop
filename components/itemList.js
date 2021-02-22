@@ -29,7 +29,7 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
               <Link href={`/additem/${data._id}`}>
                 <a>
                   Edit
-      {data._id}
+      
                 </a>
               </Link>
             </td>
@@ -41,6 +41,7 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
             <td>{data.qty}</td>
             <td>{data.minStock}</td>
             <td>{data.purchase_price}</td>
+            <td>{data.date}</td>
           </tr>
 
         </tbody>

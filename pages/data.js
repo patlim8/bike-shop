@@ -61,6 +61,7 @@ export const colourOptions = [
   export const brandOptions = [
     { value: 'ptt', label: 'ptt', rating: 'safe' },
     { value: 'mobil1', label: 'mobil1', rating: 'good' },
+    { value: 'eneos', label: 'eneos', rating: 'good' },
     
   ];
   

@@ -79,7 +79,19 @@ export default async (req, res) => {
         .collection('item')
         .update(
           {_id:  _id}, 
-          data,
+          {$set: 
+            {
+            product_name: product_name,
+            code: code,
+            brand: brand,
+            model: model,
+            avi_model: avi_model,
+            purchase_price: Number(purchase_price),
+            qty: Number(qty),
+            minStock: Number(minStock),
+            barcode_id: barcode_id,
+            date: Date(date)
+          }},
           (err, result) => {
             if (err) {
               console.log("Update Error",err)
