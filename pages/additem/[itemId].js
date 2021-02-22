@@ -19,6 +19,9 @@ import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedC
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
+
+// import BrandList from '../../components/brandList';
+// import ModelList from '../../components/modelList'
 // import _uniqueId from 'lodash/uniqueId';
 // import { v4 as uuidv4 } from 'uuid';
 // import { v1 as uuidv1 } from 'uuid';
@@ -334,6 +337,10 @@ export default function AddItem({ item  }) {
           <option value="ptt">PTT</option>
         </select><br></br>
 
+{/*         
+        <BrandList brandChange={handleBrandChange} brand={brand} />
+        <ModelList model={model}/> */}
+
         {/* <div>
               ยี่ห้อสินค้า: 
               <Select
@@ -454,6 +461,9 @@ export async function getServerSideProps(props) {
   console.log('props === ',{props})  
   const itemId = props.params.itemId
   console.log('_ID', { itemId })
+
+
+
   if (itemId === 'new') {
     console.log("Request to add new item, ignore search existing item from database.")
     return {
@@ -464,6 +474,21 @@ export async function getServerSideProps(props) {
   } else {
 
     const { db } = await connectToDatabase()
+
+    
+//   const brand = await db
+//   .collection("brand")
+//   .find()
+//   .sort({})
+//   .limit(20)
+//   .toArray();
+
+// const model = await db
+//   .collection("model")
+//   .find()
+//   .sort({})
+//   .limit(20)
+//   .toArray();
 
     const item = await db
       .collection("item")

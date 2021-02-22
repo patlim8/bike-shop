@@ -4,6 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../components/buttonBar';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
+import Modal from 'react-bootstrap/Modal';
+
+
 import BrandList from '../components/brandList';
 import ModelList from '../components/modelList'
 import AvailableList from '../components/availableList';
@@ -57,7 +60,57 @@ export async function getServerSideProps() {
     };
 }
 
+const onSubmit = (data) => {
+    // TODO avi model is not yet implemented
 
+    // buyOrder.push(p)
+    // setBuyOrder(buyOrder)
+    fetch('/api/model', {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        alert("Add New Model:\nResponse from server " + data.message)
+        alert("Newly added _id",data._id)
+    });
+}
+
+const onSubmit_brand = (data) => {
+    // TODO avi model is not yet implemented
+
+    // buyOrder.push(p)
+    // setBuyOrder(buyOrder)
+    fetch('/api/brand', {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        alert("Add New Model:\nResponse from server " + data.message)
+        alert("Newly added _id",data._id)
+    });
+}
 
 export default function modelManager({ item: items, brand, model }) {
 
@@ -71,6 +124,15 @@ export default function modelManager({ item: items, brand, model }) {
 
     const [brandListDefault, setBrandListDefault] = useState();
     const [brandList, setBrandList] = useState();
+
+    const [show, setShow] = useState(false);
+    const [show2, setShow2] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const handleClose2 = () => setShow2(false);
+    const handleShow2 = () => setShow2(true);
 
 
     const updateInput = async (input) => {
@@ -162,6 +224,9 @@ export default function modelManager({ item: items, brand, model }) {
 
                 </div>
 
+                
+                
+
                 <div>
                     <Table striped bordered hover size="sm">
                         <thead>
@@ -197,7 +262,74 @@ export default function modelManager({ item: items, brand, model }) {
             </main>
 
             <div class="button">
-                <Button variant="primary" href="/" size="lg">เพิ่มรุ่นสินค้า</Button>{' '}
+            <Button variant="primary" onClick={handleShow2}>
+          เพิ่มยี่ห้อสินค้า
+        </Button>
+  
+        <Modal show={show2} onHide={handleClose2}>
+          <Modal.Header closeButton>
+            <Modal.Title>เพิ่มยี่ห้อสินค้า</Modal.Title>
+          </Modal.Header>
+
+        <form onSubmit={handleSubmit(onSubmit_brand)}>
+          <Modal.Body>
+            
+
+
+                ยี่ห้อที่ต้องการเพิ่ม: <input type="text" name="name" ref={register}>
+                </input>
+
+            
+          </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose2}>
+                ปิด
+                </Button>
+                <Button type="submit" variant="primary" onClick={handleClose2}>
+                บันทึก
+                </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+
+
+
+            <Button variant="primary" onClick={handleShow}>
+          เพิ่มรุ่นสินค้า
+        </Button>
+  
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>เพิ่มรุ่นสินค้า</Modal.Title>
+          </Modal.Header>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Modal.Body>
+            
+
+                ยี่ห้อสินค้า: <select name="brand" ref={register}>
+                    {brand.map(data => (<option value={data._id}>{data.name}</option>))}
+            
+                    </select><br></br>
+
+                รุ่นที่ต้องการเพิ่ม: <input type="text" name="model" ref={register}>
+                </input>
+
+            
+          </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                ปิด
+                </Button>
+                <Button type="submit" variant="primary" onClick={handleClose}>
+                บันทึก
+                </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+
+
+                {/* <Button variant="primary" href="/" size="lg">เพิ่มรุ่นสินค้า</Button>{' '} */}
                 <Button variant="primary" href="/" size="lg">อัพเดตรุ่นที่ใช้ได้</Button>{' '}
             </div>
         </div>
