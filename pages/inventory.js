@@ -31,22 +31,34 @@ export async function getServerSideProps() {
     .sort({})
     .limit(20)
     .toArray();
-  
-    
+
+  const brand = await db
+    .collection("brand")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
+
+  const model = await db
+    .collection("model")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
+
   return {
     props: {
       item: JSON.parse(JSON.stringify(item)),
-      
+      brand: JSON.parse(JSON.stringify(brand)),
+      model: JSON.parse(JSON.stringify(model)),
     },
-    
-    
   };
-  
+
 }
 
 
- 
-export default function Inventory({ item: items }) {
+
+export default function Inventory({ item: items, brand, model }) {
 
   console.log("item: ", items)
 
@@ -55,48 +67,48 @@ export default function Inventory({ item: items }) {
   const [input, setInput] = useState('');
   const [itemListDefault, setItemListDefault] = useState();
   const [itemList, setItemList] = useState();
-    
+
   const [brandListDefault, setBrandListDefault] = useState();
-  const [brandList, setBrandList] = useState();    
+  const [brandList, setBrandList] = useState();
 
 
   const updateInput = async (input) => {
-    if(input != items.brand){
+    if (input != items.brand) {
 
-    
-    const filtered = itemListDefault.filter(item => {
-     return item.product_name.toLowerCase().includes(input.toLowerCase())
-    })
-    setInput(input);
-    setItemList(filtered);
+
+      const filtered = itemListDefault.filter(item => {
+        return item.product_name.toLowerCase().includes(input.toLowerCase())
+      })
+      setInput(input);
+      setItemList(filtered);
     }
-    else{
+    else {
       const filtered = brandListDefault.filter(item => {
         return item.brand.toLowerCase().includes(input.toLowerCase())
-       })
-       setInput(input);
-       setBrandList(filtered);
+      })
+      setInput(input);
+      setBrandList(filtered);
     }
-    
- }
 
- // filter is a JSON object having brand and model
- let [filter,setFilter] = useState({
-   brand: 'ptt',
-  //  model: '0w20'
- })
+  }
 
- useEffect( () => {
-   setItemList(items)
-   setItemListDefault(items)
- },[]);
+  // filter is a JSON object having brand and model
+  let [filter, setFilter] = useState({
+    brand: 'ptt',
+    //  model: '0w20'
+  })
+
+  useEffect(() => {
+    setItemList(items)
+    setItemListDefault(items)
+  }, []);
 
   const edit = (itemId) => {
-    console.log({itemId})
+    console.log({ itemId })
   }
 
   const handleBrandChange = (value) => {
-    setFilter({brand: value})
+    setFilter({ brand: value })
   }
 
   return (
@@ -130,35 +142,35 @@ export default function Inventory({ item: items }) {
               onChange={updateInput}
             />
           </InputGroup> */}
-          <SearchBar input={input} 
-                      onChange={updateInput} />
-          
-          
-          <BrandList brandChange={handleBrandChange}/>
-          <ModelList />
-          
+          <SearchBar input={input}
+            onChange={updateInput} />
+
+
+          <BrandList brandChange={handleBrandChange} brand={brand}/>
+          <ModelList model={model}/>
+
           รุ่นที่ใช้ได้: <Controller
-          name="avi_model"
-          type="select"
-          control={control}
+            name="avi_model"
+            type="select"
+            control={control}
 
 
-          render={({ onChange, onBlur, value }) => (
-            <Select
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}  // this is what you need to do
-              isMulti
-              options={groupedOptions}
-              ref={register}
-            />
-          )}
-        />
+            render={({ onChange, onBlur, value }) => (
+              <Select
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value}  // this is what you need to do
+                isMulti
+                options={groupedOptions}
+                ref={register}
+              />
+            )}
+          />
 
         </div>
 
         <div>
-        <ItemList ItemList={itemList} filter={filter}/>
+          <ItemList ItemList={itemList} filter={filter} />
 
           {/* <Table striped bordered hover size="sm">
             <thead>
@@ -219,7 +231,7 @@ export default function Inventory({ item: items }) {
 //     <td>{items.code}</td>
 //     <td>{items.brand}</td>
 //     <td>{items.model}</td>
-    
+
 //     <td>{items.barcode_id}</td>
 //     <td>{items.amount}</td>
 //     <td>{items.limit_amount}</td>

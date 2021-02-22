@@ -20,10 +20,6 @@ import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedC
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
 // import _uniqueId from 'lodash/uniqueId';
-import { v4 as uuidv4 } from 'uuid';
-import { v1 as uuidv1 } from 'uuid';
-
-
 
 export default function AddItem({ item  }) {
 

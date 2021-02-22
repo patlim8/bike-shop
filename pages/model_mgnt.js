@@ -139,8 +139,8 @@ export default function modelManager({ item: items, brand, model }) {
 
                 <div>
 
-                    <BrandList brandChange={handleBrandChange} brand={brand} />
-                    <ModelList model={model}/>
+                    <BrandList brand={brand} brandChange={handleBrandChange} />
+                    <ModelList model={model} />
 
           รุ่นที่ใช้ได้: <Controller
                         name="avi_model"
@@ -167,19 +167,19 @@ export default function modelManager({ item: items, brand, model }) {
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>ยี่ห้อสินค้า</th>
                                 <th>รุ่นสินค้า</th>
+                                <th>ยี่ห้อสินค้า</th>
                                 <th>รุ่นที่ใช้ได้</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {brand.map((p) => (
+                            {brand.map((p) => (model.map((i) => (i.brand == p._id) ?
                                 <tr>
-                                    <td>{p._id}</td>
+                                    <td>{i._id}</td>
+                                    <td>{i.name}</td>
                                     <td>{p.name}</td>
-                                    {model.map((i) => (i.brand == p._id) ? <td>{i.name}</td> : <td>Error</td>
-                                    )}
                                 </tr>
+                                : null)
                             ))}
                         </tbody>
                     </Table>

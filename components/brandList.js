@@ -10,13 +10,13 @@ import { groupedOptions } from '../pages/data';
 
 export default function BrandList({ brandChange, brand }) {
 
-  // console.log('brand:', brand)
-  // let brandOP = []
-  // let element = { label: 'brand', options: [] }
-  // element.options = (brand.map((b) => ({
-  //   value: b.name, label: b.name
-  // })))
-  // brandOP.push(element)
+  console.log('brand:', brand)
+  let brandOP = []
+  let element = { label: 'brand', options: [] }
+  element.options = (brand.map((b) => ({
+    value: b.name, label: b.name
+  })))
+  brandOP.push(element)
 
   const groupStyles = {
     display: 'flex',
@@ -51,8 +51,8 @@ export default function BrandList({ brandChange, brand }) {
     <div>
       ยี่ห้อสินค้า: <Select
 
-        // options={brandOP}
-        options={groupedOptions}
+        options={brandOP}
+        // options={groupedOptions}
         formatGroupLabel={formatGroupLabel}
         onChange={handleOnChange}
       />

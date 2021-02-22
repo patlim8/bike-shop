@@ -8,20 +8,7 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
   const itemList2 = filteredList.map((data) => {
     if (data) {
       return (
-        //     <tbody>
-        //       <tr>
-        //   <td>1</td>
-        //   <td>{data.product_name}</td>
-        //   <td>{data.code}</td>
-        //   <td>{data.brand}</td>
-        //   <td>{data.model}</td>
 
-        //   <td>{data.barcode_id}</td>
-        //   <td>{data.amount}</td>
-        //   <td>{data.limit_amount}</td>
-        //   <td>{data.purchase_price}</td>  
-        // </tr>
-        // </tbody>
         <tbody>
 
           <tr key={data._id}>

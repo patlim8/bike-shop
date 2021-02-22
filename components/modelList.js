@@ -9,13 +9,13 @@ import { colourOptions, groupedOptions } from '../pages/data';
 
 export default function ModelList({ model }) {
 
-  // console.log('model:', model)
-  // let modelOP = []
-  // let element = {label: 'brand', options: []}
-  // element.options = (model.map((b) => ({
-  //   value: b.name, label: b.name
-  // })))
-  // modelOP.push(element)
+  console.log('model:', model)
+  let modelOP = []
+  let element = {label: 'brand', options: []}
+  element.options = (model.map((b) => ({
+    value: b.name, label: b.name
+  })))
+  modelOP.push(element)
 
   const groupStyles = {
     display: 'flex',
@@ -46,8 +46,8 @@ export default function ModelList({ model }) {
 
     <div>
       รุ่นสินค้า: <Select
-        options={groupedOptions}
-        // options={modelOP}
+        // options={groupedOptions}
+        options={modelOP}
         formatGroupLabel={formatGroupLabel}
       />
     </div>
