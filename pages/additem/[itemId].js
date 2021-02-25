@@ -19,17 +19,19 @@ import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedC
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
+import BrandList from '../../components/brandList';
+import ModelList from '../../components/modelList';
 // import _uniqueId from 'lodash/uniqueId';
 
-export default function AddItem({ item  }) {
+export default function AddItem({ item, brand, model }) {
 
   console.log("AddItem", { item })
 
   // const [id] = useState(_uniqueId('prefix-'));
-  
+
   const [buyOrder, setBuyOrder] = useState([]);
-  const tempID = uuidv4();
-  console.log(tempID)
+  // const tempID = uuidv4();
+  // console.log(tempID)
   // console.log(item._id)
   // console.log(ObjectId(item._id))
 
@@ -40,7 +42,7 @@ export default function AddItem({ item  }) {
     // Add new item, prepare blank form
     // in this case, use dummyData
     const dummyData = {
-      _id: tempID,
+      // _id: tempID,
       product_name: 'น้ำมันเครื่อง',
       avi_model: [],
       code: 'DW001',
@@ -49,7 +51,8 @@ export default function AddItem({ item  }) {
       barcode_id: '865406549874981987',
       purchase_price: 100,
       qty: 10,
-      minStock: 4
+      minStock: 4,
+      date: ""
     }
 
     data = dummyData
@@ -63,30 +66,25 @@ export default function AddItem({ item  }) {
   const onSubmit = (data, e) => {
     // TODO avi model is not yet implemented
     data['avi_model'] = []
+    data['date'] = new Date()
     console.log(data)
 
-    let p = { id: uuidv1(), product_name: data.product_name, type: "Buy", 
-              qty: 0, unit_price: data.purchase_price, expense: 0}
+    let order = {
+      product_name: data.product_name, type: "Buy",
+      qty: 0, unit_price: data.purchase_price, expense: 0
+    }
 
 
-    p.qty = data.qty - item.qty
-    // item.map(r => {
+    if (data._id === "") {
+      order.qty = data.qty
+    } else {
+      order.qty = data.qty - item.qty
+    }
 
-    //   if(r._id == data._id){
-    //     p.qty = data.qty - r.qty
-        
-      
-    //     // productList.push(p)
-    //     // q.items_code.push(p.code)
-    //   }
-      
-    // }
-    
-    // )
-    p.expense = p.unit_price * p.qty
+    order.expense = order.unit_price * order.qty
 
-    buyOrder.push(p)
-    setBuyOrder(buyOrder)
+    // buyOrder.push(p)
+    // setBuyOrder(buyOrder)
 
 
 
@@ -111,10 +109,10 @@ export default function AddItem({ item  }) {
         .then(data => {
           console.log(data);
           alert("Add Item:\nResponse from server " + data.message)
-          alert("Newly added _id",data._id)
+          alert("Newly added _id", data._id)
         });
 
-      buyOrder.map( order =>{
+      if (order.qty != 0) {
         console.log(order)
         fetch('/api/order2', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -132,10 +130,13 @@ export default function AddItem({ item  }) {
           .then(response => response.json())
           .then(data => {
             console.log(data);
-            alert("Add Item\nResponse from server " + data.message)
+            alert("Add Order2 :\nResponse from server " + data.message)
+            alert("Newly added _id in Order2", data._id)
           });
       }
-      )
+
+
+
     } else if (submitterId == 'update_item') {
       fetch('/api/item', {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
@@ -156,28 +157,31 @@ export default function AddItem({ item  }) {
           alert("Response from server " + data.message)
         });
 
-        buyOrder.map( order =>{
-          console.log(order)
-          fetch('/api/order2', {
-            method: 'PUT', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, *cors, same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-              'Content-Type': 'application/json'
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            redirect: 'follow', // manual, *follow, error
-            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            body: JSON.stringify(order) // body data type must match "Content-Type" header
-          })
-            .then(response => response.json())
-            .then(order => {
-              console.log(order);
-              alert("Update Item\nResponse from server " + order.message)
-            });
-        }
-        )
+
+      if (order.qty != 0) {
+        console.log(order)
+        fetch('/api/order2', {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(order) // body data type must match "Content-Type" header
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            alert("Add Order2 :\nResponse from server " + data.message)
+            alert("Newly added _id in Order2", data._id)
+          });
+      }
+
+
     } else if (submitterId === 'del_item') {
       fetch('/api/item', {
         method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
@@ -206,7 +210,7 @@ export default function AddItem({ item  }) {
     </div>
   );
 
-  
+
 
 
 
@@ -214,7 +218,7 @@ export default function AddItem({ item  }) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>
-          {data._id === tempID ? 'New Item' : 'Edit'}
+          {data._id === undefined ? 'New Item' : 'Edit'}
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -225,7 +229,7 @@ export default function AddItem({ item  }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-        {data._id === tempID ? 'New Item' : 'Edit'}
+          {data._id === undefined ? 'New Item' : 'Edit'}
         </h1> <br></br><br></br><br></br>
 
 
@@ -267,7 +271,7 @@ export default function AddItem({ item  }) {
             type="text"
             name="_id"
             defaultValue={data._id}
-            ref={register({id: data._id})}
+            ref={register({ id: data._id })}
           />
         </InputGroup><br></br>
 
@@ -325,9 +329,9 @@ export default function AddItem({ item  }) {
             />
           </InputGroup> */}
           ยี่ห้อสินค้า: <select name="brand" ref={register} defaultValue={data.brand}>
-          <option value="mobil1">Mobil1</option>
-          <option value="eneos">Eneos</option>
-          <option value="ptt">PTT</option>
+          {brand.map((p) => (
+            <option value = {p.name}>{p.name}</option>
+          ))}
         </select><br></br>
 
         {/* <div>
@@ -340,9 +344,9 @@ export default function AddItem({ item  }) {
             </div> */}
 
           รุ่นสินค้า: <select name="model" ref={register} defaultValue={data.model}>
-          <option value="0w20">0w-20</option>
-          <option value="5w40">5w-40</option>
-          <option value="10w40">10w-40</option>
+          {model.map((i) => (
+            <option value = {i.name}>{i.name}</option>
+          ))}
         </select><br></br>
 
         {/* รุ่นที่ใช้ได้: <Select
@@ -437,9 +441,9 @@ export default function AddItem({ item  }) {
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         <Button variant="danger" type="submit" id="del_item">ลบสินค้า</Button>{' '}
 
-        {data._id === tempID ? <Button type="submit" id="add_item">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>}
-        
-        
+        {data._id === undefined ? <Button type="submit" id="add_item">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>}
+
+
         <Button variant="dark">กลับ</Button>{' '}
       </div>
     </form>
@@ -447,14 +451,32 @@ export default function AddItem({ item  }) {
 }
 
 export async function getServerSideProps(props) {
-  console.log('props === ',{props})  
+  console.log('props === ', { props })
   const itemId = props.params.itemId
   console.log('_ID', { itemId })
   if (itemId === 'new') {
     console.log("Request to add new item, ignore search existing item from database.")
+
+    const { db } = await connectToDatabase()
+
+    const brand = await db
+      .collection("brand")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+
+    const model = await db
+      .collection("model")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
     return {
       props: {
-        item: null
+        item: null,
+        brand: JSON.parse(JSON.stringify(brand)),
+        model: JSON.parse(JSON.stringify(model)),
       }
     }
   } else {
@@ -467,10 +489,26 @@ export async function getServerSideProps(props) {
         { _id: ObjectId(itemId) }
       )
 
+    const brand = await db
+      .collection("brand")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+
+    const model = await db
+      .collection("model")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+
     console.log("Found", { item })
     return {
       props: {
         item: JSON.parse(JSON.stringify(item)),
+        brand: JSON.parse(JSON.stringify(brand)),
+        model: JSON.parse(JSON.stringify(model)),
       },
     };
   }

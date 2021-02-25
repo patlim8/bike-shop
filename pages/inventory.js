@@ -71,6 +71,9 @@ export default function Inventory({ item: items, brand, model }) {
   const [brandListDefault, setBrandListDefault] = useState();
   const [brandList, setBrandList] = useState();
 
+  const [modelListDefault, setModelListDefault] = useState();
+  const [modelList, setModelList] = useState();
+
 
   const updateInput = async (input) => {
     if (input != items.brand) {
@@ -81,6 +84,7 @@ export default function Inventory({ item: items, brand, model }) {
       })
       setInput(input);
       setItemList(filtered);
+
     }
     else {
       const filtered = brandListDefault.filter(item => {
@@ -90,13 +94,34 @@ export default function Inventory({ item: items, brand, model }) {
       setBrandList(filtered);
     }
 
+    if (input != items.model) {
+        const filteredModel = itemListDefault.filter(item => {
+          return item.product_name.toLowerCase().includes(input.toLowerCase())
+        })
+
+        setInput(input);
+        setItemList(filteredModel)
+      } else {
+        const filteredModel = modelListDefault.filter(item => {
+          return item.model.toLowerCase().includes(input.toLowerCase())
+        })
+
+        setInput(input);
+        setModelList(filteredModel)
+      }
+
   }
 
   // filter is a JSON object having brand and model
   let [filter, setFilter] = useState({
     brand: 'ptt',
-    //  model: '0w20'
+    // model: '0w20'
   })
+
+  let [modelFilter, setModelFilter] = useState({
+    model: '0w20',
+  })
+
 
   useEffect(() => {
     setItemList(items)
@@ -109,6 +134,10 @@ export default function Inventory({ item: items, brand, model }) {
 
   const handleBrandChange = (value) => {
     setFilter({ brand: value })
+  }
+
+  const handleModelChange = (value) => {
+    setModelFilter({ model: value })
   }
 
   return (
@@ -146,8 +175,8 @@ export default function Inventory({ item: items, brand, model }) {
             onChange={updateInput} />
 
 
-          <BrandList brandChange={handleBrandChange} brand={brand}/>
-          <ModelList model={model}/>
+          <BrandList brandChange={handleBrandChange} brand={brand} />
+          <ModelList modelChange={handleModelChange} model={model} />
 
           รุ่นที่ใช้ได้: <Controller
             name="avi_model"
@@ -170,7 +199,7 @@ export default function Inventory({ item: items, brand, model }) {
         </div>
 
         <div>
-          <ItemList ItemList={itemList} filter={filter} />
+          <ItemList ItemList={itemList} filter={filter} modelFilter={modelFilter} />
 
           {/* <Table striped bordered hover size="sm">
             <thead>

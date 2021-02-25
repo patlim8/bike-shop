@@ -38,23 +38,41 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const [jsxProductList, setJsxProductList] = useState(<tr></tr>);
   const [productList, setProductList] = useState([]);
   // const newOrder = [];
-  const [newOrder, setNewOrder] = useState([]);
+  // const [newOrder, setNewOrder] = useState([]);
   const [newOrder2, setNewOrder2] = useState([]);
+  const [totalPriceProducts, setTotalPriceProducts] = useState(0);
+  const [fixing_price, setFixingPrice] = useState(0);
 
   
 
-  const onSubmitToDatabase = () => {
+  const onSubmitToDatabase = (data) => {
     // productList << array of Json
     // let data = productList[0]
     
+    console.log("data ===", data)
+    let s = { totalprice_order: totalPriceProducts, fix_service_price: data.fix_service_price, 
+      total: 0, receive: data.receive, change: 0, type: "Sale"}
+
+    // s.totalprice_order = parseInt(q.totalprice_order)
+    // s.fix_service_price += parseFloat( data.fix_service_price)
+    s.total = s.totalprice_order + Number(s.fix_service_price)
+    s.change = Number(s.receive) - s.total
+
+    console.log("s.price order === ", s.totalprice_order)
+    console.log("s.total === ", s.total)
+    console.log("s.change === ", s.change)
     
+    console.log("data ", data)
+    console.log("product Lists ", productList)
+
+
 
     productList.map(data => {
       console.log(data)
     
-      fetch('/api/item',
+      fetch('/api/item/qty',
         {
-          method: 'DELETE',
+          method: 'PUT',
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
           credentials: 'same-origin', // include, *same-origin, omit
@@ -72,37 +90,9 @@ export default function Calculation({ item: items, order, customer_price_multipl
           alert("Response from server " + data.message)
         });
       })
-    // console.log("new order ", newOrder)
+  
 
 
-    newOrder.map(data => {
-      console.log(data)
-    
-      fetch('/api/order',
-        {
-          method: 'POST',
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          alert("Response from server " + data.message)
-        });
-      })
-
-
-
-    newOrder2.map(data => {
-      console.log(data)
     
       fetch('/api/order2',
         {
@@ -116,14 +106,14 @@ export default function Calculation({ item: items, order, customer_price_multipl
           },
           redirect: 'follow', // manual, *follow, error
           referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
+          body: JSON.stringify(s) // body data type must match "Content-Type" header
         })
         .then(response => response.json())
         .then(data => {
           console.log(data);
           alert("Response from server " + data.message)
         });
-      })
+      
 
     productList.map(data => {
       console.log(data)
@@ -162,8 +152,9 @@ export default function Calculation({ item: items, order, customer_price_multipl
     // }
 
     // var start_item_id = j
-    let p = { product_name: data.product_name, code: '', brand: '', model: '', qty: data.qty ,purchase_price: 0}
-    let q = { _id: uuidv1(), items_code: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
+    let p = { _id: '', product_name: data.product_name, code: '', brand: '', model: '', qty: data.qty ,purchase_price: 0}
+    // let q = { items_ID: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
+    let total_price_products = 0
     
 
 
@@ -184,6 +175,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
       
     
       if(r.product_name == p.product_name){
+        p._id = r._id
         p.code = r.code
         p.brand = r.brand
         p.model = r.model
@@ -192,9 +184,8 @@ export default function Calculation({ item: items, order, customer_price_multipl
         
         
         productList.push(p)
-        q.items_code.push(p._id)
         
-        console.log("ข้างใน", productList)
+
 
         
       }
@@ -205,7 +196,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
     // productList.push(p)
     let newList = productList.map(p => {
-          console.log("Update JSX", p)
+          // console.log("Update JSX", p)
           return (
             <tr key={p.id}>
               <td>{p.id}</td>
@@ -214,7 +205,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
               <td>{p.brand}</td>
               <td>{p.model}</td>
               <td>{p.qty}</td>
-              <td>{p.unitPrice}</td>
+              <td>{(p.purchase_price*customer_price_multiply) * p.qty}</td>
             </tr>
           )
 
@@ -224,31 +215,33 @@ export default function Calculation({ item: items, order, customer_price_multipl
     setJsxProductList(newList)
 
 
-    const calculate = productList.map(product =>{
-      q.totalprice_order += product.qty * product.purchase_price
+    productList.map(product =>{
+       total_price_products += product.qty * (product.purchase_price * customer_price_multiply)
+       setTotalPriceProducts(total_price_products)
+       
+       
+       console.log("ราคาสินค้า", total_price_products)
+       console.log("ราคาสินค้า SET", totalPriceProducts)
     })
 
-    newOrder.push(q)
+    // setTotalPriceProducts(total_price_products)
 
-    console.log("ราคาสินค้า", q.totalprice_order*customer_price_multiply)
-    console.log("ข้างใน q", newOrder)
-    setNewOrder(newOrder)
+    // newOrder.push(q)
 
-    let s = { order_id: uuidv1(), totalprice_order: 0, fix_service_price: 0, 
-      total: 0, receive: data.receive, change: 0, type: "Sale"}
+    // console.log("ราคาสินค้า", totalPriceProducts)
+    // console.log("ข้างใน q", newOrder)
+    // setNewOrder(newOrder)
 
-    s.totalprice_order = parseInt(q.totalprice_order)
-    s.fix_service_price += parseFloat( data.fix_service_price)
-    s.total = q.totalprice_order + s.fix_service_price
-    s.change = s.receive - s.total
-    console.log("ค่าซ่อม ", data.fix_service_price)
-    console.log("รวม ", s.total)
-    console.log("เงินทอน ", s.change)
+    // console.log("new order ==== ", newOrder)
 
-    newOrder2.push(s)
-    console.log("ข้างใน s", newOrder2)
+    // console.log("ค่าซ่อม ", data.fix_service_price)
+    // console.log("รวม ", s.total)
+    // console.log("เงินทอน ", s.change)
 
-    setNewOrder2(newOrder2)
+    // newOrder2.push(s)
+    // console.log("ข้างใน s", newOrder2)
+
+    // setNewOrder2(newOrder2)
 
    
 
@@ -409,9 +402,10 @@ export default function Calculation({ item: items, order, customer_price_multipl
             <InputGroup.Text id="basic-addon1">ราคา</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
-            name="fix_service_price" ref={register}
+            name="fix_service_price" ref={register2}
             placeholder="ราคา"
             type="number"
+            onChange={e => setFixingPrice(e.target.value)}
           />
         </InputGroup>
 
@@ -421,9 +415,11 @@ export default function Calculation({ item: items, order, customer_price_multipl
             <InputGroup.Text id="basic-addon1">จำนวนที่ต้องชำระ</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
-            placeholder={order.price}
+            readOnly
+            placeholder=""
             aria-label="Item name"
             aria-describedby="basic-addon1"
+            Value={totalPriceProducts+ Number(fixing_price)}
           />
         </InputGroup>
 
@@ -433,7 +429,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
             <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
-            name="receive" ref={register}
+            name="receive" ref={register2}
             placeholder=""
             type="number"
           />
@@ -512,7 +508,7 @@ export async function getServerSideProps({query}, props) {
         props: {
         item: JSON.parse(JSON.stringify(item)),
         order: JSON.parse(JSON.stringify(order)),
-        customer_price_multiply: 1.2
+        customer_price_multiply: JSON.parse(1.2)
         },
     };
 }else{

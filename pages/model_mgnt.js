@@ -19,7 +19,7 @@ import Link from 'next/link'
 import { ObjectID } from 'bson';
 
 import React, { useState, useEffect } from 'react';
-import ItemList from '../components/itemList'
+import ModelMgntList from '../components/modelMgntList'
 import BrandOP from './data'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
@@ -61,31 +61,30 @@ export async function getServerSideProps() {
 
 export default function modelManager({ item: items, brand, model }) {
 
-    console.log("item: ", items)
+    console.log("item: ", brand)
 
     const { register, handleSubmit, control, watch, errors } = useForm();
 
     const [input, setInput] = useState('');
-    const [itemListDefault, setItemListDefault] = useState();
-    const [itemList, setItemList] = useState();
+    const [itemModelListDefault, setItemModelListDefault] = useState();
+    const [itemModelList, setItemModelList] = useState();
 
     const [brandListDefault, setBrandListDefault] = useState();
     const [brandList, setBrandList] = useState();
 
 
     const updateInput = async (input) => {
-        if (input != items.brand) {
+        if (input != brand.name) {
 
-
-            const filtered = itemListDefault.filter(item => {
-                return item.product_name.toLowerCase().includes(input.toLowerCase())
-            })
-            setInput(input);
-            setItemList(filtered);
+            const filtered = itemModelListDefault.filter(brand => {
+                return brand.name.toLowerCase().includes(input.toLowerCase())
+              })
+              setInput(input);
+              setItemList(filtered);
         }
         else {
-            const filtered = brandListDefault.filter(item => {
-                return item.brand.toLowerCase().includes(input.toLowerCase())
+            const filtered = brandListDefault.filter(brand => {
+                return brand.name.toLowerCase().includes(input.toLowerCase())
             })
             setInput(input);
             setBrandList(filtered);
@@ -100,8 +99,8 @@ export default function modelManager({ item: items, brand, model }) {
     })
 
     useEffect(() => {
-        setItemList(items)
-        setItemListDefault(items)
+        setItemModelList(brand)
+        setItemModelListDefault(brand)
     }, []);
 
     const edit = (itemId) => {
@@ -122,7 +121,7 @@ export default function modelManager({ item: items, brand, model }) {
     return (
         <div className={styles.container}>
             <Head>
-                <title>Inventory</title>
+                <title>จัดการรุ่นสินค้า</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
@@ -163,7 +162,8 @@ export default function modelManager({ item: items, brand, model }) {
                 </div>
 
                 <div>
-                    <Table striped bordered hover size="sm">
+                    *<ModelMgntList modelMgntList={itemModelList} filter={filter} />
+                    {/*<Table striped bordered hover size="sm">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -182,7 +182,7 @@ export default function modelManager({ item: items, brand, model }) {
                                 : null)
                             ))}
                         </tbody>
-                    </Table>
+                            </Table>*/}
                 </div>
 
             </main>

@@ -7,7 +7,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import Select from 'react-select';
 import { colourOptions, groupedOptions } from '../pages/data';
 
-export default function ModelList({ model }) {
+export default function ModelList({ modelChange, model }) {
 
   console.log('model:', model)
   let modelOP = []

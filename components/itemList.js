@@ -2,10 +2,12 @@ import React from 'react';
 import Table from 'react-bootstrap/Table'
 import Link from 'next/link'
 
-const ItemList = ({ ItemList = [], filter = '' }) => {
+const ItemList = ({ ItemList = [], filter = '', modelFilter = '' }) => {
   const filteredList = ItemList.filter(data => data.brand == filter.brand)
 
-  const itemList2 = filteredList.map((data) => {
+  // const filteredListModel = filteredList.filter(data => data.model == modelFilter.model)
+
+  const itemList2 = filteredList.map((data) => { 
     if (data) {
       return (
 
@@ -16,7 +18,7 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
               <Link href={`/additem/${data._id}`}>
                 <a>
                   Edit
-      {data._id}
+      
                 </a>
               </Link>
             </td>
@@ -28,11 +30,12 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
             <td>{data.qty}</td>
             <td>{data.minStock}</td>
             <td>{data.purchase_price}</td>
+            <td>{data.date}</td>
           </tr>
 
         </tbody>
       )
-    }
+    } 
   })
 
   
@@ -40,12 +43,13 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
   return (
     <>
       <h2>
-        Brand: {filter.brand ? filter.brand : '---'}
+        Brand: {filter.brand ? filter.brand : '---'} <br />
+        Model: {modelFilter.model ? modelFilter.model : '--'}
       </h2>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
-            <th>id</th>
+            <th>Action</th>
             <th>ชื่อสินค้า</th>
             <th>รหัสสินค้า</th>
             <th>ยี่ห้อสินค้า</th>

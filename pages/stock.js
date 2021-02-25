@@ -10,6 +10,8 @@ import Button from 'react-bootstrap/Button';
 import { connectToDatabase } from "../util/mongodb";
 
 export default function Stock({ item: items }) {
+
+  let currentYear = new Date().getFullYear()
   console.log(items)
   return (
     <div className={styles.container}>
@@ -37,12 +39,15 @@ export default function Stock({ item: items }) {
                 <th>ชื่อสินค้า</th>
                 <th>ยี่ห้อสินค้า</th>
                 <th>รุ่นสินค้า</th>
-                <th>จำนวนที่เหลืออยู่</th>
+                <th>อายุสินค้า (ปี)</th>
               </tr>
             </thead>
             <tbody>
             {items.map(data =>{
-                if(data.qty <= data.minStock){
+              let temp = new Date(data.date)
+              temp.setFullYear(2019)
+              data.date = temp
+                if((currentYear - new Date(data.date).getFullYear()) >= 1 ){
 
                
                 return(
@@ -51,7 +56,7 @@ export default function Stock({ item: items }) {
                 <td>{data.product_name}</td>
                 <td>{data.brand}</td>
                 <td>{data.model}</td>
-                <td>{data.qty}</td>
+                <td>{currentYear - new Date(data.date).getFullYear()}</td>
               </tr>
                 ) 
               }

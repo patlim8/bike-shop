@@ -1,7 +1,7 @@
-import { ObjectID } from "mongodb";
-// import { ObjectId } from 'bson';
+// import { ObjectID } from "mongodb";
+import { ObjectId } from 'bson';
 // import { ObjectId} from "bson";
-import { connectToDatabase } from "../../util/mongodb";
+import { connectToDatabase } from "../../../util/mongodb";
 
 export default async (req, res) => {
   console.log("item API method ++++++ " + req.method)
@@ -48,7 +48,7 @@ export default async (req, res) => {
             date: date
           },
           // callback
-          (err,result) => {
+          (err, result) => {
             if (err) {
               console.log(err)
               res.json(err)
@@ -57,29 +57,55 @@ export default async (req, res) => {
               res.json({
                 message: 'Item added',
                 _id: result.insertedId
-              });        
+              });
             }
           }
         ) // if update non-existing record, insert instead.
     } else if (req.method === 'PUT') {
+      /* Update */
       let data = req.body
-      let { _id, product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
-      console.log({ data })
+      // let data1 = req.body
+
+      var ObjectID = require('mongodb').ObjectID;
+      let { product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
+      console.log("req body ใน PUT ========", { data })
+      console.log("object id ==== ", ObjectId(data._id))
+      let _id = ObjectId(data._id)
+      delete data._id
       // not sure, _id is in data, let {_id, xxxx} = data
       // or data.id() or data._id
       const { db } = await connectToDatabase();
       let doc = await db
         .collection('item')
-        .updateOne({ _id: _id },
-          { $set: data },
-          // Option 1: use updateOne {_id: ObjectID(id)}
-          // Option 2: use findByIdAndUpdate, findByIdAndUpdate(ObjectID(id), {....})
-          {
-            new: true,
-            runValidators: true
-          },
+        .update(
+          {_id:  _id}, 
+          {$set: 
+            {
+            product_name: product_name,
+            code: code,
+            brand: brand,
+            model: model,
+            avi_model: avi_model,
+            purchase_price: Number(purchase_price),
+            qty: Number(qty),
+            minStock: Number(minStock),
+            barcode_id: barcode_id,
+            date: Date(date)
+          }},
+          (err, result) => {
+            if (err) {
+              console.log("Update Error",err)
+              res.json(err)
+            } else {
+              console.log('Newly Updated (expect 1):', result)
+              res.json({
+                message: 'Data has been updated.', 
+                data: data
+              });
+            }
+          }
         )
-      res.json({ message: 'Update data', data: data });
+      // res.json({ message: 'Update data', data: data , _id: data._id});
     } else if (req.method === 'DELETE') {
       let data = req.body
       let { _id } = data;
@@ -88,5 +114,36 @@ export default async (req, res) => {
         .collection('item')
         .deleteOne({ _id: ObjectID(_id) })
       res.json({ delete: true, message: 'Delete data', data: {} })
+    } else if (req.method === 'UPDATE_QTY') {
+      let data = req.body
+      let _id = ObjectId(data._id)
+      delete data._id
+      // let { _id } = data;
+      const { db } = await connectToDatabase();
+      let doc = await db
+        .collection('item')
+        .updateOne(
+          {_id: _id},
+          { $inc: qty - data.qty },
+          // Option 1: use updateOne {_id: ObjectID(id)}
+          // Option 2: use findByIdAndUpdate, findByIdAndUpdate(ObjectID(id), {....})
+          {
+            new: true,
+            runValidators: true
+            // upsert: true
+          },
+          (err, result) => {
+            if (err) {
+              console.log(err)
+              res.json(err)
+            } else {
+              // console.log('Newly inserted ID', result.insertedId)
+              res.json({
+                message: 'Update qty'
+              });
+            }
+          }
+        )
+      // res.json({ delete: true, message: 'Delete data', data: {} })
     }
 }
