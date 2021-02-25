@@ -99,7 +99,7 @@ export default function Calculation({ item: items, order }) {
     newOrder2.map(data => {
       console.log(data)
     
-      fetch('/api/order2',
+      fetch('/api/order2/sale',
         {
           method: 'POST',
           mode: 'cors', // no-cors, *cors, same-origin

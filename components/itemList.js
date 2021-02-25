@@ -2,8 +2,17 @@ import React from 'react';
 import Table from 'react-bootstrap/Table'
 import Link from 'next/link'
 
-const ItemList = ({ ItemList = [], filter = '', modelFilter = '' }) => {
-  const filteredList = ItemList.filter(data => data.brand == filter.brand)
+
+const ItemList = ({ ItemList = [], filter = '' }) => {
+  let filteredList = ItemList
+  if(filter.brand){
+    filteredList = ItemList.filter(data => data.brand == filter.brand)
+  }
+  // const filteredList = ItemList.filter(data => 
+    // {filter ? data.brand == filter.brand && data.model == filter.model : data.brand == filter.brand  })
+  if(filter.model){
+    filteredList = filteredList.filter(data => data.model == filter.model )
+  }
 
   // const filteredListModel = filteredList.filter(data => data.model == modelFilter.model)
 
@@ -46,6 +55,9 @@ const ItemList = ({ ItemList = [], filter = '', modelFilter = '' }) => {
         Brand: {filter.brand ? filter.brand : '---'} <br />
         Model: {modelFilter.model ? modelFilter.model : '--'}
       </h2>
+      {/* <h2>
+        Brand: {filter.brand ? filter.brand : '---'}
+      </h2> */}
       <Table striped bordered hover size="sm">
         <thead>
           <tr>

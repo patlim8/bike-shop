@@ -15,21 +15,79 @@ import { connectToDatabase } from "../../util/mongodb"
 import { ObjectId } from 'bson';
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
-import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../../pages/data';
+import { colourOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../../pages/data';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import BrandList from '../../components/brandList';
 import ModelList from '../../components/modelList';
+=======
+
+// import BrandList from '../../components/brandList';
+// import ModelList from '../../components/modelList'
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
 // import _uniqueId from 'lodash/uniqueId';
 
+<<<<<<< HEAD
 export default function AddItem({ item, brand, model }) {
+=======
+
+
+export default function AddItem({ item, brand: brands, model: models  }) {
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
 
   console.log("AddItem", { item })
 
   // const [id] = useState(_uniqueId('prefix-'));
 
   const [buyOrder, setBuyOrder] = useState([]);
+
+  
+  const modelOptions = models.map(model =>(
+    {
+        label: ''+model.name, 
+        // value: ''+brand._id,
+      value: ''+model.name,
+
+    } 
+    )
+    
+)
+
+let [filter,setFilter] = useState({
+  brand: 'ptt',
+  id: '',
+  model: ''
+})
+
+const handleBrandChange = (value) => {
+    
+  brands.map(brand => {
+    if(value.value == brand.name){
+      setFilter({brand: value.value, id: brand._id, model: ''})
+      console.log("value ==== ",filter)
+    }
+  })
+  
+}
+
+  const brandOptions = brands.map(brand =>(
+    {
+        label: ''+brand.name, 
+        // value: ''+brand._id,
+      value: ''+brand.name,
+
+    } 
+    )
+    
+)
+
+const modelListOptions = models.map(model =>(
+  
+  model.brand === filter.id ? ({label: ''+model.name, value: ''+model.name}) : ({}) 
+  )
+)
   // const tempID = uuidv4();
   // console.log(tempID)
   // console.log(item._id)
@@ -63,17 +121,24 @@ export default function AddItem({ item, brand, model }) {
 
 
   const { register, handleSubmit, control, watch, errors } = useForm();
+
   const onSubmit = (data, e) => {
     // TODO avi model is not yet implemented
-    data['avi_model'] = []
+    // data['avi_model'] = []
     data['date'] = new Date()
     console.log(data)
 
+<<<<<<< HEAD
     let order = {
       product_name: data.product_name, type: "Buy",
       qty: 0, unit_price: data.purchase_price, expense: 0
     }
+=======
+    let order = { product_name: data.product_name, type: "Buy", 
+              qty: 0, unit_price: data.purchase_price, expense: 0 , date: ""}
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
 
+    order.date = new Date()
 
     if (data._id === "") {
       order.qty = data.qty
@@ -114,7 +179,7 @@ export default function AddItem({ item, brand, model }) {
 
       if (order.qty != 0) {
         console.log(order)
-        fetch('/api/order2', {
+        fetch('/api/order2/buy', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -160,7 +225,7 @@ export default function AddItem({ item, brand, model }) {
 
       if (order.qty != 0) {
         console.log(order)
-        fetch('/api/order2', {
+        fetch('/api/order2/buy', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -203,6 +268,13 @@ export default function AddItem({ item, brand, model }) {
         });
     }
   }
+
+  const onsubmit_test = (data) => {
+    console.log(data)
+
+  }
+
+
   const formatGroupLabel = data => (
     <div style={groupStyles}>
       <span>{data.label}</span>
@@ -328,11 +400,33 @@ export default function AddItem({ item, brand, model }) {
               type="text" name="brand" ref={register({ required: true })}
             />
           </InputGroup> */}
+<<<<<<< HEAD
           ยี่ห้อสินค้า: <select name="brand" ref={register} defaultValue={data.brand}>
           {brand.map((p) => (
             <option value = {p.name}>{p.name}</option>
           ))}
+=======
+
+
+          ยี่ห้อสินค้า: <select name="brand" ref={register} onChange={handleBrandChange} defaultValue={data.brand}>
+          {brands.map(data => (<option value={data._id}>{data.name}</option>))}
+          {/* <option value="mobil1">Mobil1</option>
+          <option value="eneos">Eneos</option>
+          <option value="ptt">PTT</option> */}
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
         </select><br></br>
+
+          {/* ยี่ห้อสินค้า: <Select
+
+          // options={brandOP}
+          options={brandOptions}
+          // formatGroupLabel={formatGroupLabel}
+          onChange={handleBrandChange}
+                  /> */}
+
+{/*         
+        <BrandList brandChange={handleBrandChange} brand={brand} />
+        <ModelList model={model}/> */}
 
         {/* <div>
               ยี่ห้อสินค้า: 
@@ -344,10 +438,45 @@ export default function AddItem({ item, brand, model }) {
             </div> */}
 
           รุ่นสินค้า: <select name="model" ref={register} defaultValue={data.model}>
+<<<<<<< HEAD
           {model.map((i) => (
             <option value = {i.name}>{i.name}</option>
           ))}
+=======
+          {models.map(data => (<option value={data.name}>{data.name}</option>))}
+          {/* <option value="0w20">0w-20</option>
+          <option value="5w40">5w-40</option>
+          <option value="10w40">10w-40</option> */}
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
         </select><br></br>
+
+          {/* รุ่นสินค้า: <Select
+              options={modelListOptions}
+              // onChange={handleModelChange}
+              // options={modelOP}
+              // formatGroupLabel={formatGroupLabel}
+            /> */}
+
+        รุ่นที่ใช้ได้: <Controller
+                        name="avi_model"
+                        type="select"
+                        control={control}
+
+
+                        render={({ onChange, onBlur, value }) => (
+                          
+                            <Select
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                value={value}  // this is what you need to do
+                                isMulti
+                                // options={groupedOptions}
+                                options={modelOptions}
+                                // options={option}
+                                ref={register}
+                            />
+                        )}
+                    />
 
         {/* รุ่นที่ใช้ได้: <Select
             name="avi_model"
@@ -454,11 +583,58 @@ export async function getServerSideProps(props) {
   console.log('props === ', { props })
   const itemId = props.params.itemId
   console.log('_ID', { itemId })
+
+
+
   if (itemId === 'new') {
     console.log("Request to add new item, ignore search existing item from database.")
 
     const { db } = await connectToDatabase()
 
+<<<<<<< HEAD
+    const brand = await db
+      .collection("brand")
+=======
+    const model = await db
+      .collection("model")
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+
+<<<<<<< HEAD
+    const model = await db
+      .collection("model")
+=======
+    const brand = await db
+      .collection("brand")
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+<<<<<<< HEAD
+    return {
+      props: {
+        item: null,
+        brand: JSON.parse(JSON.stringify(brand)),
+        model: JSON.parse(JSON.stringify(model)),
+=======
+
+    return {
+      props: {
+        item: null,
+        model: JSON.parse(JSON.stringify(model)),
+        brand: JSON.parse(JSON.stringify(brand)),
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
+      }
+    }
+  } else {
+
+    const { db } = await connectToDatabase()
+
+    
     const brand = await db
       .collection("brand")
       .find()
@@ -472,16 +648,6 @@ export async function getServerSideProps(props) {
       .sort({})
       .limit(20)
       .toArray();
-    return {
-      props: {
-        item: null,
-        brand: JSON.parse(JSON.stringify(brand)),
-        model: JSON.parse(JSON.stringify(model)),
-      }
-    }
-  } else {
-
-    const { db } = await connectToDatabase()
 
     const item = await db
       .collection("item")
@@ -507,8 +673,13 @@ export async function getServerSideProps(props) {
     return {
       props: {
         item: JSON.parse(JSON.stringify(item)),
+<<<<<<< HEAD
         brand: JSON.parse(JSON.stringify(brand)),
         model: JSON.parse(JSON.stringify(model)),
+=======
+        model: JSON.parse(JSON.stringify(model)),
+        brand: JSON.parse(JSON.stringify(brand)),
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
       },
     };
   }

@@ -41,11 +41,11 @@ export default async (req, res) => {
             brand: brand,
             model: model,
             avi_model: avi_model,
-            purchase_price: purchase_price,
-            qty: qty,
-            minStock: minStock,
+            purchase_price: Number(purchase_price),
+            qty: Number(qty),
+            minStock: Number(minStock),
             barcode_id: barcode_id,
-            date: date
+            date: Date(date)
           },
           // callback
           (err, result) => {

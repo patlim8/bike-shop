@@ -6,10 +6,44 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Select from 'react-select';
 import { groupedOptions } from '../pages/data';
+// import { connectToDatabase } from "../util/mongodb";
 
 
-export default function BrandList({ brandChange, brand }) {
 
+// export async function getServerSideProps() {
+//   const { db } = await connectToDatabase();
+
+//   const item = await db
+//     .collection("item")
+//     .find()
+//     .sort({})
+//     .limit(20)
+//     .toArray();
+
+//   const brand = await db
+//     .collection("brand")
+//     .find()
+//     .sort({})
+//     .limit(20)
+//     .toArray();
+  
+    
+//   return {
+//     props: {
+//       item: JSON.parse(JSON.stringify(item)),
+//       brand: JSON.parse(JSON.stringify(brand)),
+      
+//     },
+    
+    
+//   };
+  
+// }
+
+
+export default function BrandList({ brandChange }) {
+
+<<<<<<< HEAD
   console.log('brand:', brand)
   let brandOP = []
   let element = { label: 'brand', options: [] }
@@ -17,6 +51,25 @@ export default function BrandList({ brandChange, brand }) {
     value: b.name, label: b.name
   })))
   brandOP.push(element)
+=======
+  // console.log('brand:', brand)
+  // let brandOP = []
+  // let element = { label: 'brand', options: [] }
+  // element.options = (brand.map((b) => ({
+  //   value: b.name, label: b.name
+  // })))
+  // brandOP.push(element)
+//   const brandOptions = brands.map(brand =>(
+//     {
+//         label: ''+brand.name, 
+//         // value: ''+brand._id,
+//       value: ''+brand.name,
+
+//     } 
+//     )
+    
+// )
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
 
   const groupStyles = {
     display: 'flex',
@@ -51,9 +104,15 @@ export default function BrandList({ brandChange, brand }) {
     <div>
       ยี่ห้อสินค้า: <Select
 
+<<<<<<< HEAD
         options={brandOP}
         // options={groupedOptions}
         formatGroupLabel={formatGroupLabel}
+=======
+        // options={brandOP}
+        options={groupedOptions}
+        // formatGroupLabel={formatGroupLabel}
+>>>>>>> 9bf85c17e27e09f6454bb0310ba74785b332f177
         onChange={handleOnChange}
       />
     </div>
