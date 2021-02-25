@@ -6,9 +6,42 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Select from 'react-select';
 import { groupedOptions } from '../pages/data';
+// import { connectToDatabase } from "../util/mongodb";
 
 
-export default function BrandList({ brandChange, brand }) {
+
+// export async function getServerSideProps() {
+//   const { db } = await connectToDatabase();
+
+//   const item = await db
+//     .collection("item")
+//     .find()
+//     .sort({})
+//     .limit(20)
+//     .toArray();
+
+//   const brand = await db
+//     .collection("brand")
+//     .find()
+//     .sort({})
+//     .limit(20)
+//     .toArray();
+  
+    
+//   return {
+//     props: {
+//       item: JSON.parse(JSON.stringify(item)),
+//       brand: JSON.parse(JSON.stringify(brand)),
+      
+//     },
+    
+    
+//   };
+  
+// }
+
+
+export default function BrandList({ brandChange }) {
 
   // console.log('brand:', brand)
   // let brandOP = []
@@ -17,6 +50,16 @@ export default function BrandList({ brandChange, brand }) {
   //   value: b.name, label: b.name
   // })))
   // brandOP.push(element)
+//   const brandOptions = brands.map(brand =>(
+//     {
+//         label: ''+brand.name, 
+//         // value: ''+brand._id,
+//       value: ''+brand.name,
+
+//     } 
+//     )
+    
+// )
 
   const groupStyles = {
     display: 'flex',
@@ -53,7 +96,7 @@ export default function BrandList({ brandChange, brand }) {
 
         // options={brandOP}
         options={groupedOptions}
-        formatGroupLabel={formatGroupLabel}
+        // formatGroupLabel={formatGroupLabel}
         onChange={handleOnChange}
       />
     </div>

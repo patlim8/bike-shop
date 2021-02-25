@@ -19,6 +19,7 @@ import Link from 'next/link'
 
 import React, { useState, useEffect } from 'react';
 import ItemList from '../components/itemList'
+import { ObjectId } from 'bson';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -31,11 +32,27 @@ export async function getServerSideProps() {
     .sort({})
     .limit(20)
     .toArray();
+
+  const model = await db
+    .collection("model")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
+
+  const brand = await db
+    .collection("brand")
+    .find()
+    .sort({})
+    .limit(20)
+    .toArray();
   
     
   return {
     props: {
       item: JSON.parse(JSON.stringify(item)),
+      model: JSON.parse(JSON.stringify(model)),
+      brand: JSON.parse(JSON.stringify(brand)),
       
     },
     
@@ -46,7 +63,7 @@ export async function getServerSideProps() {
 
 
  
-export default function Inventory({ item: items }) {
+export default function Inventory({ item: items, brand: brands, model: models }) {
 
   console.log("item: ", items)
 
@@ -57,46 +74,131 @@ export default function Inventory({ item: items }) {
   const [itemList, setItemList] = useState();
     
   const [brandListDefault, setBrandListDefault] = useState();
-  const [brandList, setBrandList] = useState();    
+  const [brandList, setBrandList] = useState();  
+
+  // filter is a JSON object having brand and model
+ let [filter,setFilter] = useState({
+  brand: '',
+  id: '',
+  model: ''
+})
+
+  const brandOptions = brands.map(brand =>(
+    {
+        label: ''+brand.name, 
+        // value: ''+brand._id,
+      value: ''+brand.name,
+
+    } 
+    ),[{label: 'empty', value:'empty'}]
+    
+)
+  
+  const modelOptions = models.map(model =>(
+    {
+        label: ''+model.name, 
+        // value: ''+brand._id,
+      value: ''+model.name,
+
+    } 
+    ),
+    [{label: '', value:''}]
+) 
+
+const modelListOptions = models.map(model =>(
+
+    model.brand === filter.id ? ({label: ''+model.name, value: ''+model.name}) : ({}) 
+    
+    // label: ''+model.name, 
+    //   // value: ''+brand._id,
+    // value: ''+model.name,
+
+  )
+)
+  
+
+
+const handleOnChange = e => {
+  console.log(e.value)
+  brandChange(e.value)
+}
 
 
   const updateInput = async (input) => {
+    console.log("input ==== ",input)
     if(input != items.brand){
+    // if(input == String && input.value != undefined ){
 
     
     const filtered = itemListDefault.filter(item => {
      return item.product_name.toLowerCase().includes(input.toLowerCase())
     })
+    console.log("filter ==== ", filtered)
     setInput(input);
     setItemList(filtered);
+    console.log("itemList ==== ", itemList)
     }
-    else{
-      const filtered = brandListDefault.filter(item => {
-        return item.brand.toLowerCase().includes(input.toLowerCase())
-       })
-       setInput(input);
-       setBrandList(filtered);
-    }
+    // else{
+    //   const filtered = brandListDefault.filter(item => {
+    //     return item.brand.toLowerCase().includes(input.value.toLowerCase())
+    //    })
+    //    console.log("222222222222222222")
+    //    setInput(input);
+    //    setBrandList(filtered);
+    // }
     
  }
 
- // filter is a JSON object having brand and model
- let [filter,setFilter] = useState({
-   brand: 'ptt',
-  //  model: '0w20'
- })
+ const updateBrand = async (input) => {
+  
+    const filtered = itemListDefault.filter(item => {
+      return item.brand.toLowerCase().includes(input.value.toLowerCase())
+     })
+     console.log("222222222222222222")
+    //  setInput(input);
+     setBrandList(filtered);
+  
+  
+}
+
+ 
 
  useEffect( () => {
+   
    setItemList(items)
    setItemListDefault(items)
+   {console.log("itemList ====",itemList)}
+   {console.log("itemListDefalut ====",itemListDefault)}
  },[]);
+
 
   const edit = (itemId) => {
     console.log({itemId})
   }
 
   const handleBrandChange = (value) => {
-    setFilter({brand: value})
+    
+    brands.map(brand => {
+      if(value.value == brand.name){
+        setFilter({brand: value.value, id: brand._id, model: ''})
+        console.log("value ==== ",filter)
+      }
+    })
+    
+  }
+
+  const handleModelChange = (value) => {
+    let temp_brand = filter.brand
+    let temp_id = filter.id
+    
+    
+    // console.log("model ====", value.value)
+    setFilter({brand: temp_brand, id: temp_id, model: value.value})
+    console.log(filter)
+      
+    
+    
+    
   }
 
   return (
@@ -134,8 +236,25 @@ export default function Inventory({ item: items }) {
                       onChange={updateInput} />
           
           
-          <BrandList brandChange={handleBrandChange}/>
-          <ModelList />
+          {/* <BrandList brandChange={handleBrandChange}/> */}
+          
+      ยี่ห้อสินค้า: <Select
+
+        // options={brandOP}
+        options={brandOptions}
+        // formatGroupLabel={formatGroupLabel}
+        onChange={handleBrandChange}
+                />
+    
+
+          {/* <ModelList /> */}
+
+          รุ่นสินค้า: <Select
+              options={modelListOptions}
+              onChange={handleModelChange}
+              // options={modelOP}
+              // formatGroupLabel={formatGroupLabel}
+            />
           
           รุ่นที่ใช้ได้: <Controller
           name="avi_model"
@@ -149,7 +268,7 @@ export default function Inventory({ item: items }) {
               onBlur={onBlur}
               value={value}  // this is what you need to do
               isMulti
-              options={groupedOptions}
+              options={modelOptions}
               ref={register}
             />
           )}

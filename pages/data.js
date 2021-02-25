@@ -1,4 +1,5 @@
 import makeAnimated from 'react-select/animated';
+import BrandList from '../components/brandList';
 import { connectToDatabase } from "../util/mongodb";
 
 export const animatedComponents = makeAnimated();
@@ -27,10 +28,27 @@ export async function getServerSideProps() {
   };
 }
 
+
+// export const modelOptions = {model}.map(model =>(
+//   {
+//       label: ''+model.name, 
+//       // value: ''+brand._id,
+//     value: ''+model.name,
+
+//   } 
+// )
+  
+// )
+
+
+
+
 export default function BrandOP({ brand }) {
   console.log('brand', brand)
   return (null)
 }
+
+
 
 export const options = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -58,12 +76,31 @@ export const colourOptions = [
     { value: 'salted-caramel', label: 'Salted Caramel', rating: 'crazy' },
   ];
 
-  export const brandOptions = [
-    { value: 'ptt', label: 'ptt', rating: 'safe' },
-    { value: 'mobil1', label: 'mobil1', rating: 'good' },
-    { value: 'eneos', label: 'eneos', rating: 'good' },
+  export function brandOptions(id, models) {
+    return(
+
     
-  ];
+    models.map(model =>{
+      if(model.brand == id){
+        [
+          {
+             value: {model}, label: {model}, rating: 'safe' 
+          }
+        ]
+      }
+    })
+
+    )
+    // return(
+    // { value: 'ptt', label: 'ptt', rating: 'safe' },
+    // { value: 'mobil1', label: 'mobil1', rating: 'good' },
+    // { value: 'eneos', label: 'eneos', rating: 'good' }
+    // )
+  
+    
+    
+  
+}
   
   export const stateOptions = [
     { value: 'AL', label: 'Alabama' },
@@ -153,12 +190,32 @@ export const colourOptions = [
   // 	bigOptions = bigOptions.concat(colourOptions);
   // }
   
-  export const groupedOptions = [
-    {
-      label: 'ยี่ห้อ',
-      options: brandOptions,
+
+
+
+
+  
+  // export const groupedOptions = [
+  //   {
+  //     label: 'ยี่ห้อ',
+  //     options: brandOptions,
+  //   }
+  // ];
+
+  export function groupedOptions(brands, models) {
+    brands.map(brand =>{
+    [
+      {
+      label: {brand},
+      options: brandOptions(brand._id, models),
     }
-  ];
+    ]
+      
+    
+  
+    })
+    
+  } 
 
   export const groupStyles = {
     display: 'flex',

@@ -15,7 +15,7 @@ import { connectToDatabase } from "../../util/mongodb"
 import { ObjectId } from 'bson';
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
-import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../../pages/data';
+import { colourOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../../pages/data';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
@@ -28,13 +28,59 @@ import React, { useState } from 'react';
 
 
 
-export default function AddItem({ item  }) {
+export default function AddItem({ item, brand: brands, model: models  }) {
 
   console.log("AddItem", { item })
 
   // const [id] = useState(_uniqueId('prefix-'));
   
   const [buyOrder, setBuyOrder] = useState([]);
+
+  
+  const modelOptions = models.map(model =>(
+    {
+        label: ''+model.name, 
+        // value: ''+brand._id,
+      value: ''+model.name,
+
+    } 
+    )
+    
+)
+
+let [filter,setFilter] = useState({
+  brand: 'ptt',
+  id: '',
+  model: ''
+})
+
+const handleBrandChange = (value) => {
+    
+  brands.map(brand => {
+    if(value.value == brand.name){
+      setFilter({brand: value.value, id: brand._id, model: ''})
+      console.log("value ==== ",filter)
+    }
+  })
+  
+}
+
+  const brandOptions = brands.map(brand =>(
+    {
+        label: ''+brand.name, 
+        // value: ''+brand._id,
+      value: ''+brand.name,
+
+    } 
+    )
+    
+)
+
+const modelListOptions = models.map(model =>(
+  
+  model.brand === filter.id ? ({label: ''+model.name, value: ''+model.name}) : ({}) 
+  )
+)
   // const tempID = uuidv4();
   // console.log(tempID)
   // console.log(item._id)
@@ -68,15 +114,17 @@ export default function AddItem({ item  }) {
 
 
   const { register, handleSubmit, control, watch, errors } = useForm();
+
   const onSubmit = (data, e) => {
     // TODO avi model is not yet implemented
-    data['avi_model'] = []
+    // data['avi_model'] = []
     data['date'] = new Date()
     console.log(data)
 
     let order = { product_name: data.product_name, type: "Buy", 
-              qty: 0, unit_price: data.purchase_price, expense: 0}
+              qty: 0, unit_price: data.purchase_price, expense: 0 , date: ""}
 
+    order.date = new Date()
 
     if(data._id === ""){
       order.qty = data.qty 
@@ -117,7 +165,7 @@ export default function AddItem({ item  }) {
 
       if(order.qty != 0){
         console.log(order)
-        fetch('/api/order2', {
+        fetch('/api/order2/buy', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -163,7 +211,7 @@ export default function AddItem({ item  }) {
       
       if(order.qty != 0){
         console.log(order)
-        fetch('/api/order2', {
+        fetch('/api/order2/buy', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -206,6 +254,13 @@ export default function AddItem({ item  }) {
         });
     }
   }
+
+  const onsubmit_test = (data) => {
+    console.log(data)
+
+  }
+
+
   const formatGroupLabel = data => (
     <div style={groupStyles}>
       <span>{data.label}</span>
@@ -331,11 +386,22 @@ export default function AddItem({ item  }) {
               type="text" name="brand" ref={register({ required: true })}
             />
           </InputGroup> */}
-          ยี่ห้อสินค้า: <select name="brand" ref={register} defaultValue={data.brand}>
-          <option value="mobil1">Mobil1</option>
+
+
+          ยี่ห้อสินค้า: <select name="brand" ref={register} onChange={handleBrandChange} defaultValue={data.brand}>
+          {brands.map(data => (<option value={data._id}>{data.name}</option>))}
+          {/* <option value="mobil1">Mobil1</option>
           <option value="eneos">Eneos</option>
-          <option value="ptt">PTT</option>
+          <option value="ptt">PTT</option> */}
         </select><br></br>
+
+          {/* ยี่ห้อสินค้า: <Select
+
+          // options={brandOP}
+          options={brandOptions}
+          // formatGroupLabel={formatGroupLabel}
+          onChange={handleBrandChange}
+                  /> */}
 
 {/*         
         <BrandList brandChange={handleBrandChange} brand={brand} />
@@ -351,10 +417,39 @@ export default function AddItem({ item  }) {
             </div> */}
 
           รุ่นสินค้า: <select name="model" ref={register} defaultValue={data.model}>
-          <option value="0w20">0w-20</option>
+          {models.map(data => (<option value={data.name}>{data.name}</option>))}
+          {/* <option value="0w20">0w-20</option>
           <option value="5w40">5w-40</option>
-          <option value="10w40">10w-40</option>
+          <option value="10w40">10w-40</option> */}
         </select><br></br>
+
+          {/* รุ่นสินค้า: <Select
+              options={modelListOptions}
+              // onChange={handleModelChange}
+              // options={modelOP}
+              // formatGroupLabel={formatGroupLabel}
+            /> */}
+
+        รุ่นที่ใช้ได้: <Controller
+                        name="avi_model"
+                        type="select"
+                        control={control}
+
+
+                        render={({ onChange, onBlur, value }) => (
+                          
+                            <Select
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                value={value}  // this is what you need to do
+                                isMulti
+                                // options={groupedOptions}
+                                options={modelOptions}
+                                // options={option}
+                                ref={register}
+                            />
+                        )}
+                    />
 
         {/* รุ่นที่ใช้ได้: <Select
             name="avi_model"
@@ -466,9 +561,28 @@ export async function getServerSideProps(props) {
 
   if (itemId === 'new') {
     console.log("Request to add new item, ignore search existing item from database.")
+
+    const { db } = await connectToDatabase()
+
+    const model = await db
+      .collection("model")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+
+    const brand = await db
+      .collection("brand")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+
     return {
       props: {
-        item: null
+        item: null,
+        model: JSON.parse(JSON.stringify(model)),
+        brand: JSON.parse(JSON.stringify(brand)),
       }
     }
   } else {
@@ -476,19 +590,19 @@ export async function getServerSideProps(props) {
     const { db } = await connectToDatabase()
 
     
-//   const brand = await db
-//   .collection("brand")
-//   .find()
-//   .sort({})
-//   .limit(20)
-//   .toArray();
+    const brand = await db
+      .collection("brand")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
 
-// const model = await db
-//   .collection("model")
-//   .find()
-//   .sort({})
-//   .limit(20)
-//   .toArray();
+    const model = await db
+      .collection("model")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
 
     const item = await db
       .collection("item")
@@ -500,6 +614,8 @@ export async function getServerSideProps(props) {
     return {
       props: {
         item: JSON.parse(JSON.stringify(item)),
+        model: JSON.parse(JSON.stringify(model)),
+        brand: JSON.parse(JSON.stringify(brand)),
       },
     };
   }

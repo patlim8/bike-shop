@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../../components/buttonBar';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
+import Modal from 'react-bootstrap/Modal';
 
 
 import BrandList from '../../components/brandList';
@@ -42,6 +43,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const [newOrder2, setNewOrder2] = useState([]);
   const [totalPriceProducts, setTotalPriceProducts] = useState(0);
   const [fixing_price, setFixingPrice] = useState(0);
+  const [receive_value, setReceiveValue] = useState(0);
 
   
 
@@ -51,12 +53,13 @@ export default function Calculation({ item: items, order, customer_price_multipl
     
     console.log("data ===", data)
     let s = { totalprice_order: totalPriceProducts, fix_service_price: data.fix_service_price, 
-      total: 0, receive: data.receive, change: 0, type: "Sale"}
+      total: data.total, receive: data.receive, change: data.change, type: "Sale", date: ""}
 
     // s.totalprice_order = parseInt(q.totalprice_order)
     // s.fix_service_price += parseFloat( data.fix_service_price)
-    s.total = s.totalprice_order + Number(s.fix_service_price)
-    s.change = Number(s.receive) - s.total
+    s.date = new Date()
+    
+    
 
     console.log("s.price order === ", s.totalprice_order)
     console.log("s.total === ", s.total)
@@ -94,7 +97,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
 
     
-      fetch('/api/order2',
+      fetch('/api/order2/sale',
         {
           method: 'POST',
           mode: 'cors', // no-cors, *cors, same-origin
@@ -224,45 +227,19 @@ export default function Calculation({ item: items, order, customer_price_multipl
        console.log("ราคาสินค้า SET", totalPriceProducts)
     })
 
-    // setTotalPriceProducts(total_price_products)
-
-    // newOrder.push(q)
-
-    // console.log("ราคาสินค้า", totalPriceProducts)
-    // console.log("ข้างใน q", newOrder)
-    // setNewOrder(newOrder)
-
-    // console.log("new order ==== ", newOrder)
-
-    // console.log("ค่าซ่อม ", data.fix_service_price)
-    // console.log("รวม ", s.total)
-    // console.log("เงินทอน ", s.change)
-
-    // newOrder2.push(s)
-    // console.log("ข้างใน s", newOrder2)
-
-    // setNewOrder2(newOrder2)
-
    
 
   }
 
+  const [show, setShow] = useState(false);
+    const [show2, setShow2] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
-  // Add some dummy data
-  // let p = { productName: 'กรองอากาศ', code: 'A1234', brand: 'Honda', model: 'CBR150', qty: 10, unitPrice: 100 }
-  // productList.push(p)
-  // let jsxProductList = productList.map(p => {
-  //   return (
-  //     <tr>
-  //       <td>{p.productName}</td>
-  //       <td>{p.code}</td>
-  //       <td>{p.brand}</td>
-  //       <td>{p.model}</td>
-  //       <td>{p.qty}</td>
-  //       <td>{p.unitPrice}</td>
-  //     </tr>
-  //   )
-  // })
+    const handleClose2 = () => setShow2(false);
+    const handleShow2 = () => setShow2(true);
+
 
 
   return (
@@ -416,13 +393,13 @@ export default function Calculation({ item: items, order, customer_price_multipl
           </InputGroup.Prepend>
           <FormControl
             readOnly
+            name="total" ref={register2}
             placeholder=""
             aria-label="Item name"
             aria-describedby="basic-addon1"
             Value={totalPriceProducts+ Number(fixing_price)}
           />
         </InputGroup>
-
 
         <InputGroup className="mb-3">
           <InputGroup.Prepend>
@@ -432,8 +409,36 @@ export default function Calculation({ item: items, order, customer_price_multipl
             name="receive" ref={register2}
             placeholder=""
             type="number"
+            onChange={e => setReceiveValue(e.target.value)}
           />
         </InputGroup>
+
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">เงินทอน</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            readOnly
+            name="change" ref={register2}
+            placeholder=""
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+            Value={receive_value - (totalPriceProducts+ Number(fixing_price))}
+          />
+        </InputGroup>
+
+
+
+        {/* <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            name="receive" ref={register2}
+            placeholder=""
+            type="number"
+          />
+        </InputGroup> */}
 
         <Form.Group controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="ปริ้นใบเสร็จ" />
@@ -447,6 +452,9 @@ export default function Calculation({ item: items, order, customer_price_multipl
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         {/* <Button href="/payment" type="submit">จ่าย</Button>{' '} */}
         <button>จ่าย</button>{' '}
+
+        
+
         <Button variant="danger" href="/sale">ย้อนกลับ</Button>{' '}
       </ButtonGroup>
 

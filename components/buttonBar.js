@@ -5,8 +5,14 @@ import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Badge from 'react-bootstrap/Badge';
+
+
 
 export default function ButtonBar() {
+  
+  const navDropdownTitle = (<h6>การแจ้งเตือน<Badge variant="secondary">New</Badge></h6>);
+
   return (
     <div>
       <Navbar bg="dark" variant="dark" >
@@ -24,9 +30,10 @@ export default function ButtonBar() {
               <NavDropdown.Item href="/totalSale">บัญชีรายการขาย</NavDropdown.Item>
               <NavDropdown.Item href="/balance">บัญชี-Balance</NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="การแจ้งเตือน" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/needItem">สินค้าที่ต้องเพิ่ม</NavDropdown.Item>
-              <NavDropdown.Item href="/stock">สินค้าค้างสต็อค</NavDropdown.Item>
+            <NavDropdown title={navDropdownTitle} id="basic-nav-dropdown"> 
+            
+              <NavDropdown.Item href="/needItem">สินค้าที่ต้องเพิ่ม<Badge variant="secondary">New</Badge></NavDropdown.Item>
+              <NavDropdown.Item href="/stock">สินค้าค้างสต็อค <Badge variant="secondary">New</Badge></NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

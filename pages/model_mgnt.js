@@ -17,7 +17,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { connectToDatabase } from "../util/mongodb";
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
-import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../pages/data';
+// import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../pages/data';
 import Link from 'next/link'
 import { ObjectID } from 'bson';
 
@@ -112,9 +112,13 @@ const onSubmit_brand = (data) => {
     });
 }
 
-export default function modelManager({ item: items, brand, model }) {
+export default function modelManager({ item: items, brand: brands, model: models }) {
 
     console.log("item: ", items)
+    console.log("brands: ", brands)
+    console.log("models: ", models)
+
+    // console.log(brand[0]._id)
 
     const { register, handleSubmit, control, watch, errors } = useForm();
 
@@ -133,6 +137,93 @@ export default function modelManager({ item: items, brand, model }) {
 
     const handleClose2 = () => setShow2(false);
     const handleShow2 = () => setShow2(true);
+
+    // const id = brands[0]._id
+    // console.log(id)
+
+    const groupedOptions =  brands.map(brand =>(
+        {
+            label: ''+brand._id, 
+            value: ''+brand._id,
+        //   options: modelOptions(''+brand._id),
+
+        } 
+    )
+        
+    )
+        
+        
+        
+        
+    //     brands.map(brand =>{
+    //         console.log("ok")
+    //         return(
+    //             [
+    //       {
+    //       label: {brand}, value: 0,
+    //     //   options: brandOptions(brand._id, models),
+
+    //     }
+    // ]
+    //     )
+        
+          
+        
+      
+    //     })
+        
+        
+      
+
+    const modelOptions = models.map(model =>(
+        {
+            label: ''+model.name, 
+            // value: ''+brand._id,
+          value: ''+model.name,
+
+        } 
+        )
+        
+    )
+    
+
+    // {
+        
+    
+        
+    //     models.map(model =>{
+
+            
+    //       if(model.brand == id){
+    //         console.log("ok2", model.brand," ", id)
+    //         return(
+    //         [
+    //           {
+    //              value: {model}, label: {model}, rating: 'safe' 
+    //           }
+    //         ]
+            
+    //         )
+    //       }
+    //     })
+    
+        
+    //     // return(
+    //     // { value: 'ptt', label: 'ptt', rating: 'safe' },
+    //     // { value: 'mobil1', label: 'mobil1', rating: 'good' },
+    //     // { value: 'eneos', label: 'eneos', rating: 'good' }
+    //     // )
+      
+        
+        
+      
+    // }
+
+    const option = [
+          {
+            label: 'ยี่ห้อ', value: '0',
+          }
+        ];
 
 
     const updateInput = async (input) => {
@@ -201,8 +292,8 @@ export default function modelManager({ item: items, brand, model }) {
 
                 <div>
 
-                    <BrandList brandChange={handleBrandChange} brand={brand} />
-                    <ModelList model={model}/>
+                    {/* <BrandList brandChange={handleBrandChange} brand={brand} />
+                    <ModelList model={model}/> */}
 
           รุ่นที่ใช้ได้: <Controller
                         name="avi_model"
@@ -216,7 +307,9 @@ export default function modelManager({ item: items, brand, model }) {
                                 onBlur={onBlur}
                                 value={value}  // this is what you need to do
                                 isMulti
-                                options={groupedOptions}
+                                // options={groupedOptions}
+                                options={modelOptions}
+                                // options={option}
                                 ref={register}
                             />
                         )}
@@ -237,7 +330,7 @@ export default function modelManager({ item: items, brand, model }) {
                                 <th>รุ่นที่ใช้ได้</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {/* <tbody>
                             {brand.map((p) => (model.map((i) => (i.brand == p._id) ?
                                 <tr>
                                      <td>{i._id}</td>
@@ -255,7 +348,7 @@ export default function modelManager({ item: items, brand, model }) {
                                 //     )}
                                 // </tr>
                             ))}
-                        </tbody>
+                        </tbody> */}
                     </Table>
                 </div>
 
@@ -308,7 +401,7 @@ export default function modelManager({ item: items, brand, model }) {
             
 
                 ยี่ห้อสินค้า: <select name="brand" ref={register}>
-                    {brand.map(data => (<option value={data._id}>{data.name}</option>))}
+                    {brands.map(data => (<option value={data._id}>{data.name}</option>))}
             
                     </select><br></br>
 
