@@ -46,23 +46,23 @@ export async function getServerSideProps() {
     .sort({})
     .limit(20)
     .toArray();
-  
-    
+
+
   return {
     props: {
       item: JSON.parse(JSON.stringify(item)),
       model: JSON.parse(JSON.stringify(model)),
       brand: JSON.parse(JSON.stringify(brand)),
-      
+
     },
-    
-    
+
+
   };
-  
+
 }
 
 
- 
+
 export default function Inventory({ item: items, brand: brands, model: models }) {
 
   console.log("item: ", items)
@@ -75,72 +75,69 @@ export default function Inventory({ item: items, brand: brands, model: models })
 
   const [itemListDefault, setItemListDefault] = useState();
   const [itemList, setItemList] = useState();
-    
+
   const [brandListDefault, setBrandListDefault] = useState();
-  const [brandList, setBrandList] = useState();  
+  const [brandList, setBrandList] = useState();
 
   // filter is a JSON object having brand and model
- let [filter,setFilter] = useState({
-  brand: '',
-  id: '',
-  model: '',
-  avi_model: []
-})
+  let [filter, setFilter] = useState({
+    brand: '',
+    id: '',
+    model: '',
+    avi_model: []
+  })
 
-  const brandOptions = brands.map(brand =>(
+  const brandOptions = brands.map(brand => (
     {
-        label: ''+brand.name, 
-        // value: ''+brand._id,
-      value: ''+brand.name,
+      label: '' + brand.name,
+      // value: ''+brand._id,
+      value: '' + brand.name,
 
-    } 
-    ),[{label: 'empty', value:'empty'}]
-    
-)
-  
-  const modelOptions = models.map(model =>(
+    }
+  ), [{ label: 'empty', value: 'empty' }]
+
+  )
+
+  const modelOptions = models.map(model => (
     {
-        label: ''+model.name, 
-        // value: ''+brand._id,
-      value: ''+model.name,
+      label: '' + model.name,
+      // value: ''+brand._id,
+      value: '' + model.name,
 
-    } 
-    ),
-    [{label: '', value:''}]
-) 
+    }
+  ),
+    [{ label: '', value: '' }]
+  )
 
-const modelListOptions = models.map(model =>(
-
-    model.brand === filter.id ? ({label: ''+model.name, value: ''+model.name}) : ({}) 
-    
+  const modelListOptions = models.filter(m => m.brand === filter.id).map(model => (
+    { label: '' + model.name, value: '' + model.name }
     // label: ''+model.name, 
     //   // value: ''+brand._id,
     // value: ''+model.name,
-
   )
-)
-  
+  )
 
 
-const handleOnChange = e => {
-  console.log(e.value)
-  brandChange(e.value)
-}
+
+  const handleOnChange = e => {
+    console.log(e.value)
+    brandChange(e.value)
+  }
 
 
   const updateInput = async (input) => {
-    console.log("input ==== ",input)
-    if(input != items.brand){
-    // if(input == String && input.value != undefined ){
+    console.log("input ==== ", input)
+    if (input != items.brand) {
+      // if(input == String && input.value != undefined ){
 
-    
-    const filtered = itemListDefault.filter(item => {
-     return item.product_name.toLowerCase().includes(input.toLowerCase())
-    })
-    console.log("filter ==== ", filtered)
-    setInput(input);
-    setItemList(filtered);
-    console.log("itemList ==== ", itemList)
+
+      const filtered = itemListDefault.filter(item => {
+        return item.product_name.toLowerCase().includes(input.toLowerCase())
+      })
+      console.log("filter ==== ", filtered)
+      setInput(input);
+      setItemList(filtered);
+      console.log("itemList ==== ", itemList)
     }
     // else{
     //   const filtered = brandListDefault.filter(item => {
@@ -150,52 +147,57 @@ const handleOnChange = e => {
     //    setInput(input);
     //    setBrandList(filtered);
     // }
-    
- }
 
- const updateBrand = async (input) => {
-  
+  }
+
+  const updateBrand = async (input) => {
+
     const filtered = itemListDefault.filter(item => {
       return item.brand.toLowerCase().includes(input.value.toLowerCase())
-     })
-     console.log("222222222222222222")
+    })
+    console.log("222222222222222222")
     //  setInput(input);
-     setBrandList(filtered);
-  
-  
-}
+    setBrandList(filtered);
 
- 
 
- useEffect( () => {
-   
-   setItemList(items)
-   setItemListDefault(items)
-   {console.log("itemList ====",itemList)}
-   {console.log("itemListDefalut ====",itemListDefault)}
- },[]);
+  }
+
+
+
+  useEffect(() => {
+    // This will run after the first render, only once
+    setItemList(items)
+    setItemListDefault(items)
+    { console.log("itemList ====", itemList) }
+    { console.log("itemListDefalut ====", itemListDefault) }
+  }, []);
+
+  useEffect(() => {
+    // This will run when filter is set.
+    console.log("filter update ----", filter)
+  }, [filter])
 
 
   const edit = (itemId) => {
-    console.log({itemId})
+    console.log({ itemId })
   }
 
   const handleBrandChange = (value) => {
     let temp_avi = filter.avi_model
-    
-    if(value != null){
-      brands.map(brand => {
-      if(value.value == brand.name){
-        setFilter({brand: value.value, id: brand._id, model: '', avi_model: temp_avi})
-        setInputModel('')
-        console.log("value ==== ",filter)
-      }
-    })
-  }else{
-    setFilter({brand: '', id: '', model: '', avi_model:[]})
-  }
 
-    
+    if (value != null) {
+      brands.map(brand => {
+        if (value.value == brand.name) {
+          setFilter({ brand: value.value, id: brand._id, model: '', avi_model: temp_avi })
+          setInputModel('')
+          console.log("value ==== ", filter)
+        }
+      })
+    } else {
+      setFilter({ brand: '', id: '', model: '', avi_model: [] })
+    }
+
+
   }
 
   const handleModelChange = (value) => {
@@ -203,33 +205,33 @@ const handleOnChange = e => {
     let temp_id = filter.id
     let temp_avi = filter.avi_model
 
-    if(value != null){
-    // console.log("model ====", value.value)
-    setFilter({brand: temp_brand, id: temp_id, model: value.value, avi_model: temp_avi})
-    console.log(filter)
-  }else{
-    setFilter({brand: temp_brand, id: temp_id, model: '', avi_model: temp_avi})
-  }
-       
+    if (value != null) {
+      // console.log("model ====", value.value)
+      setFilter({ brand: temp_brand, id: temp_id, model: value.value, avi_model: temp_avi })
+      console.log(filter)
+    } else {
+      setFilter({ brand: temp_brand, id: temp_id, model: '', avi_model: temp_avi })
+    }
+
   }
 
-  const handleAviModelChange = (e) => {
-    console.log(e[0].value)
-    console.log("value avi ======= ",e.label)
+  const handleAviModelChange = (obj) => {
+    console.log(obj)
+    // console.log(obj[0].value)
     let temp_brand = filter.brand
     let temp_id = filter.id
     let temp_model = filter.model
 
-    if(e != null)
-    {  
-      
-      
+    if (obj != null) {
+      // console.log("value avi ======= ",obj.label)
       // console.log("model ====", value.value)
-      setFilter({brand: temp_brand, id: temp_id, model: temp_model, avi_model: e})
-      console.log(filter)
-    // console.log(filter.avi_model.value)
-    filter.avi_model.map(avi_model => console.log(avi_model.value))
-       }
+      console.log('obj', obj)
+      let newFilter = { brand: temp_brand, id: temp_id, model: temp_model, avi_model: obj }
+      setFilter(newFilter)
+      console.log('filter', filter)
+      // console.log(filter.avi_model.value)
+      newFilter.avi_model.map(avi_model => console.log('--->', avi_model.value))
+    }
   }
 
 
@@ -265,57 +267,57 @@ const handleOnChange = e => {
               onChange={updateInput}
             />
           </InputGroup> */}
-          <SearchBar input={input} 
-                      onChange={updateInput} />
-          
-          
+          <SearchBar input={input}
+            onChange={updateInput} />
+
+
           {/* <BrandList brandChange={handleBrandChange}/> */}
-          
+
       ยี่ห้อสินค้า: <Select
 
-        // options={brandOP}
-        // defaultValue={inputBrand}
-        options={brandOptions}
-        isClearable={true}
-        // isMulti
-        // className="basic-multi-select"
-        // classNamePrefix="select"
-        // formatGroupLabel={formatGroupLabel}
-        onChange={handleBrandChange}
-                />
+            // options={brandOP}
+            // defaultValue={inputBrand}
+            options={brandOptions}
+            isClearable={true}
+            // isMulti
+            // className="basic-multi-select"
+            // classNamePrefix="select"
+            // formatGroupLabel={formatGroupLabel}
+            onChange={handleBrandChange}
+          />
 
-          
-    
+
+
 
           {/* <ModelList /> */}
 
           รุ่นสินค้า: <Select
-              options={modelListOptions}
-              onChange={handleModelChange}
-              isClearable={true}
-              // value={inputModel}
-              // options={modelOP}
-              // formatGroupLabel={formatGroupLabel}
-            />
-          
-          รุ่นที่ใช้ได้: 
-          
+            options={modelListOptions}
+            onChange={handleModelChange}
+            isClearable={true}
+          // value={inputModel}
+          // options={modelOP}
+          // formatGroupLabel={formatGroupLabel}
+          />
+
+          รุ่นที่ใช้ได้:
+
             <Select
-              onChange={handleAviModelChange}
-              // onBlur={onBlur}
-              // value={value}  // this is what you need to do
-              isMulti
-              isSearchable={true}
-              options={modelOptions}
-              // ref={register}
-            />
-        
-       
+            onChange={handleAviModelChange}
+            // onBlur={onBlur}
+            // value={value}  // this is what you need to do
+            isMulti
+            isSearchable={true}
+            options={modelOptions}
+          // ref={register}
+          />
+
+
 
         </div>
 
         <div>
-        <ItemList ItemList={itemList} filter={filter}/>
+          <ItemList ItemList={itemList} filter={filter} />
 
           {/* <Table striped bordered hover size="sm">
             <thead>
@@ -376,7 +378,7 @@ const handleOnChange = e => {
 //     <td>{items.code}</td>
 //     <td>{items.brand}</td>
 //     <td>{items.model}</td>
-    
+
 //     <td>{items.barcode_id}</td>
 //     <td>{items.amount}</td>
 //     <td>{items.limit_amount}</td>

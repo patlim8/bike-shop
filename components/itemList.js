@@ -3,28 +3,29 @@ import Table from 'react-bootstrap/Table'
 import Link from 'next/link'
 
 
-const ItemList = ({ ItemList = [], filter = '' }) => {
+const ItemList = ({ ItemList = [], filter = null }) => {
   let filteredList = ItemList
-  if(filter.brand){
-    filteredList = ItemList.filter(data => data.brand == filter.brand)
-  }
-  // const filteredList = ItemList.filter(data => 
-    // {filter ? data.brand == filter.brand && data.model == filter.model : data.brand == filter.brand  })
-  if(filter.model){
-    filteredList = filteredList.filter(data => data.model == filter.model )
-  }
 
-  if(filter.avi_model){
-    filteredList = filteredList.filter(data => filter.avi_model.map(avi_model => avi_model.value == data.model)
-                                        || filter.avi_model.map(avi_model => data.avi_model.map(dataAvi => avi_model.value == dataAvi.value)))
+  if (filter) {
+    if(filter.brand){
+      filteredList = ItemList.filter(data => data.brand == filter.brand)
+    }
+    // const filteredList = ItemList.filter(data => 
+      // {filter ? data.brand == filter.brand && data.model == filter.model : data.brand == filter.brand  })
+    if(filter.model){
+      filteredList = filteredList.filter(data => data.model == filter.model )
+    }
+
+    if(filter.avi_model){
+      filteredList = filteredList.filter(data => filter.avi_model.map(avi_model => avi_model.value == data.model)
+                                          || filter.avi_model.map(avi_model => data.avi_model.map(dataAvi => avi_model.value == dataAvi.value)))
+    }
   }
 
   const itemList2 = filteredList.map((data) => {
     if (data) {
       return (
-
         <tbody>
-
           <tr key={data._id}>
             <td>
               <Link href={`/additem/${data._id}`}>
@@ -56,7 +57,7 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
     <>
       <h2>
         Brand: {filter.brand ? filter.brand : '---'} <br />
-        Model: {modelFilter.model ? modelFilter.model : '--'}
+        {/* Model: {modelFilter.model ? modelFilter.model : '--'} */}
       </h2>
       {/* <h2>
         Brand: {filter.brand ? filter.brand : '---'}
