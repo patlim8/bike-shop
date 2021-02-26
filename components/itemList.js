@@ -13,6 +13,11 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
     filteredList = filteredList.filter(data => data.model == filter.model )
   }
 
+  if(filter.avi_model){
+    filteredList = filteredList.filter(data => filter.avi_model.map(avi_model => avi_model.value == data.model)
+                                        || filter.avi_model.map(avi_model => data.avi_model.map(dataAvi => avi_model.value == dataAvi.value)))
+  }
+
   const itemList2 = filteredList.map((data) => {
     if (data) {
       return (

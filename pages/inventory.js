@@ -70,6 +70,9 @@ export default function Inventory({ item: items, brand: brands, model: models })
   const { register, handleSubmit, control, watch, errors } = useForm();
 
   const [input, setInput] = useState('');
+  const [inputBrand, setInputBrand] = useState();
+  const [inputModel, setInputModel] = useState();
+
   const [itemListDefault, setItemListDefault] = useState();
   const [itemList, setItemList] = useState();
     
@@ -80,7 +83,8 @@ export default function Inventory({ item: items, brand: brands, model: models })
  let [filter,setFilter] = useState({
   brand: '',
   id: '',
-  model: ''
+  model: '',
+  avi_model: []
 })
 
   const brandOptions = brands.map(brand =>(
@@ -177,29 +181,58 @@ const handleOnChange = e => {
   }
 
   const handleBrandChange = (value) => {
+    let temp_avi = filter.avi_model
     
-    brands.map(brand => {
+    if(value != null){
+      brands.map(brand => {
       if(value.value == brand.name){
-        setFilter({brand: value.value, id: brand._id, model: ''})
+        setFilter({brand: value.value, id: brand._id, model: '', avi_model: temp_avi})
+        setInputModel('')
         console.log("value ==== ",filter)
       }
     })
+  }else{
+    setFilter({brand: '', id: '', model: '', avi_model:[]})
+  }
+
     
   }
 
   const handleModelChange = (value) => {
     let temp_brand = filter.brand
     let temp_id = filter.id
-    
-    
+    let temp_avi = filter.avi_model
+
+    if(value != null){
     // console.log("model ====", value.value)
-    setFilter({brand: temp_brand, id: temp_id, model: value.value})
+    setFilter({brand: temp_brand, id: temp_id, model: value.value, avi_model: temp_avi})
     console.log(filter)
-      
-    
-    
-    
+  }else{
+    setFilter({brand: temp_brand, id: temp_id, model: '', avi_model: temp_avi})
   }
+       
+  }
+
+  const handleAviModelChange = (e) => {
+    console.log(e[0].value)
+    console.log("value avi ======= ",e.label)
+    let temp_brand = filter.brand
+    let temp_id = filter.id
+    let temp_model = filter.model
+
+    if(e != null)
+    {  
+      
+      
+      // console.log("model ====", value.value)
+      setFilter({brand: temp_brand, id: temp_id, model: temp_model, avi_model: e})
+    console.log(filter)
+    // console.log(filter.avi_model.value)
+    filter.avi_model.map(avi_model => console.log(avi_model.value))
+       }
+  }
+
+
 
   return (
     <div className={styles.container}>
@@ -241,10 +274,17 @@ const handleOnChange = e => {
       ยี่ห้อสินค้า: <Select
 
         // options={brandOP}
+        // defaultValue={inputBrand}
         options={brandOptions}
+        isClearable={true}
+        // isMulti
+        // className="basic-multi-select"
+        // classNamePrefix="select"
         // formatGroupLabel={formatGroupLabel}
         onChange={handleBrandChange}
                 />
+
+          
     
 
           {/* <ModelList /> */}
@@ -252,27 +292,25 @@ const handleOnChange = e => {
           รุ่นสินค้า: <Select
               options={modelListOptions}
               onChange={handleModelChange}
+              isClearable={true}
+              // value={inputModel}
               // options={modelOP}
               // formatGroupLabel={formatGroupLabel}
             />
           
-          รุ่นที่ใช้ได้: <Controller
-          name="avi_model"
-          type="select"
-          control={control}
-
-
-          render={({ onChange, onBlur, value }) => (
+          รุ่นที่ใช้ได้: 
+          
             <Select
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}  // this is what you need to do
+              onChange={handleAviModelChange}
+              // onBlur={onBlur}
+              // value={value}  // this is what you need to do
               isMulti
+              isSearchable={true}
               options={modelOptions}
-              ref={register}
+              // ref={register}
             />
-          )}
-        />
+        
+       
 
         </div>
 
