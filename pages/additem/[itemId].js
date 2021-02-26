@@ -19,21 +19,16 @@ import { colourOptions, groupStyles, groupBadgeStyles, animatedComponents, optio
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
-
-// import BrandList from '../../components/brandList';
-// import ModelList from '../../components/modelList'
+import BrandList from '../../components/brandList';
+import ModelList from '../../components/modelList';
 // import _uniqueId from 'lodash/uniqueId';
-// import { v4 as uuidv4 } from 'uuid';
-// import { v1 as uuidv1 } from 'uuid';
 
-
-
-export default function AddItem({ item, brand: brands, model: models  }) {
+export default function AddItem({ item, brand, model }) {
 
   console.log("AddItem", { item })
 
   // const [id] = useState(_uniqueId('prefix-'));
-  
+
   const [buyOrder, setBuyOrder] = useState([]);
 
   
@@ -121,17 +116,19 @@ const modelListOptions = models.map(model =>(
     data['date'] = new Date()
     console.log(data)
 
-    let order = { product_name: data.product_name, type: "Buy", 
-              qty: 0, unit_price: data.purchase_price, expense: 0 , date: ""}
+    let order = {
+      product_name: data.product_name, type: "Buy",
+      qty: 0, unit_price: data.purchase_price, expense: 0
+    }
 
     order.date = new Date()
 
-    if(data._id === ""){
-      order.qty = data.qty 
-    }else{
+    if (data._id === "") {
+      order.qty = data.qty
+    } else {
       order.qty = data.qty - item.qty
     }
-    
+
     order.expense = order.unit_price * order.qty
 
     // buyOrder.push(p)
@@ -160,10 +157,10 @@ const modelListOptions = models.map(model =>(
         .then(data => {
           console.log(data);
           alert("Add Item:\nResponse from server " + data.message)
-          alert("Newly added _id",data._id)
+          alert("Newly added _id", data._id)
         });
 
-      if(order.qty != 0){
+      if (order.qty != 0) {
         console.log(order)
         fetch('/api/order2/buy', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -181,13 +178,13 @@ const modelListOptions = models.map(model =>(
           .then(response => response.json())
           .then(data => {
             console.log(data);
-          alert("Add Order2 :\nResponse from server " + data.message)
-          alert("Newly added _id in Order2",data._id)
+            alert("Add Order2 :\nResponse from server " + data.message)
+            alert("Newly added _id in Order2", data._id)
           });
       }
-        
-      
-      
+
+
+
     } else if (submitterId == 'update_item') {
       fetch('/api/item', {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
@@ -208,8 +205,8 @@ const modelListOptions = models.map(model =>(
           alert("Response from server " + data.message)
         });
 
-      
-      if(order.qty != 0){
+
+      if (order.qty != 0) {
         console.log(order)
         fetch('/api/order2/buy', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -227,12 +224,12 @@ const modelListOptions = models.map(model =>(
           .then(response => response.json())
           .then(data => {
             console.log(data);
-          alert("Add Order2 :\nResponse from server " + data.message)
-          alert("Newly added _id in Order2",data._id)
+            alert("Add Order2 :\nResponse from server " + data.message)
+            alert("Newly added _id in Order2", data._id)
           });
       }
-        
-        
+
+
     } else if (submitterId === 'del_item') {
       fetch('/api/item', {
         method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
@@ -268,7 +265,7 @@ const modelListOptions = models.map(model =>(
     </div>
   );
 
-  
+
 
 
 
@@ -276,7 +273,7 @@ const modelListOptions = models.map(model =>(
     <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>
-          {data._id ===  undefined ? 'New Item' : 'Edit'}
+          {data._id === undefined ? 'New Item' : 'Edit'}
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -287,7 +284,7 @@ const modelListOptions = models.map(model =>(
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-        {data._id === undefined ? 'New Item' : 'Edit'}
+          {data._id === undefined ? 'New Item' : 'Edit'}
         </h1> <br></br><br></br><br></br>
 
 
@@ -329,7 +326,7 @@ const modelListOptions = models.map(model =>(
             type="text"
             name="_id"
             defaultValue={data._id}
-            ref={register({id: data._id})}
+            ref={register({ id: data._id })}
           />
         </InputGroup><br></br>
 
@@ -386,13 +383,10 @@ const modelListOptions = models.map(model =>(
               type="text" name="brand" ref={register({ required: true })}
             />
           </InputGroup> */}
-
-
-          ยี่ห้อสินค้า: <select name="brand" ref={register} onChange={handleBrandChange} defaultValue={data.brand}>
-          {brands.map(data => (<option value={data._id}>{data.name}</option>))}
-          {/* <option value="mobil1">Mobil1</option>
-          <option value="eneos">Eneos</option>
-          <option value="ptt">PTT</option> */}
+          ยี่ห้อสินค้า: <select name="brand" ref={register} defaultValue={data.brand}>
+          {brand.map((p) => (
+            <option value = {p.name}>{p.name}</option>
+          ))}
         </select><br></br>
 
           {/* ยี่ห้อสินค้า: <Select
@@ -417,10 +411,9 @@ const modelListOptions = models.map(model =>(
             </div> */}
 
           รุ่นสินค้า: <select name="model" ref={register} defaultValue={data.model}>
-          {models.map(data => (<option value={data.name}>{data.name}</option>))}
-          {/* <option value="0w20">0w-20</option>
-          <option value="5w40">5w-40</option>
-          <option value="10w40">10w-40</option> */}
+          {model.map((i) => (
+            <option value = {i.name}>{i.name}</option>
+          ))}
         </select><br></br>
 
           {/* รุ่นสินค้า: <Select
@@ -544,8 +537,8 @@ const modelListOptions = models.map(model =>(
         <Button variant="danger" type="submit" id="del_item">ลบสินค้า</Button>{' '}
 
         {data._id === undefined ? <Button type="submit" id="add_item">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>}
-        
-        
+
+
         <Button variant="dark">กลับ</Button>{' '}
       </div>
     </form>
@@ -553,7 +546,7 @@ const modelListOptions = models.map(model =>(
 }
 
 export async function getServerSideProps(props) {
-  console.log('props === ',{props})  
+  console.log('props === ', { props })
   const itemId = props.params.itemId
   console.log('_ID', { itemId })
 
@@ -564,13 +557,6 @@ export async function getServerSideProps(props) {
 
     const { db } = await connectToDatabase()
 
-    const model = await db
-      .collection("model")
-      .find()
-      .sort({})
-      .limit(20)
-      .toArray();
-
     const brand = await db
       .collection("brand")
       .find()
@@ -578,11 +564,17 @@ export async function getServerSideProps(props) {
       .limit(20)
       .toArray();
 
+    const model = await db
+      .collection("model")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
     return {
       props: {
         item: null,
-        model: JSON.parse(JSON.stringify(model)),
         brand: JSON.parse(JSON.stringify(brand)),
+        model: JSON.parse(JSON.stringify(model)),
       }
     }
   } else {
@@ -610,12 +602,26 @@ export async function getServerSideProps(props) {
         { _id: ObjectId(itemId) }
       )
 
+    const brand = await db
+      .collection("brand")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+
+    const model = await db
+      .collection("model")
+      .find()
+      .sort({})
+      .limit(20)
+      .toArray();
+
     console.log("Found", { item })
     return {
       props: {
         item: JSON.parse(JSON.stringify(item)),
-        model: JSON.parse(JSON.stringify(model)),
         brand: JSON.parse(JSON.stringify(brand)),
+        model: JSON.parse(JSON.stringify(model)),
       },
     };
   }

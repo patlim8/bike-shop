@@ -2,6 +2,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table'
 import Link from 'next/link'
 
+
 const ItemList = ({ ItemList = [], filter = '' }) => {
   let filteredList = ItemList
   if(filter.brand){
@@ -21,20 +22,7 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
   const itemList2 = filteredList.map((data) => {
     if (data) {
       return (
-        //     <tbody>
-        //       <tr>
-        //   <td>1</td>
-        //   <td>{data.product_name}</td>
-        //   <td>{data.code}</td>
-        //   <td>{data.brand}</td>
-        //   <td>{data.model}</td>
 
-        //   <td>{data.barcode_id}</td>
-        //   <td>{data.amount}</td>
-        //   <td>{data.limit_amount}</td>
-        //   <td>{data.purchase_price}</td>  
-        // </tr>
-        // </tbody>
         <tbody>
 
           <tr key={data._id}>
@@ -59,20 +47,24 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
 
         </tbody>
       )
-    }
+    } 
   })
 
   
 
   return (
     <>
+      <h2>
+        Brand: {filter.brand ? filter.brand : '---'} <br />
+        Model: {modelFilter.model ? modelFilter.model : '--'}
+      </h2>
       {/* <h2>
         Brand: {filter.brand ? filter.brand : '---'}
       </h2> */}
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
-            <th>id</th>
+            <th>Action</th>
             <th>ชื่อสินค้า</th>
             <th>รหัสสินค้า</th>
             <th>ยี่ห้อสินค้า</th>

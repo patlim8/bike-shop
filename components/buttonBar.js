@@ -10,7 +10,7 @@ import Badge from 'react-bootstrap/Badge';
 
 
 export default function ButtonBar() {
-  
+  let hasNewItem = true
   const navDropdownTitle = (<h6>การแจ้งเตือน<Badge variant="secondary">New</Badge></h6>);
 
   return (
