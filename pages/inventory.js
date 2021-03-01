@@ -8,6 +8,10 @@ import { connectToDatabase } from "../util/mongodb";
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
 import { Container, Row, Col } from 'react-bootstrap'
+import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../pages/data';
+import Link from 'next/link'
+import hasNewItem from '../pages/needItem'
+import hasNewItemStock from '../pages/stock'
 
 import React, { useState, useEffect } from 'react';
 import ItemList from '../components/itemList'
@@ -54,7 +58,7 @@ export async function getServerSideProps() {
 
 export default function Inventory({ item: items, brand: brands, model: models }) {
 
-  console.log("item: ", items)
+  console.log("All item in database: ", items)
 
   const { register, handleSubmit, control, watch, errors } = useForm();
 
@@ -98,14 +102,10 @@ export default function Inventory({ item: items, brand: brands, model: models })
     [{ label: '', value: '' }]
   )
 
+
   const modelListOptions = models.filter(m => m.brand === filter.id).map(model => (
-
-    model.brand === filter.id ? ({ label: '' + model.name, value: '' + model.name }) : ({})
-
-    // label: ''+model.name, 
-    //   // value: ''+brand._id,
-    // value: ''+model.name,
-
+    { label: '' + model.name, value: '' + model.name }
+    
   )
   )
 
@@ -121,8 +121,6 @@ export default function Inventory({ item: items, brand: brands, model: models })
     console.log("input ==== ", input)
     if (input != items.brand) {
       // if(input == String && input.value != undefined ){
-
-      console.log("itemListDefault", itemListDefault)
 
 
       const filtered = itemListDefault.filter(item => {
@@ -160,12 +158,17 @@ export default function Inventory({ item: items, brand: brands, model: models })
 
 
   useEffect(() => {
-
+    // This will run after the first render, only once
     setItemList(items)
     setItemListDefault(items)
     { console.log("itemList ====", itemList) }
     { console.log("itemListDefalut ====", itemListDefault) }
   }, []);
+
+  useEffect(() => {
+    // This will run when filter is set.
+    console.log("filter update ----", filter)
+  }, [filter])
 
 
   const edit = (itemId) => {
@@ -205,21 +208,28 @@ export default function Inventory({ item: items, brand: brands, model: models })
 
   }
 
-  const handleAviModelChange = (e) => {
-    console.log(e[0].value)
-    console.log("value avi ======= ", e.label)
+  const handleAviModelChange = (obj) => {
+    console.log("obj === ", obj)
+    // console.log(obj[0].value)
     let temp_brand = filter.brand
     let temp_id = filter.id
     let temp_model = filter.model
 
-    if (e != null) {
-
-
+    if (obj != null) {
+      // console.log("value avi ======= ",obj.label)
       // console.log("model ====", value.value)
-      setFilter({ brand: temp_brand, id: temp_id, model: temp_model, avi_model: e })
-      console.log(filter)
+      console.log('obj', obj)
+
+      let newFilter = { brand: temp_brand, id: temp_id, model: temp_model, avi_model: [] }
+
+      obj.map(avi => newFilter.avi_model.push(avi.value))
+
+      setFilter(newFilter)
+      // console.log('filter', filter)
       // console.log(filter.avi_model.value)
-      filter.avi_model.map(avi_model => console.log(avi_model.value))
+      // newFilter.avi_model.map(avi_model => console.log('--->', avi_model.value))
+    }else{
+      setFilter({ brand: temp_brand, id: temp_id, model: temp_model, avi_model: [] })
     }
   }
 
@@ -232,7 +242,7 @@ export default function Inventory({ item: items, brand: brands, model: models })
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar />
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
       <Container>
         <main className={styles.main}>

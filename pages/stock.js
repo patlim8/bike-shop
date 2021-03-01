@@ -8,11 +8,23 @@ import Button from 'react-bootstrap/Button';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import { connectToDatabase } from "../util/mongodb";
+import hasNewItem from '../pages/needItem'
+
+export var hasNewItemStock = (check) =>{
+  if(check != []){
+    return true
+  }else{
+    return false
+  }
+   
+}
 
 export default function Stock({ item: items }) {
 
   let currentYear = new Date().getFullYear()
   console.log(items)
+  let check = []
+
   return (
     <div className={styles.container}>
       <Head>
@@ -20,7 +32,7 @@ export default function Stock({ item: items }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar />
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock} />
 
 
 
@@ -48,7 +60,7 @@ export default function Stock({ item: items }) {
               temp.setFullYear(2019)
               data.date = temp
                 if((currentYear - new Date(data.date).getFullYear()) >= 1 ){
-
+                  check.push(data)
                
                 return(
               <tr>

@@ -19,15 +19,23 @@ import { colourOptions, groupStyles, groupBadgeStyles, animatedComponents, optio
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
+import hasNewItem from '../../pages/needItem'
+import hasNewItemStock from '../../pages/stock'
+import BrandList from '../../components/brandList';
+import ModelList from '../../components/modelList';
 // import _uniqueId from 'lodash/uniqueId';
 
-export default function AddItem({ item: items, brand: brands, model: models}) {
+export default function AddItem({ item, brand: brands, model: models }) {
 
   console.log("AddItem", { items })
 
   // const [id] = useState(_uniqueId('prefix-'));
 
   const [buyOrder, setBuyOrder] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState([]);
+  const [selectedModel, setSelectedModel] = useState([]);
+  
+
 
   
   const modelOptions = models.map(model =>(
@@ -42,12 +50,14 @@ export default function AddItem({ item: items, brand: brands, model: models}) {
 )
 
 let [filter,setFilter] = useState({
-  brand: 'ptt',
+  brand: '',
   id: '',
   model: ''
 })
 
 const handleBrandChange = (value) => {
+  console.log("brand === ", value.value)
+  setSelectedBrand(value.value)
     
   brands.map(brand => {
     if(value.value == brand.name){
@@ -57,6 +67,15 @@ const handleBrandChange = (value) => {
   })
   
 }
+
+const handleModelChange = (value) => {
+  console.log("model === ",value)
+  setSelectedModel(value.value)
+  
+
+}
+
+
 
   const brandOptions = brands.map(brand =>(
     {
@@ -69,10 +88,12 @@ const handleBrandChange = (value) => {
     
 )
 
-const modelListOptions = models.map(model =>(
-  
-  model.brand === filter.id ? ({label: ''+model.name, value: ''+model.name}) : ({}) 
-  )
+const modelListOptions = models.filter(m => m.brand === filter.id).map(model => (
+  { label: '' + model.name, value: '' + model.name }
+  // label: ''+model.name, 
+  //   // value: ''+brand._id,
+  // value: ''+model.name,
+)
 )
   // const tempID = uuidv4();
   // console.log(tempID)
@@ -103,7 +124,7 @@ const modelListOptions = models.map(model =>(
 
   }
 
-  console.log(data._id)
+  console.log("id ==", data._id)
 
 
   const { register, handleSubmit, control, watch, errors } = useForm();
@@ -111,6 +132,13 @@ const modelListOptions = models.map(model =>(
   const onSubmit = (data, e) => {
     // TODO avi model is not yet implemented
     // data['avi_model'] = []
+    let temp_avi = data.avi_model
+    data['avi_model'] = []
+
+    temp_avi.map(avi => data['avi_model'].push(avi.value))
+
+    data['brand'] = selectedBrand
+    data['model'] = selectedModel
     data['date'] = new Date()
     console.log(data)
 
@@ -251,6 +279,12 @@ const modelListOptions = models.map(model =>(
   }
 
   const onsubmit_test = (data) => {
+    // data.model = data.model.value
+    // let temp_avi = data.avi_model
+    // data['avi_model'] = []
+    data['brand'] = selectedBrand
+    data['model'] = selectedModel
+    // temp_avi.map(avi => data['avi_model'].push(avi.value))
     console.log(data)
 
   }
@@ -276,7 +310,7 @@ const modelListOptions = models.map(model =>(
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar />
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
 
 
@@ -370,56 +404,94 @@ const modelListOptions = models.map(model =>(
           />
         </InputGroup><br></br>
 
-        {/* <InputGroup>
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">ยี่ห้อสินค้า</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="ยี่ห้อ"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              type="text" name="brand" ref={register({ required: true })}
-            />
-          </InputGroup> */}
-          ยี่ห้อสินค้า: <select name="brand" ref={register} defaultValue={data.brand}>
+          {/* ยี่ห้อสินค้า: <select name="brand" ref={register} defaultValue={data.brand}>
           {brands.map((p) => (
             <option value = {p.name}>{p.name}</option>
           ))}
-        </select><br></br>
+        </select><br></br> */}
 
-          {/* ยี่ห้อสินค้า: <Select
+        {/* ยี่ห้อสินค้า: <Select
 
-          // options={brandOP}
-          options={brandOptions}
-          // formatGroupLabel={formatGroupLabel}
-          onChange={handleBrandChange}
-                  /> */}
+              // options={brandOP}
+              // defaultValue={inputBrand}
+              options={brandOptions}
+              isClearable={true}
+              // isMulti
+              // className="basic-multi-select"
+              // classNamePrefix="select"
+              // formatGroupLabel={formatGroupLabel}
+              onChange={handleBrandChange}
+              /> */}
 
-{/*         
-        <BrandList brandChange={handleBrandChange} brand={brand} />
-        <ModelList model={model}/> */}
-
-        {/* <div>
-              ยี่ห้อสินค้า: 
-              <Select
-                options={groupedOptions}
-                formatGroupLabel={formatGroupLabel}
-                name="brand" ref={register({ required: true })}
+            ยี่ห้อสินค้า:    <Controller 
+              render={(props) => (
+                <Select 
+                onChange={(e) => props.onChange(handleBrandChange(e)) } 
+                options={brandOptions} 
+                // value={props.onChange}
+                ref={register} />
+              )}
+              control={control} 
+              name="brand" 
+              // ref={register} 
             />
-            </div> */}
 
-          รุ่นสินค้า: <select name="model" ref={register} defaultValue={data.model}>
+          {/* รุ่นสินค้า: <select name="model" ref={register} defaultValue={data.model}>
           {models.map((i) => (
             <option value = {i.name}>{i.name}</option>
           ))}
-        </select><br></br>
+        </select><br></br> */}
 
-          {/* รุ่นสินค้า: <Select
-              options={modelListOptions}
-              // onChange={handleModelChange}
-              // options={modelOP}
-              // formatGroupLabel={formatGroupLabel}
-            /> */}
+        {/* รุ่นสินค้า: <Controller
+            as={Select}
+            options={modelListOptions}
+            onChange={handleModelChange}
+            isClearable={true}
+            name="model"
+            control={control}
+          // value={inputModel}
+          // options={modelOP}
+          // formatGroupLabel={formatGroupLabel}
+          /> */}
+
+        รุ่นสินค้า: <Controller 
+              render={(props) => (
+                <Select 
+                onChange={(e) => props.onChange(handleModelChange(e)) } 
+                options={modelListOptions} 
+                
+                // value={props.onChange}
+                ref={register} />
+              )}
+              control={control} 
+              name="model" 
+              // ref={register} 
+            />
+
+        
+
+{/* รุ่นสินค้า: <Controller
+                        name="model"
+                        type="select"
+                        control={control}
+
+
+                        render={({ onChange, onBlur, value }) => (
+                          
+                            <Select
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                value={value}  // this is what you need to do
+                                isMulti
+                                // options={groupedOptions}
+                                options={modelOptions}
+                                // options={option}
+                                ref={register}
+                            />
+                        )}
+                    /> */}
+
+
 
         รุ่นที่ใช้ได้: <Controller
                         name="avi_model"
@@ -599,6 +671,7 @@ export async function getServerSideProps(props) {
       .findOne(
         { _id: ObjectId(itemId) }
       )
+
 
     console.log("Found", { item })
     return {

@@ -11,6 +11,8 @@ import Modal from 'react-bootstrap/Modal';
 
 import BrandList from '../../components/brandList';
 import ModelList from '../../components/modelList'
+import hasNewItem from '../../pages/needItem'
+import hasNewItemStock from '../../pages/stock'
 
 
 import Table from 'react-bootstrap/Table'
@@ -250,7 +252,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar />
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
 
 

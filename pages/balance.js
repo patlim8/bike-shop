@@ -12,6 +12,8 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
+import hasNewItem from '../pages/needItem'
+import hasNewItemStock from '../pages/stock'
 import { connectToDatabase } from "../util/mongodb";
 
 export default function Balance( { balance: balances } ) {
@@ -41,7 +43,7 @@ export default function Balance( { balance: balances } ) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar />
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
 
 

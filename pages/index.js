@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../components/buttonBar';
 import { connectToDatabase } from "../util/mongodb"
 import Link from 'next/link'
+import hasNewItem from '../pages/needItem'
+import hasNewItemStock from '../pages/stock'
 
 export default function Home({ movies }) {
   return (
@@ -13,7 +15,7 @@ export default function Home({ movies }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar />
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
       <main className={styles.main2}>
         <h1 className={styles.title}>

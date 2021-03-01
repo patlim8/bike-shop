@@ -21,6 +21,9 @@ import Select from 'react-select';
 import Link from 'next/link'
 import { ObjectID } from 'bson';
 
+import hasNewItem from '../pages/needItem'
+import hasNewItemStock from '../pages/stock'
+
 import React, { useState, useEffect } from 'react';
 import ModelMgntList from '../components/modelMgntList'
 import BrandOP from './data'
@@ -225,6 +228,11 @@ export default function modelManager({ brand: brands, model: models }) {
             setFilter({ brand: temp_brand, id: temp_id, model: '', avi_model: temp_avi })
         }
 
+    // useEffect(() => {
+    //     setItemModelList(brands)
+    //     setItemModelListDefault(brands)
+    // }, []);
+
     }
 
     const handleAviModelChange = (e) => {
@@ -252,7 +260,7 @@ export default function modelManager({ brand: brands, model: models }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <ButtonBar />
+            <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
 
 
@@ -264,9 +272,6 @@ export default function modelManager({ brand: brands, model: models }) {
                 <br></br><br></br>
 
                 <div>
-
-                    {/* <BrandList brandChange={handleBrandChange} brand={brand} />
-                    <ModelList model={model}/> */}
 
                     ยี่ห้อสินค้า: <Select
 

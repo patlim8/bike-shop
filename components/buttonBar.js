@@ -9,9 +9,19 @@ import Badge from 'react-bootstrap/Badge';
 
 
 
-export default function ButtonBar() {
-  let hasNewItem = true
-  const navDropdownTitle = (<h6>การแจ้งเตือน<Badge variant="secondary">New</Badge></h6>);
+export default function ButtonBar({hasNewItem, hasNewItemStock}) {
+  let newItem = false
+  let newItemStock = false
+
+  if(hasNewItem){
+    newItem = true
+  }
+
+  if(hasNewItemStock){
+    newItemStock = true
+  }
+
+  const navDropdownTitle = (<h6>การแจ้งเตือน{newItem == true || newItemStock == true ? <Badge variant="secondary">New</Badge> : null}</h6>);
 
   return (
     <div>
@@ -31,8 +41,9 @@ export default function ButtonBar() {
               <NavDropdown.Item href="/balance">บัญชี-Balance</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title={navDropdownTitle} id="basic-nav-dropdown"> 
-              <NavDropdown.Item href="/needItem">สินค้าที่ต้องเพิ่ม<Badge variant="secondary">New</Badge></NavDropdown.Item>
-              <NavDropdown.Item href="/stock">สินค้าค้างสต็อค <Badge variant="secondary">New</Badge></NavDropdown.Item>
+            
+              <NavDropdown.Item href="/needItem">สินค้าที่ต้องเพิ่ม{newItem == true ? <Badge variant="secondary">New</Badge> : null}</NavDropdown.Item>
+              <NavDropdown.Item href="/stock">สินค้าค้างสต็อค {newItemStock == true ? <Badge variant="secondary">New</Badge> : null}</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

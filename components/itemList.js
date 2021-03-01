@@ -5,26 +5,51 @@ import Link from 'next/link'
 import { Container, Row, Col } from 'react-bootstrap'
 
 
-const ItemList = ({ ItemList = [], filter = '' }) => {
+const ItemList = ({ ItemList = [], filter = null }) => {
   let filteredList = ItemList
-  if(filter.brand){
-    filteredList = ItemList.filter(data => data.brand == filter.brand)
-  }
-  // const filteredList = ItemList.filter(data => 
-    // {filter ? data.brand == filter.brand && data.model == filter.model : data.brand == filter.brand  })
-  if(filter.model){
-    filteredList = filteredList.filter(data => data.model == filter.model )
+
+  if (filter) {
+    if(filter.avi_model.length != 0){
+      // let array = []
+      // ItemList.map(data => )
+      console.log("ข้างใน filter ==== ", filter)
+      console.log("ข้างใน filter avi ==== ", filter.avi_model)
+      let array = []
+      let contain_Avi = (avi) => filter.avi_model.includes(avi)
+      filteredList.map(data =>{
+        if(data.avi_model.some(contain_Avi)){
+          array.push(data)
+        }
+      })
+      // array.push()
+      filteredList = array
+      // let filteredList1 = ItemList.filter(data => filter.avi_model.includes(data.model) )
+      // let filteredList2 = ItemList.filter(data => data.avi_model.map(avi => filter.avi_model.includes(avi)) )
+      // filteredList = [...filteredList1, ...filteredList2]
+
+    }
+    if(filter.brand){
+      filteredList = filteredList.filter(data => data.brand == filter.brand)
+    }
+    // const filteredList = ItemList.filter(data => 
+      // {filter ? data.brand == filter.brand && data.model == filter.model : data.brand == filter.brand  })
+    if(filter.model){
+      filteredList = filteredList.filter(data => data.model == filter.model )
+    }
+
+    
+      //|| data.avi_model.map(avi => filter.avi_model.includes(avi))
+    
   }
 
-  if(filter.avi_model){
-    filteredList = filteredList.filter(data => filter.avi_model.map(avi_model => avi_model.value == data.model)
-                                        || filter.avi_model.map(avi_model => data.avi_model.map(dataAvi => avi_model.value == dataAvi.value)))
-  }
+  // if(filter.avi_model){
+  //   filteredList = filteredList.filter(data => data.model == filter.model )
+  //   //|| data.avi_model.map(avi => filter.avi_model.includes(avi))
+  // }
 
   const itemList2 = filteredList.map((data) => {
     if (data) {
       return (
-
         <tbody>
           <tr key={data._id}>
             <td>
