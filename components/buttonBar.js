@@ -31,7 +31,6 @@ export default function ButtonBar() {
               <NavDropdown.Item href="/balance">บัญชี-Balance</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title={navDropdownTitle} id="basic-nav-dropdown"> 
-            
               <NavDropdown.Item href="/needItem">สินค้าที่ต้องเพิ่ม<Badge variant="secondary">New</Badge></NavDropdown.Item>
               <NavDropdown.Item href="/stock">สินค้าค้างสต็อค <Badge variant="secondary">New</Badge></NavDropdown.Item>
             </NavDropdown>

@@ -19,13 +19,11 @@ import { colourOptions, groupStyles, groupBadgeStyles, animatedComponents, optio
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
-import BrandList from '../../components/brandList';
-import ModelList from '../../components/modelList';
 // import _uniqueId from 'lodash/uniqueId';
 
-export default function AddItem({ item, brand, model }) {
+export default function AddItem({ item: items, brand: brands, model: models}) {
 
-  console.log("AddItem", { item })
+  console.log("AddItem", { items })
 
   // const [id] = useState(_uniqueId('prefix-'));
 
@@ -82,9 +80,9 @@ const modelListOptions = models.map(model =>(
   // console.log(ObjectId(item._id))
 
 
-  var data = item;
+  var data = items;
 
-  if (item === null) {
+  if (items === null) {
     // Add new item, prepare blank form
     // in this case, use dummyData
     const dummyData = {
@@ -126,7 +124,7 @@ const modelListOptions = models.map(model =>(
     if (data._id === "") {
       order.qty = data.qty
     } else {
-      order.qty = data.qty - item.qty
+      order.qty = data.qty - items.qty
     }
 
     order.expense = order.unit_price * order.qty
@@ -384,7 +382,7 @@ const modelListOptions = models.map(model =>(
             />
           </InputGroup> */}
           ยี่ห้อสินค้า: <select name="brand" ref={register} defaultValue={data.brand}>
-          {brand.map((p) => (
+          {brands.map((p) => (
             <option value = {p.name}>{p.name}</option>
           ))}
         </select><br></br>
@@ -411,7 +409,7 @@ const modelListOptions = models.map(model =>(
             </div> */}
 
           รุ่นสินค้า: <select name="model" ref={register} defaultValue={data.model}>
-          {model.map((i) => (
+          {models.map((i) => (
             <option value = {i.name}>{i.name}</option>
           ))}
         </select><br></br>
@@ -601,20 +599,6 @@ export async function getServerSideProps(props) {
       .findOne(
         { _id: ObjectId(itemId) }
       )
-
-    const brand = await db
-      .collection("brand")
-      .find()
-      .sort({})
-      .limit(20)
-      .toArray();
-
-    const model = await db
-      .collection("model")
-      .find()
-      .sort({})
-      .limit(20)
-      .toArray();
 
     console.log("Found", { item })
     return {

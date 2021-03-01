@@ -2,6 +2,8 @@ import React from 'react';
 import Table from 'react-bootstrap/Table'
 import Link from 'next/link'
 
+import { Container, Row, Col } from 'react-bootstrap'
+
 
 const ItemList = ({ ItemList = [], filter = '' }) => {
   let filteredList = ItemList
@@ -24,7 +26,6 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
       return (
 
         <tbody>
-
           <tr key={data._id}>
             <td>
               <Link href={`/additem/${data._id}`}>
@@ -53,11 +54,19 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
   
 
   return (
-    <>
-      <h2>
-        Brand: {filter.brand ? filter.brand : '---'} <br />
-        Model: {modelFilter.model ? modelFilter.model : '--'}
-      </h2>
+    <div>
+      <Container>
+        <br />
+        <Row>
+          <Col sw={6}>
+            <h3>Brand: {filter.brand ? filter.brand : '---'}</h3>
+          </Col>
+          <Col sw={6}>
+            <h3>Model: {filter.model ? filter.model : '---'}</h3>
+          </Col>
+        </Row>
+        <br />
+      </Container>
       {/* <h2>
         Brand: {filter.brand ? filter.brand : '---'}
       </h2> */}
@@ -81,51 +90,7 @@ const ItemList = ({ ItemList = [], filter = '' }) => {
         {itemList2}
 
       </Table>
-
-
-      {/* { countryList.map((data,index) => {
-        if (data) {
-          return (
-            // <div key={data.name}>
-            //   <h1>{data.name}</h1>
-
-
-        //        <Table striped bordered hover size="sm">
-        //     <thead>
-        //       <tr>
-        //         <th>id</th>
-        //         <th>ชื่อสินค้า</th>
-        //         <th>รหัสสินค้า</th>
-        //         <th>ยี่ห้อสินค้า</th>
-        //         <th>รุ่นสินค้า</th>
-                
-        //         <th>Barcode ID</th>
-        //         <th>จำนวน</th>
-        //         <th>จำนวนจำกัด</th>
-        //         <th>ราคา</th>
-        //         <th>วันที่บันทึก</th>
-        //       </tr>
-        //     </thead>
-        //     <tbody>
-        //       {countryList.map((data) => (
-        //         <tr>
-        //           <td>1</td>
-        //           <td>{data.name}</td>
-                  
-                  
-                  
-        //         </tr>
-        //       ))}
-        //     </tbody>
-        //   </Table> 
-
-              
-	    // </div>	
-    	   )	
-    	 }
-    	 return null
-    }) }  */}
-    </>
+    </div>
   );
 }
 

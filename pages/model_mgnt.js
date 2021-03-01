@@ -30,13 +30,6 @@ import BrandOP from './data'
 export async function getServerSideProps() {
     const { db } = await connectToDatabase();
 
-    const item = await db
-        .collection("item")
-        .find()
-        .sort({})
-        .limit(20)
-        .toArray();
-
     const brand = await db
         .collection("brand")
         .find()
@@ -53,7 +46,6 @@ export async function getServerSideProps() {
 
     return {
         props: {
-            item: JSON.parse(JSON.stringify(item)),
             brand: JSON.parse(JSON.stringify(brand)),
             model: JSON.parse(JSON.stringify(model)),
         },
@@ -66,24 +58,24 @@ const onSubmit = (data) => {
     // buyOrder.push(p)
     // setBuyOrder(buyOrder)
     fetch('/api/model', {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data) // body data type must match "Content-Type" header
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        alert("Add New Model:\nResponse from server " + data.message)
-        alert("Newly added _id",data._id)
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            alert("Add New Model:\nResponse from server " + data.message)
+            alert("Newly added _id", data._id)
+        });
 }
 
 const onSubmit_brand = (data) => {
@@ -92,29 +84,28 @@ const onSubmit_brand = (data) => {
     // buyOrder.push(p)
     // setBuyOrder(buyOrder)
     fetch('/api/brand', {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data) // body data type must match "Content-Type" header
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        alert("Add New Model:\nResponse from server " + data.message)
-        alert("Newly added _id",data._id)
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            alert("Add New Model:\nResponse from server " + data.message)
+            alert("Newly added _id", data._id)
+        });
 }
 
-export default function modelManager({ item: items, brand: brands, model: models }) {
+export default function modelManager({ brand: brands, model: models }) {
 
-    console.log("item: ", items)
     console.log("brands: ", brands)
     console.log("models: ", models)
 
@@ -122,16 +113,12 @@ export default function modelManager({ item: items, brand: brands, model: models
 
     const { register, handleSubmit, control, watch, errors } = useForm();
 
-    const [input, setInput] = useState('');
-    const [itemModelListDefault, setItemModelListDefault] = useState();
-    const [itemModelList, setItemModelList] = useState();
-
-    const [brandListDefault, setBrandListDefault] = useState();
-    const [brandList, setBrandList] = useState();
+    const [inputBrand, setInputBrand] = useState();
+    const [inputModel, setInputModel] = useState();
 
     const [show, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
-  
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -141,135 +128,122 @@ export default function modelManager({ item: items, brand: brands, model: models
     // const id = brands[0]._id
     // console.log(id)
 
-    const groupedOptions =  brands.map(brand =>(
-        {
-            label: ''+brand._id, 
-            value: ''+brand._id,
-        //   options: modelOptions(''+brand._id),
-
-        } 
-    )
-        
-    )
-        
-        
-        
-        
-    //     brands.map(brand =>{
-    //         console.log("ok")
-    //         return(
-    //             [
-    //       {
-    //       label: {brand}, value: 0,
-    //     //   options: brandOptions(brand._id, models),
-
-    //     }
-    // ]
-    //     )
-        
-          
-        
-      
-    //     })
-        
-        
-      
-
-    const modelOptions = models.map(model =>(
-        {
-            label: ''+model.name, 
-            // value: ''+brand._id,
-          value: ''+model.name,
-
-        } 
-        )
-        
-    )
-    
-
-    // {
-        
-    
-        
-    //     models.map(model =>{
-
-            
-    //       if(model.brand == id){
-    //         console.log("ok2", model.brand," ", id)
-    //         return(
-    //         [
-    //           {
-    //              value: {model}, label: {model}, rating: 'safe' 
-    //           }
-    //         ]
-            
-    //         )
-    //       }
-    //     })
-    
-        
-    //     // return(
-    //     // { value: 'ptt', label: 'ptt', rating: 'safe' },
-    //     // { value: 'mobil1', label: 'mobil1', rating: 'good' },
-    //     // { value: 'eneos', label: 'eneos', rating: 'good' }
-    //     // )
-      
-        
-        
-      
-    // }
-
-    const option = [
-          {
-            label: 'ยี่ห้อ', value: '0',
-          }
-        ];
-
-
-    const updateInput = async (input) => {
-        if (input != brand.name) {
-
-            const filtered = itemModelListDefault.filter(brand => {
-                return brand.name.toLowerCase().includes(input.toLowerCase())
-              })
-              setInput(input);
-              setItemList(filtered);
-        }
-        else {
-            const filtered = brandListDefault.filter(brand => {
-                return brand.name.toLowerCase().includes(input.toLowerCase())
-            })
-            setInput(input);
-            setBrandList(filtered);
-        }
-
-    }
-
     // filter is a JSON object having brand and model
     let [filter, setFilter] = useState({
-        brand: 'ptt',
-        //  model: '0w20'
+        brand: '',
+        id: '',
+        model: '',
+        avi_model: []
     })
 
-    useEffect(() => {
-        setItemModelList(brand)
-        setItemModelListDefault(brand)
-    }, []);
 
-    const edit = (itemId) => {
-        console.log({ itemId })
-    }
+    const groupedOptions = brands.map(brand => (
+        {
+            label: '' + brand._id,
+            value: '' + brand._id,
+            //   options: modelOptions(''+brand._id),
+
+        }
+    )
+
+    )
+
+    const brandOptions = brands.map(brand => (
+        {
+            label: '' + brand.name,
+            // value: ''+brand._id,
+            value: '' + brand.name,
+
+        }
+    ), [{ label: 'empty', value: 'empty' }]
+
+    )
+
+    const modelOptions = models.map(model => (
+        {
+            label: '' + model.name,
+            // value: ''+brand._id,
+            value: '' + model.name,
+
+        }
+    )
+
+    )
+
+    const modelListOptions = models.filter(m => m.brand === filter.id).map(model => (
+
+        model.brand === filter.id ? ({ label: '' + model.name, value: '' + model.name }) : ({})
+
+    )
+    )
+
+
+    const option = [
+        {
+            label: 'ยี่ห้อ', value: '0',
+        }
+    ];
+
+    let Modelss = []
+
+    brands.map((p) => (models.map((i) => (i.brand == p._id) ?
+        Modelss.push({ model_id: i._id, model_name: i.name, brandName: p.name, brand_id: p._id })
+        : null)
+    ))
+
+
+    console.log("Modelss", Modelss)
 
     const handleBrandChange = (value) => {
-        setFilter({ brand: value })
+        let temp_avi = filter.avi_model
+
+        if (value != null) {
+            brands.map(brand => {
+                if (value.value == brand.name) {
+                    setFilter({ brand: value.value, id: brand._id, model: '', avi_model: temp_avi })
+                    setInputModel('')
+                    console.log("value ==== ", filter)
+                }
+            })
+        } else {
+            setFilter({ brand: '', id: '', model: '', avi_model: [] })
+        }
+
+
     }
 
-    // var getModel = []
-    // if (model.brand === brand._id) {
-    //     getModel = [
-    //         {brand_id: brand._id, name: brand.name, model_name: model.name
-    //     }]
-    // }
+    const handleModelChange = (value) => {
+        let temp_brand = filter.brand
+        let temp_id = filter.id
+        let temp_avi = filter.avi_model
+
+        if (value != null) {
+            // console.log("model ====", value.value)
+            setFilter({ brand: temp_brand, id: temp_id, model: value.value, avi_model: temp_avi })
+            console.log(filter)
+        } else {
+            setFilter({ brand: temp_brand, id: temp_id, model: '', avi_model: temp_avi })
+        }
+
+    }
+
+    const handleAviModelChange = (e) => {
+        console.log(e[0].value)
+        console.log("value avi ======= ", e.label)
+        let temp_brand = filter.brand
+        let temp_id = filter.id
+        let temp_model = filter.model
+
+        if (e != null) {
+
+
+            // console.log("model ====", value.value)
+            setFilter({ brand: temp_brand, id: temp_id, model: temp_model, avi_model: e })
+            console.log(filter)
+            // console.log(filter.avi_model.value)
+            filter.avi_model.map(avi_model => console.log(avi_model.value))
+        }
+    }
 
     return (
         <div className={styles.container}>
@@ -294,6 +268,28 @@ export default function modelManager({ item: items, brand: brands, model: models
                     {/* <BrandList brandChange={handleBrandChange} brand={brand} />
                     <ModelList model={model}/> */}
 
+                    ยี่ห้อสินค้า: <Select
+
+                        // options={brandOP}
+                        // defaultValue={inputBrand}
+                        options={brandOptions}
+                        isClearable={true}
+                        // isMulti
+                        // className="basic-multi-select"
+                        // classNamePrefix="select"
+                        // formatGroupLabel={formatGroupLabel}
+                        onChange={handleBrandChange}
+                    />
+
+                    รุ่นสินค้า: <Select
+                        options={modelListOptions}
+                        onChange={handleModelChange}
+                        isClearable={true}
+                    // value={inputModel}
+                    // options={modelOP}
+                    // formatGroupLabel={formatGroupLabel}
+                    />
+
           รุ่นที่ใช้ได้: <Controller
                         name="avi_model"
                         type="select"
@@ -316,11 +312,11 @@ export default function modelManager({ item: items, brand: brands, model: models
 
                 </div>
 
-                
-                
+
+
 
                 <div>
-                    *<ModelMgntList modelMgntList={itemModelList} filter={filter} />
+                    <ModelMgntList modelMgntList={Modelss} filter={filter} />
                     {/*<Table striped bordered hover size="sm">
                         <thead>
                             <tr>
@@ -346,71 +342,71 @@ export default function modelManager({ item: items, brand: brands, model: models
             </main>
 
             <div class="button">
-            <Button variant="primary" onClick={handleShow2}>
-          เพิ่มยี่ห้อสินค้า
+                <Button variant="primary" onClick={handleShow2}>
+                    เพิ่มยี่ห้อสินค้า
         </Button>
-  
-        <Modal show={show2} onHide={handleClose2}>
-          <Modal.Header closeButton>
-            <Modal.Title>เพิ่มยี่ห้อสินค้า</Modal.Title>
-          </Modal.Header>
 
-        <form onSubmit={handleSubmit(onSubmit_brand)}>
-          <Modal.Body>
-            
+                <Modal show={show2} onHide={handleClose2}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>เพิ่มยี่ห้อสินค้า</Modal.Title>
+                    </Modal.Header>
+
+                    <form onSubmit={handleSubmit(onSubmit_brand)}>
+                        <Modal.Body>
 
 
-                ยี่ห้อที่ต้องการเพิ่ม: <input type="text" name="name" ref={register}>
-                </input>
 
-            
-          </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose2}>
-                ปิด
+                            ยี่ห้อที่ต้องการเพิ่ม: <input type="text" name="name" ref={register}>
+                            </input>
+
+
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose2}>
+                                ปิด
                 </Button>
-                <Button type="submit" variant="primary" onClick={handleClose2}>
-                บันทึก
+                            <Button type="submit" variant="primary" onClick={handleClose2}>
+                                บันทึก
                 </Button>
-            </Modal.Footer>
-          </form>
-        </Modal>
+                        </Modal.Footer>
+                    </form>
+                </Modal>
 
 
 
-            <Button variant="primary" onClick={handleShow}>
-          เพิ่มรุ่นสินค้า
+                <Button variant="primary" onClick={handleShow}>
+                    เพิ่มรุ่นสินค้า
         </Button>
-  
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>เพิ่มรุ่นสินค้า</Modal.Title>
-          </Modal.Header>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Modal.Body>
-            
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>เพิ่มรุ่นสินค้า</Modal.Title>
+                    </Modal.Header>
 
-                ยี่ห้อสินค้า: <select name="brand" ref={register}>
-                    {brands.map(data => (<option value={data._id}>{data.name}</option>))}
-            
-                    </select><br></br>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Modal.Body>
+
+
+                            ยี่ห้อสินค้า: <select name="brand" ref={register}>
+                                {brands.map(data => (<option value={data._id}>{data.name}</option>))}
+
+                            </select><br></br>
 
                 รุ่นที่ต้องการเพิ่ม: <input type="text" name="model" ref={register}>
-                </input>
+                            </input>
 
-            
-          </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                ปิด
+
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                ปิด
                 </Button>
-                <Button type="submit" variant="primary" onClick={handleClose}>
-                บันทึก
+                            <Button type="submit" variant="primary" onClick={handleClose}>
+                                บันทึก
                 </Button>
-            </Modal.Footer>
-          </form>
-        </Modal>
+                        </Modal.Footer>
+                    </form>
+                </Modal>
 
 
                 {/* <Button variant="primary" href="/" size="lg">เพิ่มรุ่นสินค้า</Button>{' '} */}

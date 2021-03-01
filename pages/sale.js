@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import React, { useState, useEffect } from 'react';
+import { handleInputChange } from 'react-select/src/utils';
 
 function CustomToggle({ children, eventKey }) {
   const decoratedOnClick = useAccordionToggle(eventKey, () =>
@@ -15,13 +16,13 @@ function CustomToggle({ children, eventKey }) {
     console.log("working ")
   );
 
-  
+
 
 
   return (
     <button
       type="button"
-      style={{ backgroundColor: 'white' },{ color: 'blue' }}
+      style={{ backgroundColor: 'white' }, { color: 'blue' }}
       onClick={decoratedOnClick}
     >
       {children}
@@ -34,12 +35,17 @@ export default function Sale() {
   const [percent, setPercent] = useState('')
 
   // const updateInput = (e) => {
-    
+
   //     // percent = e.target.value
   //     // setPercent(percent)
   //     console.log("percent ===", e.target.value)
 
   // }
+  const handleKeyPress = (e) => {
+    if (e.charCode === 13) {
+      console.log("Enter is pressed.", e.target.value)
+    }
+  }
 
 
   return (
@@ -49,12 +55,12 @@ export default function Sale() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar/>
-      
+      <ButtonBar />
+
 
       <main className={styles.main2}>
         <h1 className={styles.title}>
-          Sale 
+          Sale
         </h1>
 
         {/* <p className={styles.description}>
@@ -67,8 +73,8 @@ export default function Sale() {
             <Card.Body>
               <Card.Link href="/sell/normal">
                 <h1>ลูกค้าหน้าร้าน</h1>
-              </Card.Link> 
-            </Card.Body> 
+              </Card.Link>
+            </Card.Body>
           </Card>
 
           <Accordion>
@@ -78,15 +84,19 @@ export default function Sale() {
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                <Form>
-                  <Form.Group>
-                    <Form.Label>คิดราคาเพิ่ม(%)</Form.Label>
-                    <Form.Control type="text" placeholder="ใส่ % ที่ต้องการคิด" onChange={e => setPercent(e.target.value)} />
-                  </Form.Group>
-                  <Button variant="primary" type="submit" href={`/sell/specialx${percent}`} >
-                    ตกลง
+                  <Form>
+                    <Form.Group>
+                      <Form.Label>คิดราคาเพิ่ม(%)</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="ใส่ % ที่ต้องการคิด" 
+                        onChange={e => setPercent(e.target.value)}
+                        onKeyPress={handleKeyPress} />
+                    </Form.Group>
+                    <Button variant="primary" type="submit" href={`/sell/specialx${percent}`}>
+                      ตกลง
                   </Button>
-                </Form>
+                  </Form>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
