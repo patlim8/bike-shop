@@ -8,6 +8,8 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import React, { useState, useEffect } from 'react';
+import hasNewItem from '../pages/needItem'
+import hasNewItemStock from '../pages/stock'
 
 function CustomToggle({ children, eventKey }) {
   const decoratedOnClick = useAccordionToggle(eventKey, () =>
@@ -49,7 +51,7 @@ export default function Sale() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar/>
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
       
 
       <main className={styles.main2}>

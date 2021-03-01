@@ -43,7 +43,7 @@ import { groupedOptions } from '../pages/data';
 
 export default function BrandList({ brandChange }) {
 
-  console.log('brand:', brand)
+  // console.log('brand:', brand)
   let brandOP = []
   let element = { label: 'brand', options: [] }
   element.options = (brand.map((b) => ({

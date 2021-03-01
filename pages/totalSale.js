@@ -10,9 +10,12 @@ import Button from 'react-bootstrap/Button';
 //import ModelList from '../components/modelList'
 //import AvailableList from '../components/availableList'
 import Table from 'react-bootstrap/Table'
+import hasNewItem from '../pages/needItem'
+import hasNewItemStock from '../pages/stock'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import { connectToDatabase } from "../util/mongodb";
+
 
 
 
@@ -25,7 +28,7 @@ export default function TotalSale( { item: items } ) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar />
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
 
 

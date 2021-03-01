@@ -21,6 +21,9 @@ import Select from 'react-select';
 import Link from 'next/link'
 import { ObjectID } from 'bson';
 
+import hasNewItem from '../pages/needItem'
+import hasNewItemStock from '../pages/stock'
+
 import React, { useState, useEffect } from 'react';
 import ModelMgntList from '../components/modelMgntList'
 import BrandOP from './data'
@@ -252,8 +255,8 @@ export default function modelManager({ item: items, brand: brands, model: models
     })
 
     useEffect(() => {
-        setItemModelList(brand)
-        setItemModelListDefault(brand)
+        setItemModelList(brands)
+        setItemModelListDefault(brands)
     }, []);
 
     const edit = (itemId) => {
@@ -278,7 +281,7 @@ export default function modelManager({ item: items, brand: brands, model: models
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <ButtonBar />
+            <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
 
 
@@ -291,8 +294,8 @@ export default function modelManager({ item: items, brand: brands, model: models
 
                 <div>
 
-                    {/* <BrandList brandChange={handleBrandChange} brand={brand} />
-                    <ModelList model={model}/> */}
+                 <BrandList brandChange={handleBrandChange} brand={brands} />
+                    <ModelList model={models}/> 
 
           รุ่นที่ใช้ได้: <Controller
                         name="avi_model"

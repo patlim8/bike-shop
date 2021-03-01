@@ -7,11 +7,28 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
+import React, { useState, useEffect } from 'react';
 import { connectToDatabase } from "../util/mongodb";
+import hasNewItemStock from '../pages/stock'
 
+export var hasNewItem = (check) =>{
+  if(check != []){
+    return true
+  }else{
+    return false
+  }
+   
+}
 
 export default function NeedItem({ item: items }) {
   console.log(items)
+
+  
+
+  let check = []
+
+  
+
   return (
     <div className={styles.container}>
       <Head>
@@ -19,7 +36,7 @@ export default function NeedItem({ item: items }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar />
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
 
 
 
@@ -44,7 +61,7 @@ export default function NeedItem({ item: items }) {
             <tbody>
               {items.map(data =>{
                 if(data.qty <= data.minStock){
-
+                  check.push(data)
                
                 return(
               <tr>
@@ -69,6 +86,7 @@ export default function NeedItem({ item: items }) {
 
     </div>
   )
+
 }
 
 export async function getServerSideProps() {
