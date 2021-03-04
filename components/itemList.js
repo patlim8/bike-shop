@@ -1,12 +1,19 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
 import Link from 'next/link'
+import { useState, useEffect } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap'
 
 
 const ItemList = ({ ItemList = [], filter = null }) => {
   let filteredList = ItemList
+  let array = []
+
+  // useEffect(() => {
+  //   // This will run when filter is set.
+  //   filteredList = array
+  // }, [array])
 
   if (filter) {
     if(filter.avi_model.length != 0){
@@ -14,15 +21,21 @@ const ItemList = ({ ItemList = [], filter = null }) => {
       // ItemList.map(data => )
       console.log("ข้างใน filter ==== ", filter)
       console.log("ข้างใน filter avi ==== ", filter.avi_model)
-      let array = []
+      
       let contain_Avi = (avi) => filter.avi_model.includes(avi)
       filteredList.map(data =>{
-        if(data.avi_model.some(contain_Avi)){
-          array.push(data)
+        if(data.avi_model != null){
+          if(data.avi_model.some(contain_Avi)){
+            console.log("data ===== ",data)
+            array.push(data)
+          }
         }
       })
-      // array.push()
+
       filteredList = array
+
+      // array.push()
+      
       // let filteredList1 = ItemList.filter(data => filter.avi_model.includes(data.model) )
       // let filteredList2 = ItemList.filter(data => data.avi_model.map(avi => filter.avi_model.includes(avi)) )
       // filteredList = [...filteredList1, ...filteredList2]
@@ -64,7 +77,7 @@ const ItemList = ({ ItemList = [], filter = null }) => {
             <td>{data.code}</td>
             <td>{data.brand}</td>
             <td>{data.model}</td>
-            <td>{data.barcode_id}</td>
+            <td>{data.avi_model}</td>
             <td>{data.qty}</td>
             <td>{data.minStock}</td>
             <td>{data.purchase_price}</td>
@@ -104,7 +117,7 @@ const ItemList = ({ ItemList = [], filter = null }) => {
             <th>ยี่ห้อสินค้า</th>
             <th>รุ่นสินค้า</th>
 
-            <th>Barcode ID</th>
+            <th>รุ่นที่ใช้ได้</th>
             <th>จำนวน</th>
             <th>จำนวนจำกัด</th>
             <th>ราคา</th>

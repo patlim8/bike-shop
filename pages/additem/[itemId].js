@@ -25,7 +25,7 @@ import BrandList from '../../components/brandList';
 import ModelList from '../../components/modelList';
 // import _uniqueId from 'lodash/uniqueId';
 
-export default function AddItem({ item, brand: brands, model: models }) {
+export default function AddItem({ item: items, brand: brands, model: models }) {
 
   console.log("AddItem", { items })
 

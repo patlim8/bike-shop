@@ -157,7 +157,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
     // }
 
     // var start_item_id = j
-    let p = { _id: '', product_name: data.product_name, code: '', brand: '', model: '', qty: data.qty ,purchase_price: 0}
+    let p = { _id: '', product_name: data.product_name, code: '', barcode: data.barcode, brand: '', model: '', qty: data.qty ,purchase_price: 0}
     // let q = { items_ID: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
     let total_price_products = 0
     
@@ -179,7 +179,8 @@ export default function Calculation({ item: items, order, customer_price_multipl
       
       
     
-      if(r.product_name == p.product_name){
+      if(r.product_name == p.product_name || r.barcode_id == p.barcode){
+        p.product_name = r.product_name
         p._id = r._id
         p.code = r.code
         p.brand = r.brand
@@ -321,6 +322,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
               <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
+              name="barcode" ref={register}
               placeholder="Barcode ID"
               aria-label="Item name"
               aria-describedby="basic-addon1"
@@ -362,6 +364,22 @@ export default function Calculation({ item: items, order, customer_price_multipl
               </tbody>
             </Table>
           </div>
+
+          <div>
+          <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            readOnly
+            name="total" ref={register2}
+            placeholder=""
+            aria-label="Item name"
+            aria-describedby="basic-addon1"
+            Value={totalPriceProducts}
+          />
+        </InputGroup>
+        </div>
 
 
         </div>
