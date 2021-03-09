@@ -29,9 +29,9 @@ import { ObjectId } from 'bson';
 
 export default function Calculation({ item: items, order, customer_price_multiply  }) {
 
-  console.log("items: ", items)
+  // console.log("items: ", items)
 
-  console.log("multiply === ", customer_price_multiply)
+  // console.log("multiply === ", customer_price_multiply)
 
   const { register, handleSubmit, watch, errors } = useForm();
 
@@ -40,6 +40,9 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
   const [jsxProductList, setJsxProductList] = useState(<tr></tr>);
   const [productList, setProductList] = useState([]);
+
+  const [jsxBillList, setJsxBillList] = useState(<tr></tr>);
+  const [billList, setBillList] = useState([]);
   // const newOrder = [];
   // const [newOrder, setNewOrder] = useState([]);
   const [newOrder2, setNewOrder2] = useState([]);
@@ -149,6 +152,47 @@ export default function Calculation({ item: items, order, customer_price_multipl
         
   }
 
+  const onSubmitTest = (data) => {
+    // productList << array of Json
+    // let data = productList[0]
+    
+    console.log("data ===", data)
+    console.log("bill ===", billList)
+    let bill = {orderID: '', date: '', productList: billList, total: data.total, receive: data.receive, change: data.change }
+
+    // s.totalprice_order = parseInt(q.totalprice_order)
+    // s.fix_service_price += parseFloat( data.fix_service_price)
+    bill.date = new Date()
+    
+
+    fetch('/api/bill',
+        {
+          method: 'POST',
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(bill) // body data type must match "Content-Type" header
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
+    
+    
+
+   
+    
+
+        
+  }
+
   const addItems = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
     // let j = 1
@@ -160,6 +204,8 @@ export default function Calculation({ item: items, order, customer_price_multipl
     let p = { _id: '', product_name: data.product_name, code: '', barcode: data.barcode, brand: '', model: '', qty: data.qty ,purchase_price: 0}
     // let q = { items_ID: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
     let total_price_products = 0
+
+    let q = {product_name: '', qty: data.qty, unit: '', price: 0, totalperProduct: 0}
     
 
 
@@ -186,10 +232,16 @@ export default function Calculation({ item: items, order, customer_price_multipl
         p.brand = r.brand
         p.model = r.model
         p.purchase_price = r.purchase_price
+
+        q.product_name = r.product_name+' '+r.model
+        q.price = r.purchase_price
+        q.totalperProduct = (q.price*customer_price_multiply) * q.qty
+        
       
         
         
         productList.push(p)
+        billList.push(q)
         
 
 
@@ -219,6 +271,22 @@ export default function Calculation({ item: items, order, customer_price_multipl
       
     setProductList(productList)
     setJsxProductList(newList)
+
+    let newBillList = billList.map(q =>{
+      return(
+        <tr>
+              <td>{q.product_name}</td>
+              <td>{q.qty}</td>
+              <td>{q.unit}</td>
+              <td>{q.price}</td>
+              <td>{(q.price*customer_price_multiply) * q.qty}</td>
+            </tr>
+      )
+    })
+
+    setBillList(billList)
+    setJsxBillList(newBillList)
+    console.log("jsx:  ",jsxBillList)
 
 
     productList.map(product =>{
@@ -251,6 +319,9 @@ export default function Calculation({ item: items, order, customer_price_multipl
       <Head>
         <title>Calculation</title>
         <link rel="icon" href="/favicon.ico" />
+        
+        <link rel="stylesheet" href="styles.css" />
+
       </Head>
 
       <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
@@ -258,7 +329,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
+        <h1 className={styles.title} className="no-print">
           Sale - Calculation
         </h1>
 
@@ -290,7 +361,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
             />
   </InputGroup>*/}
 
-          <InputGroup className="mb-3">
+          <InputGroup className="mb-3" className="no-print">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -302,7 +373,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
             />
           </InputGroup>
 
-          <InputGroup className="mb-3">
+          <InputGroup className="mb-3" className="no-print">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
             </InputGroup.Prepend>
@@ -317,7 +388,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
           {/* <BrandList brand={brand} />
           <ModelList model={model} /> */}
 
-          <InputGroup className="mb-3">
+          <InputGroup className="mb-3" className="no-print">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
             </InputGroup.Prepend>
@@ -329,7 +400,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
             />
           </InputGroup>
 
-          <InputGroup className="mb-3">
+          <InputGroup className="mb-3" className="no-print">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
             </InputGroup.Prepend>
@@ -341,11 +412,11 @@ export default function Calculation({ item: items, order, customer_price_multipl
           </InputGroup>
 
           
-          <button>เพิ่มในรายการขาย</button>
+          <button className="no-print">เพิ่มในรายการขาย</button>
 
 
 
-          <div>
+          <div className="no-print">
             <Table striped bordered hover size="sm">
               <thead>
                 <tr>
@@ -365,7 +436,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
             </Table>
           </div>
 
-          <div>
+          <div className="no-print">
           <InputGroup className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
@@ -385,11 +456,53 @@ export default function Calculation({ item: items, order, customer_price_multipl
         </div>
 
       </main>
+
+      <main class="print-only hide">
+        <h1>ร้านเทพประทานพร</h1>
+        <div>Order No:</div>
+        <div>วันที่:</div>
+
+        <div>
+            <Table striped bordered hover size="sm">
+              <thead>
+                <tr>
+                 
+                  <th>ชื่อสินค้า</th>
+                  <th>จำนวน</th>
+                  <th>หน่วย</th>
+                  <th>ราคา</th>
+                  <th>จำนวนเงิน</th>
+                  
+
+                </tr>
+              </thead>
+              <tbody>
+                {jsxBillList}
+              </tbody>
+              <thead>
+              <tr>
+                <th>รวมทั้งสิ้น</th>
+                <th>{totalPriceProducts+ Number(fixing_price)}</th>
+              </tr>
+              <tr>
+                <th>จำนวนที่ได้รับ</th>
+                <th>{receive_value}</th>
+              </tr>
+              <tr>
+                <th>เงินทอน</th>
+                <th>{receive_value - (totalPriceProducts+ Number(fixing_price))}</th>
+              </tr>
+              </thead>
+            </Table>
+          </div>
+
+      </main>
+
     </form>
 
-    <form onSubmit={handleSubmit2(onSubmitToDatabase)}>
+    <form onSubmit={handleSubmit2(onSubmitTest)}>
 
-      <div>
+      <div className="no-print">
         <Form.Group controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="ค่าถอดประกอบ" />
         </Form.Group>
@@ -467,11 +580,13 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
       </div>
 
-      <div>
+      <div className="no-print">
       <ButtonGroup>
         <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
         {/* <Button href="/payment" type="submit">จ่าย</Button>{' '} */}
         <button>จ่าย</button>{' '}
+
+        <Button onClick={() => window.print()}>บิล</Button>{' '}
 
         
 

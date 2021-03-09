@@ -39,6 +39,7 @@ export default function ButtonBar({hasNewItem, hasNewItemStock}) {
             <NavDropdown title="บัญชี" id="basic-nav-dropdown">
               <NavDropdown.Item href="/totalSale">บัญชีรายการขาย</NavDropdown.Item>
               <NavDropdown.Item href="/balance">บัญชี-Balance</NavDropdown.Item>
+              <NavDropdown.Item href="/billHis">บิล</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title={navDropdownTitle} id="basic-nav-dropdown"> 
             

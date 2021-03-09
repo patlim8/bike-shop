@@ -27,10 +27,10 @@ import ModelList from '../../components/modelList';
 
 export default function AddItem({ item: items, brand: brands, model: models }) {
 
-  console.log("AddItem", { items })
+  // console.log("AddItem", { items })
 
   // const [id] = useState(_uniqueId('prefix-'));
-
+  const [newItem, setNewItem] = useState(false);
   const [buyOrder, setBuyOrder] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [selectedModel, setSelectedModel] = useState([]);
@@ -74,6 +74,20 @@ const handleModelChange = (value) => {
   
 
 }
+
+const handleCheck = (event) =>{
+  if(event.target.checked){
+
+    // console.log("check")
+    setNewItem(true)
+  }else{
+    setNewItem(false)
+    // console.log("not check")
+  }
+  
+}
+
+
 
 
 
@@ -124,7 +138,7 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
 
   }
 
-  console.log("id ==", data._id)
+  // console.log("id ==", data._id)
 
 
   const { register, handleSubmit, control, watch, errors } = useForm();
@@ -143,8 +157,11 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
     console.log(data)
 
     let order = {
-      product_name: data.product_name, type: "Buy",
+      product_name: data.product_name, type: '',
       qty: 0, unit_price: data.purchase_price, expense: 0
+    }
+    if(newItem == true){
+      order.type = 'Buy'
     }
 
     order.date = new Date()
@@ -597,6 +614,10 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
             defaultValue={data.minStock}
           />
         </InputGroup>
+
+        <div>
+          สินค้าใหม่<input type="checkbox" onChange={handleCheck}></input>
+        </div>
 
 
 
