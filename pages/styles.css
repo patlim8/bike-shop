@@ -1,5 +1,5 @@
 table {
-  width: 80%;
+  width: 100%;
 }
 th {
   padding-top: 12px;
@@ -7,11 +7,28 @@ th {
   text-align: left;
   background-color: #4CAF50;
   color: white;
+  border: solid #000000 1px;
+}
+
+#addressTbody, #orderTable {
+  border: solid #000000 1px;
+}
+
+#addressTd {
+  border-left: solid #000000 1px
+}
+
+.text-center {
+  text-align: center;
 }
 
 td {
   border: 0;
   padding: 0px;
+}
+
+tfoot {
+  border: solid #000000 1px;
 }
 
 tr:nth-child(even) {
@@ -22,14 +39,16 @@ tr:nth-child(even) {
   display: none;
 }
 
-@media print
-{    
-    .no-print, .no-print *
-    {
-        display: none !important;
-    }
+@media print {
+  .no-print, .no-print *{
+      display: none !important;
+  }
 
-    .print-only{
-      display: block;
+  .print-only{
+    display: block;
+  }
+
+  .full-height-div {
+    height: 100%;
   }
 }

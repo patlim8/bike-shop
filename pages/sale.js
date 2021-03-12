@@ -42,10 +42,16 @@ export default function Sale() {
   //     console.log("percent ===", e.target.value)
 
   // }
+  
   const handleKeyPress = (e) => {
     if (e.charCode === 13) {
       console.log("Enter is pressed.", e.target.value)
     }
+  }
+
+  const Percent = (e) => {
+    console.log(e.target.value)
+    setPercent(e.target.value)
   }
 
 
@@ -56,8 +62,8 @@ export default function Sale() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
-      
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock} />
+
 
       <main className={styles.main2}>
         <h1 className={styles.title}>
@@ -78,30 +84,33 @@ export default function Sale() {
             </Card.Body>
           </Card>
 
-          <Accordion>
+          {<Accordion>
             <Card>
               <Accordion.Toggle as={Card.Body} eventKey="0">
                 <CustomToggle eventKey="0"><h1>ลูกค้าช่าง</h1></CustomToggle>
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <Form>
+                  {/*<Form>
                     <Form.Group>
                       <Form.Label>คิดราคาเพิ่ม(%)</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="ใส่ % ที่ต้องการคิด" 
+                        placeholder="ใส่ % ที่ต้องการคิด"
                         onChange={e => setPercent(e.target.value)}
                         onKeyPress={handleKeyPress} />
                     </Form.Group>
                     <Button variant="primary" type="submit" href={`/sell/specialx${percent}`}>
                       ตกลง
                   </Button>
-                  </Form>
+                  </Form>*/}
+                  <Button variant="secondary" value={10} onClick={Percent}>ราคาปลีก</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <Button variant="secondary" value={20} onClick={Percent}>ราคาส่ง</Button><br /><br />
+                  <Button variant="primary" href={`/sell/specialx${percent}`}>ตกลง</Button>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-          </Accordion>
+          </Accordion>}
         </div>
       </main>
     </div>
