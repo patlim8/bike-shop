@@ -39,7 +39,7 @@ export default async (req, res) => {
             receive: Number(receive), 
             change: Number(change), 
             type: type, 
-            date: Date(date)
+            date: date
           
           
           },

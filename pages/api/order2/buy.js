@@ -39,7 +39,7 @@ export default async (req, res) => {
             qty: Number(qty),
             unit_price: Number(unit_price), // ก่อนเอาขึ้น database ต้องเอามาทำ % ก่อน (เฉพาะขาย ไม่ใช่ buy)
             expense: Number(expense),
-            date: Date(date)
+            date: date
             
             
             },

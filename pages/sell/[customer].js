@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
@@ -24,6 +24,9 @@ import { connectToDatabase } from "../../util/mongodb";
 import { ObjectID } from "mongodb";
 import { ObjectId } from 'bson';
 
+import ReactDataGrid from 'react-data-grid';
+// import React from "react";
+import DataGrid from 'react-data-grid';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -41,6 +44,8 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const [jsxProductList, setJsxProductList] = useState(<tr></tr>);
   const [productList, setProductList] = useState([]);
 
+  const [rows, setRows] = useState([]);
+
   const [jsxBillList, setJsxBillList] = useState(<tr></tr>);
   const [billList, setBillList] = useState([]);
   // const newOrder = [];
@@ -49,6 +54,74 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const [totalPriceProducts, setTotalPriceProducts] = useState(0);
   const [fixing_price, setFixingPrice] = useState(0);
   const [receive_value, setReceiveValue] = useState(0);
+
+  // const columns = [
+  //   { key: "id", name: "ID" },
+  //   { key: "product_name", name: "ชื่อสินค้า" },
+  //   { key: "code", name: "รหัสสินค้า" },
+  //   { key: "brand", name: "ยี่ห้อสินค้า" },
+  //   { key: "model", name: "รุ่นสินค้า" },
+  //   { key: "qty", name: "จำนวน" },
+  //   { key: "price", name: "ราคา" }
+
+  //   //<th>id</th>
+  //   // <th>ชื่อสินค้า</th>
+  //   // <th>รหัสสินค้า</th>
+  //   // <th>ยี่ห้อสินค้า</th>
+  //   // <th>รุ่นสินค้า</th>
+  //   // <th>จำนวน</th>
+  //   // <th>ราคา</th>
+  // ];
+
+  const columns = [
+    { key: "id", name: "ID" },
+    { key: "product_name", name: "ชื่อสินค้า" },
+    { key: "code", name: "รหัสสินค้า" },
+    { key: "brand", name: "ยี่ห้อสินค้า" },
+    { key: "model", name: "รุ่นสินค้า" },
+    { key: "qty", name: "จำนวน", editable: true },
+    { key: "price", name: "ราคา", editable: true }
+  ];
+
+  // const rows = [
+  //   {id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, price: 6}
+  // ]
+
+  // var rows = [
+  //   // { id: 0, title: "Task 1", complete: 20 },
+  //   // { id: 1, title: "Task 2", complete: 40 },
+  //   // { id: 2, title: "Task 3", complete: 60 }
+  // ];
+
+
+
+  // state = { rows };
+
+  // const onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
+  //   console.log("fromRow == ", fromRow)
+  //   console.log("toRow == ", toRow)
+  //   console.log("updated == ", updated)
+  //   setRows(state => {
+  //     const rows = state.rows.slice();
+  //     console.log("=== ",rows)
+  //     for (let i = fromRow; i <= toRow; i++) {
+  //       rows[i] = { ...rows[i], ...updated };
+  //     }
+  //     return { rows };
+  //   });
+  // };
+
+  const handleGridRowsUpdated = ({ fromRow, toRow, updated }) => {
+    let row = rows.slice();
+
+    for (let i = fromRow; i <= toRow; i++) {
+      let rowToUpdate = row[i];
+      let updatedRow = React.addons.update(rowToUpdate, {$merge: updated});
+      row[i] = updatedRow;
+    }
+
+    this.setState({ row });
+  }
 
   
 
@@ -193,6 +266,10 @@ export default function Calculation({ item: items, order, customer_price_multipl
         
   }
 
+  useEffect(() => {
+    console.log('rows == ', rows)
+}, [rows]);
+
   const addItems = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
     // let j = 1
@@ -236,8 +313,10 @@ export default function Calculation({ item: items, order, customer_price_multipl
         q.product_name = r.product_name+' '+r.model
         q.price = r.purchase_price
         q.totalperProduct = (q.price*customer_price_multiply) * q.qty
-        
-      
+
+
+        let item = {id: p.id, product_name: p.product_name, code: p.code, brand: p.brand, model: p.model, qty: q.qty, price: (q.price*customer_price_multiply) * q.qty}
+        rows.push(item)
         
         
         productList.push(p)
@@ -255,6 +334,12 @@ export default function Calculation({ item: items, order, customer_price_multipl
     // productList.push(p)
     let newList = productList.map(p => {
           // console.log("Update JSX", p)
+        // let item = {id: p.id, product_name: p.product_name, code: p.code, brand: p.brand, model: p.model, qty: p.qty, price: (p.purchase_price*customer_price_multiply) * p.qty}
+        // rows.push(item)
+        // console.log("item in row ==== ",item)
+
+       
+
           return (
             <tr key={p.id}>
               <td>{p.id}</td>
@@ -268,6 +353,10 @@ export default function Calculation({ item: items, order, customer_price_multipl
           )
 
         })
+
+    
+
+    
       
     setProductList(productList)
     setJsxProductList(newList)
@@ -434,6 +523,15 @@ export default function Calculation({ item: items, order, customer_price_multipl
                 {jsxProductList}
               </tbody>
             </Table>
+          </div>
+
+          <div>
+            <DataGrid
+                columns={columns}
+                rows={rows}
+                onGridRowsUpdated={handleGridRowsUpdated}
+                enableCellSelect={true}
+              />
           </div>
 
           <div className="no-print">

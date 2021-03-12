@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap'
+import { format } from 'date-fns'
 
 
 const ItemList = ({ ItemList = [], filter = null }) => {
@@ -62,6 +63,7 @@ const ItemList = ({ ItemList = [], filter = null }) => {
 
   const itemList2 = filteredList.map((data) => {
     if (data) {
+      // console.log(format(data.date, "yyyy-MM-dd"))
       return (
         <tbody>
           <tr key={data._id}>

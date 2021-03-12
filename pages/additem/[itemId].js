@@ -15,7 +15,7 @@ import { connectToDatabase } from "../../util/mongodb"
 import { ObjectId } from 'bson';
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
-import { colourOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../../pages/data';
+import { colourOptions, groupStyles, groupBadgeStyles, animatedComponents, options, brandOptions } from '../../pages/data';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
@@ -23,6 +23,8 @@ import hasNewItem from '../../pages/needItem'
 import hasNewItemStock from '../../pages/stock'
 import BrandList from '../../components/brandList';
 import ModelList from '../../components/modelList';
+
+import { format } from 'date-fns'
 // import _uniqueId from 'lodash/uniqueId';
 
 export default function AddItem({ item: items, brand: brands, model: models }) {
@@ -34,6 +36,8 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
   const [buyOrder, setBuyOrder] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [selectedModel, setSelectedModel] = useState([]);
+
+  const [aviArray, setAviArray] = useState([]);
   
 
 
@@ -100,6 +104,7 @@ const handleCheck = (event) =>{
     } 
     )
     
+    
 )
 
 const modelListOptions = models.filter(m => m.brand === filter.id).map(model => (
@@ -138,6 +143,12 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
 
   }
 
+  let array = []
+
+  data.avi_model.map(avi => array.push(modelOptions[modelOptions.findIndex((model) => model.value == avi)]))
+
+  console.log(array)
+
   // console.log("id ==", data._id)
 
 
@@ -153,7 +164,9 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
 
     data['brand'] = selectedBrand
     data['model'] = selectedModel
-    data['date'] = new Date()
+
+    let date = new Date()
+    data['date'] = format(date, 'yyyy-LL-dd')
     console.log(data)
 
     let order = {
@@ -164,7 +177,7 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
       order.type = 'Buy'
     }
 
-    order.date = new Date()
+    order.date = format(date, 'yyyy-LL-dd')
 
     if (data._id === "") {
       order.qty = data.qty
@@ -296,13 +309,11 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
   }
 
   const onsubmit_test = (data) => {
-    // data.model = data.model.value
-    // let temp_avi = data.avi_model
-    // data['avi_model'] = []
-    data['brand'] = selectedBrand
-    data['model'] = selectedModel
-    // temp_avi.map(avi => data['avi_model'].push(avi.value))
-    console.log(data)
+    
+    let date = new Date()
+
+    console.log(format(date, "yyyy-MM-dd"))
+    // console.log(data)
 
   }
 
@@ -316,13 +327,14 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
 
 
 
-
+console.log(brandOptions)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>
           {data._id === undefined ? 'New Item' : 'Edit'}
+          {console.log('data == ', data)}
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -445,9 +457,11 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
                 <Select 
                 onChange={(e) => props.onChange(handleBrandChange(e)) } 
                 options={brandOptions} 
+                defaultValue={brandOptions[brandOptions.findIndex((brand) => brand.value == data.brand)]}
                 // value={props.onChange}
                 ref={register} />
               )}
+              // defaultValue={data.brand}
               control={control} 
               name="brand" 
               // ref={register} 
@@ -476,6 +490,7 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
                 <Select 
                 onChange={(e) => props.onChange(handleModelChange(e)) } 
                 options={modelListOptions} 
+                defaultValue={modelOptions[modelOptions.findIndex((model) => model.value == data.model)]}
                 
                 // value={props.onChange}
                 ref={register} />
@@ -519,6 +534,7 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
                         render={({ onChange, onBlur, value }) => (
                           
                             <Select
+                                defaultValue={array}
                                 onChange={onChange}
                                 onBlur={onBlur}
                                 value={value}  // this is what you need to do

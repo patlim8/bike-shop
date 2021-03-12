@@ -45,7 +45,7 @@ export default async (req, res) => {
             qty: Number(qty),
             minStock: Number(minStock),
             barcode_id: barcode_id,
-            date: Date(date)
+            date: date
           },
           // callback
           (err, result) => {
