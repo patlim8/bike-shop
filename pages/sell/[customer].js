@@ -27,6 +27,7 @@ import { ObjectId } from 'bson';
 import ReactDataGrid from 'react-data-grid';
 // import React from "react";
 import DataGrid from 'react-data-grid';
+
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -44,7 +45,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const [jsxProductList, setJsxProductList] = useState(<tr></tr>);
   const [productList, setProductList] = useState([]);
 
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState([{ id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, price: 6 }]);
 
   const [jsxBillList, setJsxBillList] = useState(<tr></tr>);
   const [billList, setBillList] = useState([]);
@@ -112,18 +113,19 @@ export default function Calculation({ item: items, order, customer_price_multipl
   // };
 
   const handleGridRowsUpdated = ({ fromRow, toRow, updated }) => {
+    console.log('handleGridRowsUpdated')
     let row = rows.slice();
 
     for (let i = fromRow; i <= toRow; i++) {
       let rowToUpdate = row[i];
-      let updatedRow = React.addons.update(rowToUpdate, {$merge: updated});
+      let updatedRow = React.addons.update(rowToUpdate, { $merge: updated });
       row[i] = updatedRow;
     }
 
-    this.setState({ row });
+    setRows(row);
   }
 
-  
+
 
   const onSubmitToDatabase = (data) => {
     // productList << array of Json
@@ -221,10 +223,6 @@ export default function Calculation({ item: items, order, customer_price_multipl
           alert("Response from server " + data.message)
         });
     })
-
-
-
-
   }
 
   const onSubmitTest = (data) => {
@@ -261,16 +259,11 @@ export default function Calculation({ item: items, order, customer_price_multipl
       });
 
 
-
-
-
-
-
   }
 
   useEffect(() => {
     console.log('rows == ', rows)
-}, [rows]);
+  }, [rows]);
 
   const addItems = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
@@ -300,10 +293,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
     // productList.push(p)
     // let check_item = 
-    items.map(r => {
-
-
-
+    items.forEach(r => {
       if (r.product_name == p.product_name || r.barcode_id == p.barcode) {
         p.product_name = r.product_name
         p._id = r._id
@@ -315,24 +305,23 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
         q.product_name = r.product_name + ' ' + r.model
         q.price = r.purchase_price
-        q.totalperProduct = (q.price*customer_price_multiply) * q.qty
+        q.totalperProduct = (q.price * customer_price_multiply) * q.qty
 
 
-        let item = {id: p.id, product_name: p.product_name, code: p.code, brand: p.brand, model: p.model, qty: q.qty, price: (q.price*customer_price_multiply) * q.qty}
+        let item = { id: p.id, product_name: p.product_name, code: p.code, brand: p.brand, model: p.model, qty: q.qty, price: (q.price * customer_price_multiply) * q.qty }
         rows.push(item)
-        
-        
+
+
         productList.push(p)
         billList.push(q)
-
-
-
-
       }
+    })
 
-    }
+    // productList.push(p)
+    setProductList(productList)
 
-    )
+
+
 
     const editItem = (e) => {
       console.log("Edit btn was clicked.", e.target.value)
@@ -350,61 +339,18 @@ export default function Calculation({ item: items, order, customer_price_multipl
           // console.log("Finished Delete ProductList", productList)
         }
       }
-      let delList = productList.map(p => {
-        return (
-          <tr key={p._id}>
-            {/*<td>{p._id}</td>*/}
-            <td>{p.product_name}</td>
-            <td>{p.code}</td>
-            <td>{p.brand}</td>
-            <td>{p.model}</td>
-            <td>{p.qty}</td>
-            <td>{p.totalP}</td>
-            <td>
-              <Button variant="primary" onClick={editItem} value={p._id}>Edit</Button>
-            </td>
-            <td>
-              <Button variant="danger" onClick={deleteItem} value={p._id}>Delete</Button>
-            </td>
-          </tr>
-        )
-
-      })
 
       let TP = 0
       setProductList(productList)
-      setJsxProductList(delList)
+
       productList.map(pt => {
         TP += pt.totalP
       })
       setTotalPriceProducts(TP)
     }
 
-    // productList.push(p)
-    let newList = productList.map(p => {
-      // console.log("Update JSX", p)
-      return (
-        <tr key={p.id}>
-          {/*<td>{p.id}</td>*/}
-          <td>{p.product_name}</td>
-          <td>{p.code}</td>
-          <td>{p.brand}</td>
-          <td>{p.model}</td>
-          <td>{p.qty}</td>
-          <td>{p.totalP}</td>
-          <td>
-            <Button variant="primary" onClick={editItem}>Edit</Button>{' '}
-          </td>
-          <td>
-            <Button variant="danger" onClick={deleteItem} value={p._id}>Delete</Button>
-          </td>
-        </tr>
-      )
 
-    })
 
-    setProductList(productList)
-    setJsxProductList(newList)
 
     let newBillList = billList.map(q => {
       return (
@@ -433,6 +379,39 @@ export default function Calculation({ item: items, order, customer_price_multipl
     })
 
   }
+
+
+  useEffect(() => {
+    let productJsx = productList.map((p, i) => (
+      <tr key={p._id}>
+        {/*<td>{p._id}</td>*/}
+        <td>{p.product_name}</td>
+        <td>{p.code}</td>
+        <td>{p.brand}</td>
+        <td>{p.model}</td>
+        <td>
+          <input type="number" value={p.qty} onChange={e => handleChange(e.target.value, i)} />
+          {p.qty}
+        </td>
+        <td>{p.totalP}</td>
+        <td>
+          <Button variant="primary" value={p._id}>Edit</Button>
+        </td>
+        <td>
+          <Button variant="danger" value={p._id}>Delete</Button>
+        </td>
+      </tr>
+    ))
+    setJsxProductList(productJsx)
+  }, [productList])
+
+
+  const handleChange = (v, i) => {
+    console.log('handleChange', productList[i].qty, v)
+    productList[i].qty = v
+    setProductList(productList)
+  }
+
 
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -570,77 +549,19 @@ export default function Calculation({ item: items, order, customer_price_multipl
               </Table>
             </div>
 
-            <div>
-                  <DataGrid
+            {/* <div>
+                  <ReactDataGrid
                       columns={columns}
-                      rows={rows}
+                      rowGetter={i => rows[i]}
+                      rowCount={rows.length}
+                      // rows={rows}
                       onGridRowsUpdated={handleGridRowsUpdated}
                       enableCellSelect={true}
                     />
-                </div>
+                </div> */}
 
-              <div className="no-print">
-                <InputGroup className="mb-3">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    readOnly
-                    name="total" ref={register2}
-                    placeholder=""
-                    aria-label="Item name"
-                    aria-describedby="basic-addon1"
-                    value={totalPriceProducts}
-                  />
-                </InputGroup>
-              </div>
-
-
-          </div>
-
-        </main>
-
-        <main className="print-only hide">
-          <h1 className="text-center">ใบส่งของชั่วคราว</h1>
-              <div>
-                <table>
-                  <tbody id="addressTbody">
-                    <tr>
-                      <td id="addressTd">ชื่อลูกค้า&emsp;&emsp;ร้านเทพประทานพร</td>
-                      <td id="addressTd">Order No.&emsp;&emsp;&ensp;3602</td>
-                    </tr>
-                    <tr>
-                      <td id="addressTd"></td>
-                      <td id="addressTd">เลขที่ PO</td>
-                    </tr>
-                    <tr>
-                      <td id="addressTd">Tel.&emsp;&emsp;&emsp;&emsp;038531680, 08115113855</td>
-                      <td id="addressTd">Credit&emsp;&emsp;&emsp;&emsp;&ensp;0 วัน</td>
-                    </tr>
-                    <tr>
-                      <td id="addressTd">การจัดส่ง</td>
-                      <td id="addressTd">พนักงานขาย&emsp;&emsp;Admin</td>
-                    </tr>
-                    <tr>
-                      <td id="addressTd">ที่อยู่จัดส่ง</td>
-                      <td id="addressTd">ชำระโดย&emsp;&emsp;เงินสด</td>
-                    </tr>
-                    <tr>
-                      <td id="addressTd">&emsp;&emsp;</td>
-                      <td id="addressTd">&emsp;&emsp;</td>
-                    </tr>
-                    <tr>
-                      <td id="addressTd">หมายเหตุ</td>
-                      <td id="addressTd"></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-                
-
-                <div className="no-print">
-                <InputGroup className="mb-3">
+            <div className="no-print">
+              <InputGroup className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -650,15 +571,75 @@ export default function Calculation({ item: items, order, customer_price_multipl
                   placeholder=""
                   aria-label="Item name"
                   aria-describedby="basic-addon1"
-                  Value={totalPriceProducts}
+                  value={totalPriceProducts}
                 />
               </InputGroup>
-              </div>
+            </div>
 
 
-        {/* </div> */}
-          </main>
-      <main>
+          </div>
+
+        </main>
+
+        <main className="print-only hide">
+          <h1 className="text-center">ใบส่งของชั่วคราว</h1>
+          <div>
+            <table>
+              <tbody id="addressTbody">
+                <tr>
+                  <td id="addressTd">ชื่อลูกค้า&emsp;&emsp;ร้านเทพประทานพร</td>
+                  <td id="addressTd">Order No.&emsp;&emsp;&ensp;3602</td>
+                </tr>
+                <tr>
+                  <td id="addressTd"></td>
+                  <td id="addressTd">เลขที่ PO</td>
+                </tr>
+                <tr>
+                  <td id="addressTd">Tel.&emsp;&emsp;&emsp;&emsp;038531680, 08115113855</td>
+                  <td id="addressTd">Credit&emsp;&emsp;&emsp;&emsp;&ensp;0 วัน</td>
+                </tr>
+                <tr>
+                  <td id="addressTd">การจัดส่ง</td>
+                  <td id="addressTd">พนักงานขาย&emsp;&emsp;Admin</td>
+                </tr>
+                <tr>
+                  <td id="addressTd">ที่อยู่จัดส่ง</td>
+                  <td id="addressTd">ชำระโดย&emsp;&emsp;เงินสด</td>
+                </tr>
+                <tr>
+                  <td id="addressTd">&emsp;&emsp;</td>
+                  <td id="addressTd">&emsp;&emsp;</td>
+                </tr>
+                <tr>
+                  <td id="addressTd">หมายเหตุ</td>
+                  <td id="addressTd"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+
+          <div className="no-print">
+            <InputGroup className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                readOnly
+                name="total" ref={register2}
+                placeholder=""
+                aria-label="Item name"
+                aria-describedby="basic-addon1"
+                Value={totalPriceProducts}
+              />
+            </InputGroup>
+          </div>
+
+
+          {/* </div> */}
+        </main>
+        <main>
           <br />
 
           <div className="full-height-div">
@@ -836,7 +817,7 @@ export async function getServerSideProps({ query }, props) {
     .find({ "item_code": ObjectID(item_id) })
     .toArray()
 
-  console.log(ObjectID(item_id))
+  // console.log(ObjectID(item_id))
 
   // return {
   //     props: {
