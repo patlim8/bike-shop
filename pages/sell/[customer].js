@@ -15,7 +15,7 @@ import hasNewItem from '../../pages/needItem'
 import hasNewItemStock from '../../pages/stock'
 
 
-import Table from 'react-bootstrap/Table'
+// import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -24,11 +24,12 @@ import { connectToDatabase } from "../../util/mongodb";
 import { ObjectID } from "mongodb";
 import { ObjectId } from 'bson';
 
-import ReactDataGrid from 'react-data-grid';
-// import React from "react";
-import DataGrid from 'react-data-grid';
+import { useTable, usePagination } from 'react-table'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
+
+
+
 
 export default function Calculation({ item: items, order, customer_price_multiply }) {
 
@@ -41,8 +42,10 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const { register: register2, handleSubmit: handleSubmit2, watch: watch2, errors: errors2 } = useForm();
 
 
-  const [jsxProductList, setJsxProductList] = useState(<tr></tr>);
+  const [jsxProductList, setJsxProductList] = useState([]);
   const [productList, setProductList] = useState([]);
+  const [originalData] = React.useState([{id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, totalP: 6},{id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, totalP: 6}])
+  const [data, setData] = React.useState([])
 
   const [rows, setRows] = useState([]);
 
@@ -54,6 +57,118 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const [totalPriceProducts, setTotalPriceProducts] = useState(0);
   const [fixing_price, setFixingPrice] = useState(0);
   const [receive_value, setReceiveValue] = useState(0);
+
+  const [skipPageReset, setSkipPageReset] = React.useState(false)
+
+  const EditableCell = ({
+    value: initialValue,
+    row: { index },
+    column: { id },
+    updateMyData, // This is a custom function that we supplied to our table instance
+  }) => {
+    // We need to keep and update the state of the cell normally
+    const [value, setValue] = React.useState(initialValue)
+  
+    const onChange = e => {
+      setValue(e.target.value)
+      console.log('column === ', e.target.value)
+    }
+  
+    // We'll only update the external data when the input is blurred
+    const onBlur = () => {
+      updateMyData(index, id, value)
+      console.log('working OnBlur ==', index)
+    }
+  
+    // If the initialValue is changed external, sync it up with our state
+    React.useEffect(() => {
+      setValue(initialValue)
+    }, [initialValue])
+  
+    // if(id === 'qty'){
+      return <input value={value} onChange={onChange} onBlur={onBlur}/>
+    // }else{
+    //   return <input value={value} />
+    // }
+     
+  }
+  
+  // Set our editable cell renderer as the default Cell renderer
+  const defaultColumn = {
+    Cell: EditableCell,
+  }
+  
+  
+  
+  
+  const Table = ({ columns, data, updateMyData, skipPageReset }) => {
+    // For this example, we're using pagination to illustrate how to stop
+    // the current page from resetting when our data changes
+    // Otherwise, nothing is different here.
+    const {
+      getTableProps,
+      getTableBodyProps,
+      headerGroups,
+      prepareRow,
+      page,
+      canPreviousPage,
+      canNextPage,
+      pageOptions,
+      pageCount,
+      gotoPage,
+      nextPage,
+      previousPage,
+      setPageSize,
+      state: { pageIndex, pageSize },
+    } = useTable(
+      {
+        columns,
+        data,
+        defaultColumn,
+        // use the skipPageReset option to disable page resetting temporarily
+        autoResetPage: !skipPageReset,
+        // updateMyData isn't part of the API, but
+        // anything we put into these options will
+        // automatically be available on the instance.
+        // That way we can call this function from our
+        // cell renderer!
+        updateMyData,
+      },
+      usePagination
+    )
+  
+    // Render the UI for your table
+    return (
+      <>
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row)
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => {
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+        
+      </>
+    )
+  }
+
+  
 
   // const columns = [
   //   { key: "id", name: "ID" },
@@ -73,15 +188,90 @@ export default function Calculation({ item: items, order, customer_price_multipl
   //   // <th>ราคา</th>
   // ];
 
-  const columns = [
-    { key: "id", name: "ID" },
-    { key: "product_name", name: "ชื่อสินค้า" },
-    { key: "code", name: "รหัสสินค้า" },
-    { key: "brand", name: "ยี่ห้อสินค้า" },
-    { key: "model", name: "รุ่นสินค้า" },
-    { key: "qty", name: "จำนวน", editable: true },
-    { key: "price", name: "ราคา", editable: true }
-  ];
+  // const columns = [
+  //   { key: "id", name: "ID" },
+  //   { key: "product_name", name: "ชื่อสินค้า" },
+  //   { key: "code", name: "รหัสสินค้า" },
+  //   { key: "brand", name: "ยี่ห้อสินค้า" },
+  //   { key: "model", name: "รุ่นสินค้า" },
+  //   { key: "qty", name: "จำนวน", editable: true },
+  //   { key: "price", name: "ราคา", editable: true }
+  // ];
+  // React.useEffect(() => {
+  //   setSkipPageReset(false)
+  //   console.log(data)
+  // }, [data])
+
+  // Let's add a data resetter/randomizer to help
+  // illustrate that flow...
+
+  
+
+
+  const resetData = () => setData(originalData)
+
+
+  
+
+
+  const columns = React.useMemo(
+    () => [
+      {
+        
+        Header: 'ชื่อสินค้า',
+        accessor: 'product_name'
+        
+      },
+      {
+        Header: 'รหัสสินค้า',
+        accessor: 'code'
+
+
+      },
+      {
+        Header: 'ยี่ห้อ',
+        accessor: 'brand'
+      },
+      {
+        Header: 'รุ่นสินค้า',
+        accessor: 'model'
+      },
+      {
+        Header: 'จำนวน',
+        accessor: 'qty'
+      },
+      {
+        Header: 'ราคา',
+        accessor: 'totalP'
+      }
+    ],
+    []
+  )
+
+  
+
+  const updateMyData = (rowIndex, columnId, value) => {
+    // We also turn on the flag to not reset the page
+
+    console.log('index === ',rowIndex)
+    console.log('column === ',columnId)
+    console.log('value === ', value)
+
+    setSkipPageReset(true)
+    setData(old =>
+      
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          console.log('old == ',old)
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+          }
+        }
+        return row
+      })
+    )
+  }
 
   // const rows = [
   //   {id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, price: 6}
@@ -111,6 +301,12 @@ export default function Calculation({ item: items, order, customer_price_multipl
   //   });
   // };
 
+  const addReceive = (value) => {
+    setReceiveValue(receive_value+value)
+    
+    
+  }
+
   const handleGridRowsUpdated = ({ fromRow, toRow, updated }) => {
     let row = rows.slice();
 
@@ -120,7 +316,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
       row[i] = updatedRow;
     }
 
-    this.setState({ row });
+    setRows({ row });
   }
 
   
@@ -272,6 +468,15 @@ export default function Calculation({ item: items, order, customer_price_multipl
     console.log('rows == ', rows)
 }, [rows]);
 
+useEffect(() => {
+  setProductList(productList)
+  console.log('working')
+}, [productList]);
+
+// React.useEffect(() => {
+//   runThisFunctionOnEveryRender();
+// })
+
   const addItems = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
     // let j = 1
@@ -323,6 +528,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
         
         
         productList.push(p)
+        
         billList.push(q)
 
 
@@ -331,8 +537,15 @@ export default function Calculation({ item: items, order, customer_price_multipl
       }
 
     }
+    
 
     )
+
+    // useEffect(()=>{
+    //   setProductList(productList)
+    // },[productList])
+    
+      // console.log(productList)
 
     const editItem = (e) => {
       console.log("Edit btn was clicked.", e.target.value)
@@ -381,27 +594,28 @@ export default function Calculation({ item: items, order, customer_price_multipl
     }
 
     // productList.push(p)
-    let newList = productList.map(p => {
-      // console.log("Update JSX", p)
-      return (
-        <tr key={p.id}>
-          {/*<td>{p.id}</td>*/}
-          <td>{p.product_name}</td>
-          <td>{p.code}</td>
-          <td>{p.brand}</td>
-          <td>{p.model}</td>
-          <td>{p.qty}</td>
-          <td>{p.totalP}</td>
-          <td>
-            <Button variant="primary" onClick={editItem}>Edit</Button>{' '}
-          </td>
-          <td>
-            <Button variant="danger" onClick={deleteItem} value={p._id}>Delete</Button>
-          </td>
-        </tr>
-      )
+    // let newList = productList.map(p => {
+    //   // console.log("Update JSX", p)
+    //   return (
+    //     <tr key={p.id}>
+    //       {/*<td>{p.id}</td>*/}
+    //       <td>{p.product_name}</td>
+    //       <td>{p.code}</td>
+    //       <td>{p.brand}</td>
+    //       <td>{p.model}</td>
+    //       <td>{p.qty}</td>
+    //       <td>{p.totalP}</td>
+    //       <td>
+    //         <Button variant="primary" onClick={editItem}>Edit</Button>{' '}
+    //       </td>
+    //       <td>
+    //         <Button variant="danger" onClick={deleteItem} value={p._id}>Delete</Button>
+    //       </td>
+    //     </tr>
+    //   )
 
-    })
+    // })
+    let newList = productList
 
     setProductList(productList)
     setJsxProductList(newList)
@@ -550,10 +764,10 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
 
             <div className="no-print">
-              <Table striped bordered hover size="sm">
+              {/* <Table striped bordered hover size="sm">
                 <thead>
                   <tr>
-                    {/*<th>id</th>*/}
+                    
                     <th>ชื่อสินค้า</th>
                     <th>รหัสสินค้า</th>
                     <th>ยี่ห้อสินค้า</th>
@@ -567,17 +781,17 @@ export default function Calculation({ item: items, order, customer_price_multipl
                 <tbody>
                   {jsxProductList}
                 </tbody>
-              </Table>
+              </Table> */}
             </div>
 
             <div>
-                  <DataGrid
-                      columns={columns}
-                      rows={rows}
-                      onGridRowsUpdated={handleGridRowsUpdated}
-                      enableCellSelect={true}
-                    />
-                </div>
+              <Table
+                columns={columns}
+                data={productList}
+                updateMyData={updateMyData}
+                skipPageReset={skipPageReset}
+              />
+            </div>
 
               <div className="no-print">
                 <InputGroup className="mb-3">
@@ -658,7 +872,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
         {/* </div> */}
           </main>
-      <main>
+      <main className="print-only hide">
           <br />
 
           <div className="full-height-div">
@@ -733,6 +947,9 @@ export default function Calculation({ item: items, order, customer_price_multipl
             />
           </InputGroup>
 
+          
+          
+
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
@@ -744,6 +961,18 @@ export default function Calculation({ item: items, order, customer_price_multipl
               onChange={e => setReceiveValue(e.target.value)}
             />
           </InputGroup>
+
+          <button type="button" className="no-print" onClick={e => addReceive(5000)}>5000</button>
+          <button type="button" className="no-print" onClick={e => addReceive(1000)}>1000</button>
+          <button type="button" className="no-print" onClick={e => addReceive(500)}>500</button>
+          <button type="button" className="no-print" onClick={e => addReceive(100)}>100</button>
+          <button type="button" className="no-print" onClick={e => addReceive(50)}>50</button>
+          <button type="button" className="no-print" onClick={e => addReceive(20)}>20</button>
+          <button type="button" className="no-print" onClick={e => addReceive(10)}>10</button>
+          <button type="button" className="no-print" onClick={e => addReceive(5)}>5</button>
+          <button type="button" className="no-print" onClick={e => addReceive(1)}>1</button>
+
+          
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
