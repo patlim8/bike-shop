@@ -70,14 +70,16 @@ export default function Calculation({ item: items, order, customer_price_multipl
     const [value, setValue] = React.useState(initialValue)
 
     const onChange = e => {
-      setValue(e.target.value)
       console.log('column === ', e.target.value)
+      console.log('onChange', { productList })
+      setValue(e.target.value)
+
     }
 
     // We'll only update the external data when the input is blurred
     const onBlur = () => {
-      updateMyData(index, id, value)
       console.log('working OnBlur ==', index)
+      updateMyData(index, id, value)
     }
 
     // If the initialValue is changed external, sync it up with our state
@@ -254,12 +256,11 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
 
-    console.log('index === ', rowIndex)
-    console.log('column === ', columnId)
-    console.log('value === ', value)
+    console.log('updateMyData')
+    console.log({ rowIndex, columnId, value })
 
     setSkipPageReset(true)
-    setData(old =>
+    setProductList(old =>
 
       old.map((row, index) => {
         if (index === rowIndex) {
