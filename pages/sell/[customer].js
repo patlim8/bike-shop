@@ -533,7 +533,9 @@ export default function Calculation({ item: items, order, customer_price_multipl
       console.log("ราคาสินค้า SET", totalPriceProducts)
     })
 
-
+    setBillList(billList)
+    setJsxBillList(newBillList)
+    
   }
 
 

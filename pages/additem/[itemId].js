@@ -160,7 +160,7 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
     let temp_avi = data.avi_model
     data['avi_model'] = []
 
-    temp_avi.map(avi => data['avi_model'].push(avi.value))
+    // temp_avi.map(avi => data['avi_model'].push(avi.value))
 
     data['brand'] = selectedBrand
     data['model'] = selectedModel

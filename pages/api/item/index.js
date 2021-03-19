@@ -66,7 +66,6 @@ export default async (req, res) => {
       let data = req.body
       // let data1 = req.body
 
-      var ObjectID = require('mongodb').ObjectID;
       let { product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
       console.log("req body ใน PUT ========", { data })
       console.log("object id ==== ", ObjectId(data._id))
@@ -78,28 +77,30 @@ export default async (req, res) => {
       let doc = await db
         .collection('item')
         .update(
-          {_id:  _id}, 
-          {$set: 
+          { _id: _id },
+          {
+            $set:
             {
-            product_name: product_name,
-            code: code,
-            brand: brand,
-            model: model,
-            avi_model: avi_model,
-            purchase_price: Number(purchase_price),
-            qty: Number(qty),
-            minStock: Number(minStock),
-            barcode_id: barcode_id,
-            date: Date(date)
-          }},
+              product_name: product_name,
+              code: code,
+              brand: brand,
+              model: model,
+              avi_model: avi_model,
+              purchase_price: Number(purchase_price),
+              qty: Number(qty),
+              minStock: Number(minStock),
+              barcode_id: barcode_id,
+              date: Date(date)
+            }
+          },
           (err, result) => {
             if (err) {
-              console.log("Update Error",err)
+              console.log("Update Error", err)
               res.json(err)
             } else {
               console.log('Newly Updated (expect 1):', result)
               res.json({
-                message: 'Data has been updated.', 
+                message: 'Data has been updated.',
                 data: data
               });
             }
@@ -112,18 +113,18 @@ export default async (req, res) => {
       const { db } = await connectToDatabase();
       let doc = await db
         .collection('item')
-        .deleteOne({ _id: ObjectID(_id) })
+        .deleteOne({ _id: ObjectId(data._id) })
       res.json({ delete: true, message: 'Delete data', data: {} })
     } else if (req.method === 'UPDATE_QTY') {
       let data = req.body
-      let _id = ObjectId(data._id)
+      let { _id } = ObjectId(data._id)
       delete data._id
       // let { _id } = data;
       const { db } = await connectToDatabase();
       let doc = await db
         .collection('item')
         .updateOne(
-          {_id: _id},
+          { _id: _id },
           { $inc: qty - data.qty },
           // Option 1: use updateOne {_id: ObjectID(id)}
           // Option 2: use findByIdAndUpdate, findByIdAndUpdate(ObjectID(id), {....})
