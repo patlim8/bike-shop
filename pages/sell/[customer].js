@@ -44,7 +44,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
   const [jsxProductList, setJsxProductList] = useState([]);
   const [productList, setProductList] = useState([]);
-  const [originalData] = React.useState([{id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, totalP: 6},{id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, totalP: 6}])
+  const [originalData] = React.useState([{ id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, totalP: 6 }, { id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, totalP: 6 }])
   const [data, setData] = React.useState([])
 
   const [rows, setRows] = useState([{ id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, price: 6 }]);
@@ -68,39 +68,39 @@ export default function Calculation({ item: items, order, customer_price_multipl
   }) => {
     // We need to keep and update the state of the cell normally
     const [value, setValue] = React.useState(initialValue)
-  
+
     const onChange = e => {
       setValue(e.target.value)
       console.log('column === ', e.target.value)
     }
-  
+
     // We'll only update the external data when the input is blurred
     const onBlur = () => {
       updateMyData(index, id, value)
       console.log('working OnBlur ==', index)
     }
-  
+
     // If the initialValue is changed external, sync it up with our state
     React.useEffect(() => {
       setValue(initialValue)
     }, [initialValue])
-  
+
     // if(id === 'qty'){
-      return <input value={value} onChange={onChange} onBlur={onBlur}/>
+    return <input value={value} onChange={onChange} onBlur={onBlur} />
     // }else{
-    //   return <input value={value} />
+    //   4<input value={value} />
     // }
-     
+
   }
-  
+
   // Set our editable cell renderer as the default Cell renderer
   const defaultColumn = {
     Cell: EditableCell,
   }
-  
-  
-  
-  
+
+
+
+
   const Table = ({ columns, data, updateMyData, skipPageReset }) => {
     // For this example, we're using pagination to illustrate how to stop
     // the current page from resetting when our data changes
@@ -136,7 +136,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
       },
       usePagination
     )
-  
+
     // Render the UI for your table
     return (
       <>
@@ -163,12 +163,12 @@ export default function Calculation({ item: items, order, customer_price_multipl
             })}
           </tbody>
         </table>
-        
+
       </>
     )
   }
 
-  
+
 
   // const columns = [
   //   { key: "id", name: "ID" },
@@ -205,22 +205,22 @@ export default function Calculation({ item: items, order, customer_price_multipl
   // Let's add a data resetter/randomizer to help
   // illustrate that flow...
 
-  
+
 
 
   const resetData = () => setData(originalData)
 
 
-  
+
 
 
   const columns = React.useMemo(
     () => [
       {
-        
+
         Header: 'ชื่อสินค้า',
         accessor: 'product_name'
-        
+
       },
       {
         Header: 'รหัสสินค้า',
@@ -248,21 +248,21 @@ export default function Calculation({ item: items, order, customer_price_multipl
     []
   )
 
-  
+
 
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
 
-    console.log('index === ',rowIndex)
-    console.log('column === ',columnId)
+    console.log('index === ', rowIndex)
+    console.log('column === ', columnId)
     console.log('value === ', value)
 
     setSkipPageReset(true)
     setData(old =>
-      
+
       old.map((row, index) => {
         if (index === rowIndex) {
-          console.log('old == ',old)
+          console.log('old == ', old)
           return {
             ...old[rowIndex],
             [columnId]: value,
@@ -302,9 +302,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
   // };
 
   const addReceive = (value) => {
-    setReceiveValue(receive_value+value)
-    
-    
+    setReceiveValue(receive_value + value)
   }
 
   const handleGridRowsUpdated = ({ fromRow, toRow, updated }) => {
@@ -460,14 +458,14 @@ export default function Calculation({ item: items, order, customer_price_multipl
     console.log('rows == ', rows)
   }, [rows]);
 
-useEffect(() => {
-  setProductList(productList)
-  console.log('working')
-}, [productList]);
+  useEffect(() => {
+    // SUSPECT setProductList(productList)
+    console.log('working')
+  }, [productList]);
 
-// React.useEffect(() => {
-//   runThisFunctionOnEveryRender();
-// })
+  // React.useEffect(() => {
+  //   runThisFunctionOnEveryRender();
+  // })
 
   const addItems = (data) => {
     // console.log("เพิ่มในรายการขาย",data)
@@ -514,10 +512,10 @@ useEffect(() => {
 
         let item = { id: p.id, product_name: p.product_name, code: p.code, brand: p.brand, model: p.model, qty: q.qty, price: (q.price * customer_price_multiply) * q.qty }
         rows.push(item)
-        
-        
+
+
         productList.push(p)
-        
+
         billList.push(q)
 
 
@@ -530,94 +528,95 @@ useEffect(() => {
     setProductList(productList)
 
 
-    }
-    
+  }
 
 
-    // useEffect(()=>{
-    //   setProductList(productList)
-    // },[productList])
-    
-      // console.log(productList)
 
-    const editItem = (e) => {
-      console.log("Edit btn was clicked.", e.target.value)
-      let targetID = e.target.value
-    }
+  // useEffect(()=>{
+  //   setProductList(productList)
+  // },[productList])
 
-    const deleteItem = (e) => {
-      console.log("Delete btn was clicked. _id:", e.target.value)
-      let targetID = e.target.value
-      // let filteredProductList = productList.filter(pi => (pi._id === e.target.value))
-      for (var i = 0; i < productList.length; i++) {
-        if (productList[i]._id === targetID) {
-          // console.log("get Index", i)
-          productList.splice(i, 1);
-          // console.log("Finished Delete ProductList", productList)
-        }
+  // console.log(productList)
+
+  const editItem = (e) => {
+    console.log("Edit btn was clicked.", e.target.value)
+    let targetID = e.target.value
+  }
+
+  const deleteItem = (e) => {
+    console.log("Delete btn was clicked. _id:", e.target.value)
+    let targetID = e.target.value
+    // let filteredProductList = productList.filter(pi => (pi._id === e.target.value))
+    for (var i = 0; i < productList.length; i++) {
+      if (productList[i]._id === targetID) {
+        // console.log("get Index", i)
+        productList.splice(i, 1);
+        // console.log("Finished Delete ProductList", productList)
       }
-
-      let TP = 0
-      setProductList(productList)
-
-      productList.map(pt => {
-        TP += pt.totalP
-      })
-      setTotalPriceProducts(TP)
     }
 
-    // productList.push(p)
-    // let newList = productList.map(p => {
-    //   // console.log("Update JSX", p)
-    //   return (
-    //     <tr key={p.id}>
-    //       {/*<td>{p.id}</td>*/}
-    //       <td>{p.product_name}</td>
-    //       <td>{p.code}</td>
-    //       <td>{p.brand}</td>
-    //       <td>{p.model}</td>
-    //       <td>{p.qty}</td>
-    //       <td>{p.totalP}</td>
-    //       <td>
-    //         <Button variant="primary" onClick={editItem}>Edit</Button>{' '}
-    //       </td>
-    //       <td>
-    //         <Button variant="danger" onClick={deleteItem} value={p._id}>Delete</Button>
-    //       </td>
-    //     </tr>
-    //   )
+    let TP = 0
+    setProductList(productList)
 
-    // })
-    let newList = productList
-
-
-    let newBillList = billList.map(q => {
-      return (
-        <tr key={p.id}>
-          <td>{q.product_name}</td>
-          <td id="addressTd">{q.qty}</td>
-          <td id="addressTd">{q.unit}</td>
-          <td id="addressTd">{q.price}</td>
-          <td id="addressTd">{(q.price * customer_price_multiply) * q.qty}</td>
-        </tr>
-      )
+    productList.map(pt => {
+      TP += pt.totalP
     })
+    setTotalPriceProducts(TP)
+  }
 
-    setBillList(billList)
-    setJsxBillList(newBillList)
-    console.log("jsx:  ", jsxBillList)
+  // productList.push(p)
+  // let newList = productList.map(p => {
+  //   // console.log("Update JSX", p)
+  //   return (
+  //     <tr key={p.id}>
+  //       {/*<td>{p.id}</td>*/}
+  //       <td>{p.product_name}</td>
+  //       <td>{p.code}</td>
+  //       <td>{p.brand}</td>
+  //       <td>{p.model}</td>
+  //       <td>{p.qty}</td>
+  //       <td>{p.totalP}</td>
+  //       <td>
+  //         <Button variant="primary" onClick={editItem}>Edit</Button>{' '}
+  //       </td>
+  //       <td>
+  //         <Button variant="danger" onClick={deleteItem} value={p._id}>Delete</Button>
+  //       </td>
+  //     </tr>
+  //   )
+
+  // })
+  let newList = productList
 
 
-    productList.map(product => {
-      total_price_products += product.qty * (product.purchase_price * customer_price_multiply)
-      setTotalPriceProducts(total_price_products)
+  let newBillList = billList.map(q => {
+    return (
+      <tr key={q.id}>
+        <td>{q.product_name}</td>
+        <td id="addressTd">{q.qty}</td>
+        <td id="addressTd">{q.unit}</td>
+        <td id="addressTd">{q.price}</td>
+        <td id="addressTd">{(q.price * customer_price_multiply) * q.qty}</td>
+      </tr>
+    )
+  })
+
+  // Do not setState in main function
+  // SUSPECT setBillList(billList)
+  // SUSPECT setJsxBillList(newBillList)
+  console.log("jsx:  ", jsxBillList)
 
 
-      console.log("ราคาสินค้า", total_price_products)
-      console.log("ราคาสินค้า SET", totalPriceProducts)
-    })
+  productList.map(product => {
+    total_price_products += product.qty * (product.purchase_price * customer_price_multiply)
+    setTotalPriceProducts(total_price_products)
 
-  
+
+    console.log("ราคาสินค้า", total_price_products)
+    console.log("ราคาสินค้า SET", totalPriceProducts)
+  })
+
+
 
 
   useEffect(() => {
@@ -670,7 +669,7 @@ useEffect(() => {
           <title>Calculation</title>
           <link rel="icon" href="/favicon.ico" />
 
-          <link rel="stylesheet" href="styles.css" />
+          <link rel="stylesheet" href="/styles.css" />
 
         </Head>
 
@@ -797,21 +796,21 @@ useEffect(() => {
               />
             </div>
 
-              <div className="no-print">
-                <InputGroup className="mb-3">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    readOnly
-                    name="total" ref={register2}
-                    placeholder=""
-                    aria-label="Item name"
-                    aria-describedby="basic-addon1"
-                    value={totalPriceProducts}
-                  />
-                </InputGroup>
-              </div>
+            <div className="no-print">
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  readOnly
+                  name="total" ref={register2}
+                  placeholder=""
+                  aria-label="Item name"
+                  aria-describedby="basic-addon1"
+                  value={totalPriceProducts}
+                />
+              </InputGroup>
+            </div>
 
 
             <div className="no-print">
@@ -968,8 +967,8 @@ useEffect(() => {
             />
           </InputGroup>
 
-          
-          
+
+
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -993,7 +992,7 @@ useEffect(() => {
           <button type="button" className="no-print" onClick={e => addReceive(5)}>5</button>
           <button type="button" className="no-print" onClick={e => addReceive(1)}>1</button>
 
-          
+
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -1103,7 +1102,8 @@ export async function getServerSideProps({ query }, props) {
         customer_price_multiply: JSON.parse(1.2)
       },
     };
-  } else {
+  } 
+  else if (query.customer === 'special') {
 
     let percent = query.customer
     // percent.split("x")
