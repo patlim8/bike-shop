@@ -139,7 +139,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
     // Render the UI for your table
     return (
-      <>
+      <div>
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map(headerGroup => (
@@ -164,7 +164,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
           </tbody>
         </table>
 
-      </>
+      </div>
     )
   }
 
@@ -475,9 +475,8 @@ export default function Calculation({ item: items, order, customer_price_multipl
     // }
 
     // var start_item_id = j
-    let p = { _id: '', product_name: data.product_name, code: '', barcode: data.barcode, brand: '', model: '', qty: data.qty, purchase_price: 0, totalP: 0, remove: '' }
+    let p = { _id: '', product_name: data.product_name, code: '', barcode: data.barcode, brand: '', model: '', qty: data.qty, purchase_price: 0, totalP: 0 }
     // let q = { items_ID: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
-    let total_price_products = 0
 
     let q = { product_name: '', qty: data.qty, unit: '', price: 0, totalperProduct: 0 }
 
@@ -495,6 +494,8 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
     // productList.push(p)
     // let check_item = 
+
+    // p = productList, q = billList
     items.forEach(r => {
       if (r.product_name == p.product_name || r.barcode_id == p.barcode) {
         p.product_name = r.product_name
@@ -511,15 +512,10 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
 
         let item = { id: p.id, product_name: p.product_name, code: p.code, brand: p.brand, model: p.model, qty: q.qty, price: (q.price * customer_price_multiply) * q.qty }
-        rows.push(item)
 
 
         productList.push(p)
 
-        billList.push(q)
-
-
-        productList.push(p)
         billList.push(q)
       }
     })
@@ -538,31 +534,28 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
   // console.log(productList)
 
-  const editItem = (e) => {
-    console.log("Edit btn was clicked.", e.target.value)
-    let targetID = e.target.value
-  }
 
-  const deleteItem = (e) => {
-    console.log("Delete btn was clicked. _id:", e.target.value)
-    let targetID = e.target.value
-    // let filteredProductList = productList.filter(pi => (pi._id === e.target.value))
-    for (var i = 0; i < productList.length; i++) {
-      if (productList[i]._id === targetID) {
-        // console.log("get Index", i)
-        productList.splice(i, 1);
-        // console.log("Finished Delete ProductList", productList)
-      }
-    }
+  // Delete item in productList
+  // const deleteItem = (e) => {
+  //   console.log("Delete btn was clicked. _id:", e.target.value)
+  //   let targetID = e.target.value
+  //   // let filteredProductList = productList.filter(pi => (pi._id === e.target.value))
+  //   for (var i = 0; i < productList.length; i++) {
+  //     if (productList[i]._id === targetID) {
+  //       // console.log("get Index", i)
+  //       productList.splice(i, 1);
+  //       // console.log("Finished Delete ProductList", productList)
+  //     }
+  //   }
 
-    let TP = 0
-    setProductList(productList)
+  //   let TP = 0
+  //   setProductList(productList)
 
-    productList.map(pt => {
-      TP += pt.totalP
-    })
-    setTotalPriceProducts(TP)
-  }
+  //   productList.map(pt => {
+  //     TP += pt.totalP
+  //   })
+  //   setTotalPriceProducts(TP)
+  // }
 
   // productList.push(p)
   // let newList = productList.map(p => {
@@ -606,15 +599,17 @@ export default function Calculation({ item: items, order, customer_price_multipl
   // SUSPECT setJsxBillList(newBillList)
   console.log("jsx:  ", jsxBillList)
 
-
-  productList.map(product => {
-    total_price_products += product.qty * (product.purchase_price * customer_price_multiply)
-    setTotalPriceProducts(total_price_products)
+  let total_price_products = 0
 
 
-    console.log("ราคาสินค้า", total_price_products)
-    console.log("ราคาสินค้า SET", totalPriceProducts)
-  })
+  // productList.map(product => {
+  //   total_price_products += product.qty * (product.purchase_price * customer_price_multiply)
+  //   setTotalPriceProducts(total_price_products)
+
+
+  //   console.log("ราคาสินค้า", total_price_products)
+  //   console.log("ราคาสินค้า SET", totalPriceProducts)
+  // })
 
 
 
@@ -660,6 +655,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
 
+  
 
 
   return (
