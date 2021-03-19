@@ -81,6 +81,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
     }
 
     // If the initialValue is changed external, sync it up with our state
+    // initialValue = null
     React.useEffect(() => {
       setValue(initialValue)
     }, [initialValue])
