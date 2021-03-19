@@ -510,10 +510,6 @@ export default function Calculation({ item: items, order, customer_price_multipl
         q.price = r.purchase_price
         q.totalperProduct = (q.price * customer_price_multiply) * q.qty
 
-
-        let item = { id: p.id, product_name: p.product_name, code: p.code, brand: p.brand, model: p.model, qty: q.qty, price: (q.price * customer_price_multiply) * q.qty }
-
-
         productList.push(p)
 
         billList.push(q)
@@ -522,6 +518,18 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
     // productList.push(p)
     setProductList(productList)
+
+    let total_price_products = 0
+
+
+    productList.map(product => {
+      total_price_products += product.qty * (product.purchase_price * customer_price_multiply)
+      setTotalPriceProducts(total_price_products)
+
+
+      console.log("ราคาสินค้า", total_price_products)
+      console.log("ราคาสินค้า SET", totalPriceProducts)
+    })
 
 
   }
@@ -599,21 +607,6 @@ export default function Calculation({ item: items, order, customer_price_multipl
   // SUSPECT setJsxBillList(newBillList)
   console.log("jsx:  ", jsxBillList)
 
-  let total_price_products = 0
-
-
-  // productList.map(product => {
-  //   total_price_products += product.qty * (product.purchase_price * customer_price_multiply)
-  //   setTotalPriceProducts(total_price_products)
-
-
-  //   console.log("ราคาสินค้า", total_price_products)
-  //   console.log("ราคาสินค้า SET", totalPriceProducts)
-  // })
-
-
-
-
   useEffect(() => {
     let productJsx = productList.map((p, i) => (
       <tr key={p._id}>
@@ -655,7 +648,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
 
-  
+
 
 
   return (
@@ -880,7 +873,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
                 placeholder=""
                 aria-label="Item name"
                 aria-describedby="basic-addon1"
-                Value={totalPriceProducts}
+                value={totalPriceProducts}
               />
             </InputGroup>
           </div>
@@ -1098,7 +1091,7 @@ export async function getServerSideProps({ query }, props) {
         customer_price_multiply: JSON.parse(1.2)
       },
     };
-  } 
+  }
   else if (query.customer === 'special') {
 
     let percent = query.customer
