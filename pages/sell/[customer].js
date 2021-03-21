@@ -19,7 +19,7 @@ import hasNewItemStock from '../../pages/stock'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { connectToDatabase } from "../../util/mongodb";
 import { ObjectID } from "mongodb";
 import { ObjectId } from 'bson';
@@ -27,19 +27,18 @@ import { ObjectId } from 'bson';
 import { useTable, usePagination } from 'react-table'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
+import SearchbarDropdown from '../../components/searchDropdown'
 
 
 
 
-export default function Calculation({ item: items, order, customer_price_multiply }) {
+export default function Calculation({ item: items, order, rate }) {
 
-  // console.log("items: ", items)
-
-  // console.log("multiply === ", customer_price_multiply)
-
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, control, watch, errors } = useForm();
 
   const { register: register2, handleSubmit: handleSubmit2, watch: watch2, errors: errors2 } = useForm();
+
+  // const [options, setOptions] = useState(items);
 
 
   const [jsxProductList, setJsxProductList] = useState([]);
@@ -59,6 +58,37 @@ export default function Calculation({ item: items, order, customer_price_multipl
   const [receive_value, setReceiveValue] = useState(0);
 
   const [skipPageReset, setSkipPageReset] = React.useState(false)
+
+
+  // Dropdown component here 
+  const defaultOptions = [];
+  items.map(p =>{
+    defaultOptions.push(`${p.product_name} ${p.model} เหลือ ${p.qty} ชิ้น`)
+  })
+
+  const [options, setOptions] = useState([]);
+
+  const onInputChange = (event) => {
+    setOptions(
+      defaultOptions.filter((option) => option.includes(event.target.value))
+    );
+  };
+
+  useEffect(() => {
+    console.log('productList===', productList)
+    
+  }, [productList]);
+
+
+  useEffect(() => {
+    let total = 0
+  
+    productList.map(p => {
+      total = total + Number(p.totalP)
+      setTotalPriceProducts(total)
+    })
+    
+  }, [productList]);
 
   const EditableCell = ({
     value: initialValue,
@@ -82,17 +112,25 @@ export default function Calculation({ item: items, order, customer_price_multipl
       updateMyData(index, id, value)
     }
 
+    const onClick = () => {
+      // console.log('working OnBlur ==', index)
+      console.log('working onclick')
+      deleteRow(index)
+    }
+
     // If the initialValue is changed external, sync it up with our state
     // initialValue = null
     React.useEffect(() => {
       setValue(initialValue)
     }, [initialValue])
 
-    // if(id === 'qty'){
+    if(id === 'qty' || id === 'totalP'){
     return <input value={value} onChange={onChange} onBlur={onBlur} />
-    // }else{
-    //   4<input value={value} />
-    // }
+    }else if(id === 'action'){
+      return <button onClick={onClick} className="no-print">ลบ</button> 
+    }else{
+      return <input value={value} />
+    }
 
   }
 
@@ -211,7 +249,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
 
 
-  const resetData = () => setData(originalData)
+
 
 
 
@@ -246,6 +284,10 @@ export default function Calculation({ item: items, order, customer_price_multipl
       {
         Header: 'ราคา',
         accessor: 'totalP'
+      },
+      {
+        Header: 'Action',
+        accessor: 'action'
       }
     ],
     []
@@ -263,8 +305,14 @@ export default function Calculation({ item: items, order, customer_price_multipl
     setProductList(old =>
 
       old.map((row, index) => {
-        if (index === rowIndex) {
-          console.log('old == ', old)
+        if (index === rowIndex && columnId === 'qty') {
+          console.log('row == ', row)
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+            ["totalP"]: value * old[rowIndex].price,
+          }
+        }else if(index === rowIndex && columnId === 'totalP'){
           return {
             ...old[rowIndex],
             [columnId]: value,
@@ -275,36 +323,25 @@ export default function Calculation({ item: items, order, customer_price_multipl
     )
   }
 
-  // const rows = [
-  //   {id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, price: 6}
-  // ]
 
-  // var rows = [
-  //   // { id: 0, title: "Task 1", complete: 20 },
-  //   // { id: 1, title: "Task 2", complete: 40 },
-  //   // { id: 2, title: "Task 3", complete: 60 }
-  // ];
+  const deleteRow = (rowIndex) => {
+    
+    // if (rowIndex > -1) { //Make sure item is present in the array, without if condition, -n indexes will be considered from the end of the array.
+      
+    //   setProductList(productList.splice(rowIndex, 1))
+    // }
 
+    console.log(productList.splice(rowIndex, 1))
 
+    
 
-  // state = { rows };
+  }
 
-  // const onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-  //   console.log("fromRow == ", fromRow)
-  //   console.log("toRow == ", toRow)
-  //   console.log("updated == ", updated)
-  //   setRows(state => {
-  //     const rows = state.rows.slice();
-  //     console.log("=== ",rows)
-  //     for (let i = fromRow; i <= toRow; i++) {
-  //       rows[i] = { ...rows[i], ...updated };
-  //     }
-  //     return { rows };
-  //   });
-  // };
 
   const addReceive = (value) => {
-    setReceiveValue(receive_value + value)
+    let receive = Number(receive_value) + Number(value)
+
+    setReceiveValue(receive)
   }
 
   const handleGridRowsUpdated = ({ fromRow, toRow, updated }) => {
@@ -456,48 +493,15 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
   }
 
-  useEffect(() => {
-    console.log('rows == ', rows)
-  }, [rows]);
 
-  useEffect(() => {
-    // SUSPECT setProductList(productList)
-    console.log('working')
-  }, [productList]);
-
-  // React.useEffect(() => {
-  //   runThisFunctionOnEveryRender();
-  // })
 
   const addItems = (data) => {
-    // console.log("เพิ่มในรายการขาย",data)
-    // let j = 1
-    // for (let i = 1; i <= productList.length; i++) {
-    //   j++
-    // }
-
-    // var start_item_id = j
-    let p = { _id: '', product_name: data.product_name, code: '', barcode: data.barcode, brand: '', model: '', qty: data.qty, purchase_price: 0, totalP: 0 }
-    // let q = { items_ID: [], totalprice_order: 0} // จริงๆอยากให้เป็น ID แต่เดีนวแก้ทีหลัง
+    // console.log('data === ',data)
+    
+    let p = { _id: '', product_name: data.product_name, code: '', barcode: data.barcode, brand: '', model: '', qty: data.qty, price: 0, totalP: 0 , action: ''}
 
     let q = { product_name: '', qty: data.qty, unit: '', price: 0, totalperProduct: 0 }
 
-
-
-
-    // var totalprice = productList.map(product =>{
-    //   totalprice += product.qty * product.purchase_price
-    // })
-    // let totalprice = 0
-    // let temp = [];
-
-
-    // console.log("ใน product list", productList)
-
-    // productList.push(p)
-    // let check_item = 
-
-    // p = productList, q = billList
     items.forEach(r => {
       if (r.product_name == p.product_name || r.barcode_id == p.barcode) {
         p.product_name = r.product_name
@@ -505,33 +509,32 @@ export default function Calculation({ item: items, order, customer_price_multipl
         p.code = r.code
         p.brand = r.brand
         p.model = r.model
-        p.purchase_price = r.purchase_price
-        p.totalP = (p.purchase_price * customer_price_multiply) * p.qty
+        p.price = r.purchase_price * rate
+        p.totalP = p.price * p.qty
 
         q.product_name = r.product_name + ' ' + r.model
-        q.price = r.purchase_price
-        q.totalperProduct = (q.price * customer_price_multiply) * q.qty
+        q.price = r.purchase_price * rate
+        q.totalperProduct = q.price * q.qty
 
         productList.push(p)
+        setProductList(productList)
 
         billList.push(q)
       }
     })
 
     // productList.push(p)
-    setProductList(productList)
+    
 
     let total_price_products = 0
 
-
-    productList.map(product => {
-      total_price_products += product.qty * (product.purchase_price * customer_price_multiply)
+    productList.map(p =>{
+      total_price_products = Number(total_price_products) + Number(p.totalP)
       setTotalPriceProducts(total_price_products)
-
-
-      console.log("ราคาสินค้า", total_price_products)
-      console.log("ราคาสินค้า SET", totalPriceProducts)
     })
+
+
+  
 
     setBillList(billList)
     setJsxBillList(newBillList)
@@ -540,57 +543,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
 
 
-  // useEffect(()=>{
-  //   setProductList(productList)
-  // },[productList])
-
-  // console.log(productList)
-
-
-  // Delete item in productList
-  // const deleteItem = (e) => {
-  //   console.log("Delete btn was clicked. _id:", e.target.value)
-  //   let targetID = e.target.value
-  //   // let filteredProductList = productList.filter(pi => (pi._id === e.target.value))
-  //   for (var i = 0; i < productList.length; i++) {
-  //     if (productList[i]._id === targetID) {
-  //       // console.log("get Index", i)
-  //       productList.splice(i, 1);
-  //       // console.log("Finished Delete ProductList", productList)
-  //     }
-  //   }
-
-  //   let TP = 0
-  //   setProductList(productList)
-
-  //   productList.map(pt => {
-  //     TP += pt.totalP
-  //   })
-  //   setTotalPriceProducts(TP)
-  // }
-
-  // productList.push(p)
-  // let newList = productList.map(p => {
-  //   // console.log("Update JSX", p)
-  //   return (
-  //     <tr key={p.id}>
-  //       {/*<td>{p.id}</td>*/}
-  //       <td>{p.product_name}</td>
-  //       <td>{p.code}</td>
-  //       <td>{p.brand}</td>
-  //       <td>{p.model}</td>
-  //       <td>{p.qty}</td>
-  //       <td>{p.totalP}</td>
-  //       <td>
-  //         <Button variant="primary" onClick={editItem}>Edit</Button>{' '}
-  //       </td>
-  //       <td>
-  //         <Button variant="danger" onClick={deleteItem} value={p._id}>Delete</Button>
-  //       </td>
-  //     </tr>
-  //   )
-
-  // })
+  
   let newList = productList
 
 
@@ -601,7 +554,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
         <td id="addressTd">{q.qty}</td>
         <td id="addressTd">{q.unit}</td>
         <td id="addressTd">{q.price}</td>
-        <td id="addressTd">{(q.price * customer_price_multiply) * q.qty}</td>
+        <td id="addressTd">{(q.price * rate) * q.qty}</td>
       </tr>
     )
   })
@@ -609,31 +562,31 @@ export default function Calculation({ item: items, order, customer_price_multipl
   // Do not setState in main function
   // SUSPECT setBillList(billList)
   // SUSPECT setJsxBillList(newBillList)
-  console.log("jsx:  ", jsxBillList)
+  // console.log("jsx:  ", jsxBillList)
 
-  useEffect(() => {
-    let productJsx = productList.map((p, i) => (
-      <tr key={p._id}>
-        {/*<td>{p._id}</td>*/}
-        <td>{p.product_name}</td>
-        <td>{p.code}</td>
-        <td>{p.brand}</td>
-        <td>{p.model}</td>
-        <td>
-          <input type="number" value={p.qty} onChange={e => handleChange(e.target.value, i)} />
-          {p.qty}
-        </td>
-        <td>{p.totalP}</td>
-        <td>
-          <Button variant="primary" value={p._id}>Edit</Button>
-        </td>
-        <td>
-          <Button variant="danger" value={p._id}>Delete</Button>
-        </td>
-      </tr>
-    ))
-    setJsxProductList(productJsx)
-  }, [productList])
+  // useEffect(() => {
+  //   let productJsx = productList.map((p, i) => (
+  //     <tr key={p._id}>
+  //       {/*<td>{p._id}</td>*/}
+  //       <td>{p.product_name}</td>
+  //       <td>{p.code}</td>
+  //       <td>{p.brand}</td>
+  //       <td>{p.model}</td>
+  //       <td>
+  //         <input type="number" value={p.qty} onChange={e => handleChange(e.target.value, i)} />
+  //         {p.qty}
+  //       </td>
+  //       <td>{p.totalP}</td>
+  //       <td>
+  //         <Button variant="primary" value={p._id}>Edit</Button>
+  //       </td>
+  //       <td>
+  //         <Button variant="danger" value={p._id}>Delete</Button>
+  //       </td>
+  //     </tr>
+  //   ))
+  //   setJsxProductList(productJsx)
+  // }, [productList])
 
 
   const handleChange = (v, i) => {
@@ -642,15 +595,6 @@ export default function Calculation({ item: items, order, customer_price_multipl
     setProductList(productList)
   }
 
-
-  const [show, setShow] = useState(false);
-  const [show2, setShow2] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const handleClose2 = () => setShow2(false);
-  const handleShow2 = () => setShow2(true);
 
 
 
@@ -678,30 +622,27 @@ export default function Calculation({ item: items, order, customer_price_multipl
 
 
           <div>
-            {/* <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Order ID</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              name="order_id" ref={register}
-              placeholder="New Order"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-            />
-          </InputGroup> */}
+            
 
-            {/*<InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">ID</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              placeholder="ID"
-              name="id"
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              ref={register}
-            />
-  </InputGroup>*/}
+            
+
+            {/* <SearchbarDropdown 
+                // name="product_name" ref={register}
+                options={options} 
+                onInputChange={onInputChange} /> */}
+
+            {/* <Controller 
+              render={(props) => (
+                <SearchbarDropdown 
+                options={options} 
+                onInputChange={onInputChange}
+                ref={register} />
+              )}
+              // defaultValue={data.brand}
+              control={control} 
+              name="product_name" 
+              // ref={register} 
+            /> */}
 
             <InputGroup className="mb-3" className="no-print">
               <InputGroup.Prepend>
@@ -780,7 +721,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
               </Table> */}
             </div>
 
-            <div>
+            <div className="no-print">
               <Table
                 columns={columns}
                 data={productList}
@@ -789,21 +730,6 @@ export default function Calculation({ item: items, order, customer_price_multipl
               />
             </div>
 
-            <div className="no-print">
-              <InputGroup className="mb-3">
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  readOnly
-                  name="total" ref={register2}
-                  placeholder=""
-                  aria-label="Item name"
-                  aria-describedby="basic-addon1"
-                  value={totalPriceProducts}
-                />
-              </InputGroup>
-            </div>
 
 
             <div className="no-print">
@@ -888,7 +814,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
         <main>
           <br />
 
-          <div className="full-height-div">
+          <div className="print-only hide">
             <table id="orderTable">
               <thead>
                 <tr>
@@ -929,9 +855,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
       <form onSubmit={handleSubmit2(onSubmitTest)}>
 
         <div className="no-print">
-          <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="ค่าถอดประกอบ" />
-          </Form.Group>
+          
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -972,6 +896,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
               placeholder=""
               type="number"
               onChange={e => setReceiveValue(e.target.value)}
+              value={receive_value}
             />
           </InputGroup>
 
@@ -1014,9 +939,7 @@ export default function Calculation({ item: items, order, customer_price_multipl
           />
         </InputGroup> */}
 
-          <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="ปริ้นใบเสร็จ" />
-          </Form.Group>
+          
 
 
         </div>
@@ -1092,7 +1015,7 @@ export async function getServerSideProps({ query }, props) {
       props: {
         item: JSON.parse(JSON.stringify(item)),
         order: JSON.parse(JSON.stringify(order)),
-        customer_price_multiply: JSON.parse(1.2)
+        rate: JSON.parse(1.2)
       },
     };
   }
@@ -1106,7 +1029,7 @@ export async function getServerSideProps({ query }, props) {
       props: {
         item: JSON.parse(JSON.stringify(item)),
         order: JSON.parse(JSON.stringify(order)),
-        customer_price_multiply: JSON.parse(Number(1 + Number(percent.split("x")[1]) / 100))
+        rate: JSON.parse(Number(1 + Number(percent.split("x")[1]) / 100))
       },
     };
   }
