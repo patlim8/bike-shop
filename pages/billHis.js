@@ -18,6 +18,10 @@ import { connectToDatabase } from "../util/mongodb";
 // import bill from './api/bill';
 
 
+function NewlineText(props) {
+  const text = props.text;
+  return text.split('\n').map(str => <p>{str}</p>);
+}
 
 
 export default function TotalSale( { bill: bills } ) {
@@ -73,8 +77,11 @@ export default function TotalSale( { bill: bills } ) {
                     list.product_name+'\n'
                     console.log(list.product_name)
                     })}</td> */}
-                <td>{data.productList.map(list => list.product_name+'\n'+'จำนวน: '+list.qty+
-                        '\n'+'ราคา: '+list.price+'\n'+'รวม: '+list.totalperProduct+'\n')}</td>
+                <td>{data.productList.map(list => <NewlineText text={list.product_name+' จำนวน: '+list.qty
+                        +' ราคา: '+list.price+' รวม: '+list.totalPriceProducts+'\n'} /> )}</td>
+                
+                {/* <td>{data.productList.map(list => list.product_name+'\n'+'จำนวน: '+list.qty+
+                        '\n'+'ราคา: '+list.price+'\n'+'รวม: '+list.totalPriceProducts)}</td> */}
                 {/* <td>{data.productList[0].product_name+'\n'+'จำนวน: '+data.productList[0].qty+ */}
                         {/* '\n'+'ราคา: '+data.productList[0].price+'\n'+'รวม: '+data.productList[0].totalperProduct}</td> */}
                 <td>{data.total}</td>

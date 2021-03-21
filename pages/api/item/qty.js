@@ -11,7 +11,7 @@ export default async (req, res) => {
     let data = req.body
     // let data1 = req.body
 
-    var ObjectID = require('mongodb').ObjectID;
+    // var ObjectID = require('mongodb').ObjectID;
     let { product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
     console.log("req body ใน PUT ========", { data })
     console.log("object id ==== ", ObjectId(data._id))

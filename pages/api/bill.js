@@ -37,7 +37,7 @@ export default async (req, res) => {
             // _id: ObjectId(_id)
             // _id: _id
             orderID: orderID,
-            date: Date(date), 
+            date: date, 
             productList: productList, 
             total: total, 
             receive: receive, 
@@ -51,7 +51,7 @@ export default async (req, res) => {
             } else {
               console.log('Newly inserted ID', result.insertedId)
               res.json({
-                message: 'Item added',
+                message: 'New bill updated',
                 _id: result.insertedId
               });
             }

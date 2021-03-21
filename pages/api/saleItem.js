@@ -21,7 +21,7 @@ export default async (req, res) => {
     // let title = data.title;
     // let metacritic = data.metacritic;
 
-    let {  product_name, brand, model, qty, date } = data;
+    let {  product_name, qty, date } = data;
     
     
     // จะได้ objectID ถ้าใช้โค้ดล่าง อันบนเหมือนจะสร้าง _id เองได้
@@ -36,8 +36,8 @@ export default async (req, res) => {
         //   _id: _id
           product_name: product_name,
           // code: code,
-          brand: brand,
-          model: model
+          // brand: brand,
+          // model: model
           // avi_model: avi_model,
           // purchase_price: purchase_price,
           // qty: qty,

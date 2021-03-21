@@ -25,10 +25,21 @@ import { ObjectID } from "mongodb";
 import { ObjectId } from 'bson';
 
 import { useTable, usePagination } from 'react-table'
+import Select from 'react-select';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import SearchbarDropdown from '../../components/searchDropdown'
+import { format } from 'date-fns'
 
+function makeid(length) {
+  var result           = '';
+  var characters       = '0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 
 
 
@@ -48,36 +59,58 @@ export default function Calculation({ item: items, order, rate }) {
 
   const [rows, setRows] = useState([{ id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, price: 6 }]);
 
-  const [jsxBillList, setJsxBillList] = useState(<tr></tr>);
-  const [billList, setBillList] = useState([]);
+  
+ 
   // const newOrder = [];
   // const [newOrder, setNewOrder] = useState([]);
-  const [newOrder2, setNewOrder2] = useState([]);
   const [totalPriceProducts, setTotalPriceProducts] = useState(0);
   const [fixing_price, setFixingPrice] = useState(0);
   const [receive_value, setReceiveValue] = useState(0);
 
   const [skipPageReset, setSkipPageReset] = React.useState(false)
 
+  const [billList, setBillList] = useState([]);
+
 
   // Dropdown component here 
-  const defaultOptions = [];
-  items.map(p =>{
-    defaultOptions.push(`${p.product_name} ${p.model} เหลือ ${p.qty} ชิ้น`)
-  })
+  // const defaultOptions = [];
+  // items.map(p =>{
+  //   defaultOptions.push(`${p.product_name} ${p.model} เหลือ ${p.qty} ชิ้น`)
+  // })
 
-  const [options, setOptions] = useState([]);
+  // const [options, setOptions] = useState([]);
 
-  const onInputChange = (event) => {
-    setOptions(
-      defaultOptions.filter((option) => option.includes(event.target.value))
-    );
-  };
+  // const onInputChange = (event) => {
+  //   setOptions(
+  //     defaultOptions.filter((option) => option.includes(event.target.value))
+  //   );
+  // };
 
-  useEffect(() => {
-    console.log('productList===', productList)
+  // useEffect(() => {
+  //   console.log('productList===', productList)
     
-  }, [productList]);
+  // }, [productList]);
+  const [name, setName] = useState('')
+  const [model, setModel] = useState('')
+
+  const onChangeNameModel = (value) => {
+    // console.log(value.value)
+    setName(value.value[0])
+    setModel(value.value[1])
+    // console.log(name)
+    // console.log(model)
+  }
+
+  const itemsOptions = items.map(p =>(
+    {
+        label: p.product_name+' '+p.model+' เหลือ '+p.qty, 
+        // value: ''+brand._id,
+      value: [p.product_name, p.model],
+
+    } 
+    )
+    
+)
 
 
   useEffect(() => {
@@ -87,8 +120,27 @@ export default function Calculation({ item: items, order, rate }) {
       total = total + Number(p.totalP)
       setTotalPriceProducts(total)
     })
+
+    // productList.forEach(p => {
+    //   let q = { product_name: '', qty: 0, unit: '', price: 0, totalperProduct: 0 }
+
+    //   q.product_name = p.display_name
+    //   q.qty = p.qty
+    //   q.price = p.price
+    //   q.totalPriceProducts = p.totalP
+
+    //   setBillList(billList.push(q))
+
+    // })
+    // console.log('billList  ', billList)
+    // console.log('productList  ', productList)
     
   }, [productList]);
+
+
+  
+
+
 
   const EditableCell = ({
     value: initialValue,
@@ -112,11 +164,15 @@ export default function Calculation({ item: items, order, rate }) {
       updateMyData(index, id, value)
     }
 
-    const onClick = () => {
-      // console.log('working OnBlur ==', index)
-      console.log('working onclick')
-      deleteRow(index)
-    }
+    // const onClick = (id) => {
+    //   // console.log('working OnBlur ==', index)
+    //   console.log("onClick value == ",id)
+    //   // console.log('working onclick')
+    //   // console.log("index",index)
+    //   // console.log(productList)
+
+    //   deleteRow(id)
+    // }
 
     // If the initialValue is changed external, sync it up with our state
     // initialValue = null
@@ -127,9 +183,9 @@ export default function Calculation({ item: items, order, rate }) {
     if(id === 'qty' || id === 'totalP'){
     return <input value={value} onChange={onChange} onBlur={onBlur} />
     }else if(id === 'action'){
-      return <button onClick={onClick} className="no-print">ลบ</button> 
+      return <button type="button" onClick={() => deleteRow(value)} className="no-print">ลบ</button> 
     }else{
-      return <input value={value} />
+      return <td>{value}</td>
     }
 
   }
@@ -210,82 +266,29 @@ export default function Calculation({ item: items, order, rate }) {
   }
 
 
-
-  // const columns = [
-  //   { key: "id", name: "ID" },
-  //   { key: "product_name", name: "ชื่อสินค้า" },
-  //   { key: "code", name: "รหัสสินค้า" },
-  //   { key: "brand", name: "ยี่ห้อสินค้า" },
-  //   { key: "model", name: "รุ่นสินค้า" },
-  //   { key: "qty", name: "จำนวน" },
-  //   { key: "price", name: "ราคา" }
-
-  //   //<th>id</th>
-  //   // <th>ชื่อสินค้า</th>
-  //   // <th>รหัสสินค้า</th>
-  //   // <th>ยี่ห้อสินค้า</th>
-  //   // <th>รุ่นสินค้า</th>
-  //   // <th>จำนวน</th>
-  //   // <th>ราคา</th>
-  // ];
-
-  // const columns = [
-  //   { key: "id", name: "ID" },
-  //   { key: "product_name", name: "ชื่อสินค้า" },
-  //   { key: "code", name: "รหัสสินค้า" },
-  //   { key: "brand", name: "ยี่ห้อสินค้า" },
-  //   { key: "model", name: "รุ่นสินค้า" },
-  //   { key: "qty", name: "จำนวน", editable: true },
-  //   { key: "price", name: "ราคา", editable: true }
-  // ];
-  // React.useEffect(() => {
-  //   setSkipPageReset(false)
-  //   console.log(data)
-  // }, [data])
-
-  // Let's add a data resetter/randomizer to help
-  // illustrate that flow...
-
-
-
-
-
-
-
-
-
-
   const columns = React.useMemo(
     () => [
       {
 
         Header: 'ชื่อสินค้า',
-        accessor: 'product_name'
+        accessor: 'display_name'
 
       },
-      {
-        Header: 'รหัสสินค้า',
-        accessor: 'code'
-
-
-      },
-      {
-        Header: 'ยี่ห้อ',
-        accessor: 'brand'
-      },
-      {
-        Header: 'รุ่นสินค้า',
-        accessor: 'model'
-      },
+      
       {
         Header: 'จำนวน',
         accessor: 'qty'
       },
       {
         Header: 'ราคา',
+        accessor: 'price'
+      },
+      {
+        Header: 'จำนวนเงิน',
         accessor: 'totalP'
       },
       {
+        className: 'no-print',
         Header: 'Action',
         accessor: 'action'
       }
@@ -324,14 +327,25 @@ export default function Calculation({ item: items, order, rate }) {
   }
 
 
-  const deleteRow = (rowIndex) => {
+  const deleteRow = (id) => {
     
     // if (rowIndex > -1) { //Make sure item is present in the array, without if condition, -n indexes will be considered from the end of the array.
-      
-    setProductList(productList.splice(rowIndex, 1))
+    console.log("productList == ",productList)
+    console.log("id == ", id)
+    // let rowIndex = productList.findIndex((p) => p._id === id)
+    let newArray = productList.filter(p => p.action !== id)
+    // productList.filter(p => console.log(p.action))
+
+    // console.log("row ",rowIndex)
+    
+    // delete productList[rowIndex]
+
+    setProductList(newArray)
+
+    // setProductList(delete productList[rowIndex])
     // }
 
-    console.log(productList)
+    // console.log(productList)
 
     
 
@@ -344,18 +358,7 @@ export default function Calculation({ item: items, order, rate }) {
     setReceiveValue(receive)
   }
 
-  const handleGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    console.log('handleGridRowsUpdated')
-    let row = rows.slice();
-
-    for (let i = fromRow; i <= toRow; i++) {
-      let rowToUpdate = row[i];
-      let updatedRow = React.addons.update(rowToUpdate, { $merge: updated });
-      row[i] = updatedRow;
-    }
-
-    setRows({ row });
-  }
+  
 
 
 
@@ -371,103 +374,139 @@ export default function Calculation({ item: items, order, rate }) {
 
     // s.totalprice_order = parseInt(q.totalprice_order)
     // s.fix_service_price += parseFloat( data.fix_service_price)
-    s.date = new Date()
+
+    let date = new Date()
+    s['date'] = format(date, 'yyyy-LL-dd')
+    
+
+    console.log("s == ",s)
 
 
 
-    console.log("s.price order === ", s.totalprice_order)
-    console.log("s.total === ", s.total)
-    console.log("s.change === ", s.change)
-
-    console.log("data ", data)
-    console.log("product Lists ", productList)
+    
 
 
 
-    productList.map(data => {
-      console.log(data)
+    // productList.map(data => {
+    //   console.log(data)
 
-      fetch('/api/item/qty',
-        {
-          method: 'PUT',
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          alert("Response from server " + data.message)
-        });
-    })
+    //   fetch('/api/item/qty',
+    //     {
+    //       method: 'PUT',
+    //       mode: 'cors', // no-cors, *cors, same-origin
+    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //       credentials: 'same-origin', // include, *same-origin, omit
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //         // 'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //       redirect: 'follow', // manual, *follow, error
+    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log(data);
+    //       alert("Response from server " + data.message)
+    //     });
+    // })
 
 
 
 
-    fetch('/api/order2/sale',
-      {
-        method: 'POST',
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-          'Content-Type': 'application/json'
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(s) // body data type must match "Content-Type" header
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        alert("Response from server " + data.message)
-      });
+    // fetch('/api/order2/sale',
+    //   {
+    //     method: 'POST',
+    //     mode: 'cors', // no-cors, *cors, same-origin
+    //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //     credentials: 'same-origin', // include, *same-origin, omit
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //       // 'Content-Type': 'application/x-www-form-urlencoded',
+    //     },
+    //     redirect: 'follow', // manual, *follow, error
+    //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //     body: JSON.stringify(s) // body data type must match "Content-Type" header
+    //   })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     alert("Response from server " + data.message)
+    //   });
 
 
-    productList.map(data => {
-      console.log(data)
+    // productList.map(data => {
+    //   console.log(data)
 
-      fetch('/api/saleItem',
-        {
-          method: 'POST',
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          alert("Response from server " + data.message)
-        });
-    })
+    //   fetch('/api/saleItem',
+    //     {
+    //       method: 'POST',
+    //       mode: 'cors', // no-cors, *cors, same-origin
+    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //       credentials: 'same-origin', // include, *same-origin, omit
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //         // 'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //       redirect: 'follow', // manual, *follow, error
+    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log(data);
+    //       alert("Response from server " + data.message)
+    //     });
+    // })
   }
 
-  const onSubmitTest = (data) => {
-    // productList << array of Json
-    // let data = productList[0]
 
-    console.log("data ===", data)
-    console.log("bill ===", billList)
-    let bill = { orderID: '', date: '', productList: billList, total: data.total, receive: data.receive, change: data.change }
+  const onSubmitTest = (data) => {
+   
+
+    // console.log(makeid(16))
+
+    // let billList = []
+
+    // productList.map(p => {
+    //   billList.push(q)
+    //   console.log("billList", billList)
+    // })
+    
+
+    // productList.map((p, i) =>{
+    //   billList[i]['product_name'] = p.display_name
+    //   billList[i]['qty'] = p.qty
+    //   billList[i]['price'] = p.price
+    //   billList[i]['totalperProduct'] = p.totalP
+
+    //   console.log('i == ', i)
+    //   console.log("billList", billList)
+    // })
+
+    productList.forEach(p => {
+      let q = { product_name: '', qty: 0, unit: '', price: 0, totalperProduct: 0 }
+
+      q.product_name = p.display_name
+      q.qty = p.qty
+      q.price = p.price
+      q.totalPriceProducts = p.totalP
+
+      setBillList(billList.push(q))
+
+    })
+    console.log('billList  ', billList)
+    // console.log('productList  ', productList)
+
+    
+
+
+    let bill = { orderID: makeid(16), date: '', productList: billList, total: data.total, receive: data.receive, change: data.change }
 
     // s.totalprice_order = parseInt(q.totalprice_order)
     // s.fix_service_price += parseFloat( data.fix_service_price)
-    bill.date = new Date()
+    let date = new Date()
+    bill['date'] = format(date, 'yyyy-LL-dd')
 
 
     fetch('/api/bill',
@@ -498,31 +537,34 @@ export default function Calculation({ item: items, order, rate }) {
   const addItems = (data) => {
     // console.log('data === ',data)
     
-    let p = { _id: '', product_name: data.product_name, code: '', barcode: data.barcode, brand: '', model: '', qty: data.qty, price: 0, totalP: 0 , action: ''}
+    let p = { _id: '', display_name: '', product_name: name, code: '', barcode: data.barcode, brand: '', model: model, qty: data.qty, price: 0, totalP: 0 , action: ''}
 
-    let q = { product_name: '', qty: data.qty, unit: '', price: 0, totalperProduct: 0 }
+    // let q = { product_name: '', qty: data.qty, unit: '', price: 0, totalperProduct: 0 }
 
     items.forEach(r => {
-      if (r.product_name == p.product_name || r.barcode_id == p.barcode) {
-        p.product_name = r.product_name
+      if (r.product_name === p.product_name && r.model === p.model || r.barcode_id == p.barcode) {
+        p.display_name = r.product_name+' '+r.model
+        // p.product_name = r.product_name 
         p._id = r._id
         p.code = r.code
         p.brand = r.brand
-        p.model = r.model
+        // p.model = r.model
         p.price = r.purchase_price * rate
         p.totalP = p.price * p.qty
 
-        q.product_name = r.product_name + ' ' + r.model
-        q.price = r.purchase_price * rate
-        q.totalperProduct = q.price * q.qty
+        // q.product_name = r.product_name + ' ' + r.model
+        // q.price = r.purchase_price * rate
+        // q.totalperProduct = q.price * q.qty
+
+        p.action = r._id
 
         productList.push(p)
-        setProductList(productList)
-
-        billList.push(q)
+        
+        // billList.push(q)
       }
     })
-
+    
+    setProductList(productList)
     // productList.push(p)
     
 
@@ -536,64 +578,15 @@ export default function Calculation({ item: items, order, rate }) {
 
   
 
-    setBillList(billList)
-    setJsxBillList(newBillList)
+    // setBillList(billList)
+    // setJsxBillList(newBillList)
     
   }
 
 
 
   
-  let newList = productList
-
-
-  let newBillList = billList.map(q => {
-    return (
-      <tr key={q.id}>
-        <td>{q.product_name}</td>
-        <td id="addressTd">{q.qty}</td>
-        <td id="addressTd">{q.unit}</td>
-        <td id="addressTd">{q.price}</td>
-        <td id="addressTd">{(q.price * rate) * q.qty}</td>
-      </tr>
-    )
-  })
-
-  // Do not setState in main function
-  // SUSPECT setBillList(billList)
-  // SUSPECT setJsxBillList(newBillList)
-  // console.log("jsx:  ", jsxBillList)
-
-  // useEffect(() => {
-  //   let productJsx = productList.map((p, i) => (
-  //     <tr key={p._id}>
-  //       {/*<td>{p._id}</td>*/}
-  //       <td>{p.product_name}</td>
-  //       <td>{p.code}</td>
-  //       <td>{p.brand}</td>
-  //       <td>{p.model}</td>
-  //       <td>
-  //         <input type="number" value={p.qty} onChange={e => handleChange(e.target.value, i)} />
-  //         {p.qty}
-  //       </td>
-  //       <td>{p.totalP}</td>
-  //       <td>
-  //         <Button variant="primary" value={p._id}>Edit</Button>
-  //       </td>
-  //       <td>
-  //         <Button variant="danger" value={p._id}>Delete</Button>
-  //       </td>
-  //     </tr>
-  //   ))
-  //   setJsxProductList(productJsx)
-  // }, [productList])
-
-
-  const handleChange = (v, i) => {
-    console.log('handleChange', productList[i].qty, v)
-    productList[i].qty = v
-    setProductList(productList)
-  }
+ 
 
 
 
@@ -626,23 +619,19 @@ export default function Calculation({ item: items, order, rate }) {
 
             
 
-            {/* <SearchbarDropdown 
-                name="product_name" ref={register}
-                options={options} 
-                onInputChange={onInputChange} /> */}
+            
 
-            <Controller 
-              render={(props) => (
-                <SearchbarDropdown 
-                options={options} 
-                onInputChange={onInputChange}
-                ref={register} />
-              )}
-              // defaultValue={data.brand}
-              control={control} 
-              name="product_name" 
-              // ref={register} 
-            />
+              ชื่อสินค้า: <Select
+                // defaultValue={array}
+                onChange={(e) => onChangeNameModel(e)}
+                // onBlur={onBlur}
+                // value={value}  // this is what you need to do
+                // isMulti
+                // options={groupedOptions}
+                options={itemsOptions}
+                // options={option}
+                // ref={register}
+              />
 
             {/* <InputGroup className="mb-3" className="no-print">
               <InputGroup.Prepend>
@@ -700,62 +689,17 @@ export default function Calculation({ item: items, order, rate }) {
 
 
 
-            <div className="no-print">
-              {/* <Table striped bordered hover size="sm">
-                <thead>
-                  <tr>
-                    
-                    <th>ชื่อสินค้า</th>
-                    <th>รหัสสินค้า</th>
-                    <th>ยี่ห้อสินค้า</th>
-                    <th>รุ่นสินค้า</th>
-                    <th>จำนวน</th>
-                    <th>ราคา</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {jsxProductList}
-                </tbody>
-              </Table> */}
-            </div>
 
-            <div className="no-print">
-              <Table
-                columns={columns}
-                data={productList}
-                updateMyData={updateMyData}
-                skipPageReset={skipPageReset}
-              />
-            </div>
-
-
-
-            <div className="no-print">
-              <InputGroup className="mb-3">
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  readOnly
-                  name="total" ref={register2}
-                  placeholder=""
-                  aria-label="Item name"
-                  aria-describedby="basic-addon1"
-                  value={totalPriceProducts}
-                />
-              </InputGroup>
-            </div>
+            
 
 
           </div>
 
         </main>
 
-        <main className="print-only hide">
-          <h1 className="text-center">ใบส่งของชั่วคราว</h1>
-          <div>
+        <main >
+          <h1 className="text-center" className="print-only hide">ใบส่งของชั่วคราว</h1>
+          <div className="print-only hide">
             <table>
               <tbody id="addressTbody">
                 <tr>
@@ -790,9 +734,36 @@ export default function Calculation({ item: items, order, rate }) {
             </table>
           </div>
 
+          <div>
+              <Table
+                columns={columns}
+                data={productList}
+                updateMyData={updateMyData}
+                skipPageReset={skipPageReset}
+              />
+            </div>
 
 
-          <div className="no-print">
+
+            <div className="no-print">
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  readOnly
+                  name="total" ref={register2}
+                  placeholder=""
+                  aria-label="Item name"
+                  aria-describedby="basic-addon1"
+                  value={totalPriceProducts}
+                />
+              </InputGroup>
+            </div>
+
+
+
+          {/* <div className="no-print">
             <InputGroup className="mb-3">
               <InputGroup.Prepend>
                 <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
@@ -806,7 +777,7 @@ export default function Calculation({ item: items, order, rate }) {
                 value={totalPriceProducts}
               />
             </InputGroup>
-          </div>
+          </div> */}
 
 
           {/* </div> */}
@@ -816,7 +787,7 @@ export default function Calculation({ item: items, order, rate }) {
 
           <div className="print-only hide">
             <table id="orderTable">
-              <thead>
+              {/* <thead>
                 <tr>
 
                   <th>ชื่อสินค้า</th>
@@ -830,7 +801,7 @@ export default function Calculation({ item: items, order, rate }) {
               </thead>
               <tbody>
                 {jsxBillList}
-              </tbody>
+              </tbody> */}
               <tfoot>
                 <tr>
                   <td id="addressTd" colSpan="4">รวมทั้งสิ้น</td>
@@ -859,7 +830,7 @@ export default function Calculation({ item: items, order, rate }) {
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">ราคา</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">ค่าซ่อม</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               name="fix_service_price" ref={register2}
