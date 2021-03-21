@@ -328,10 +328,10 @@ export default function Calculation({ item: items, order, rate }) {
     
     // if (rowIndex > -1) { //Make sure item is present in the array, without if condition, -n indexes will be considered from the end of the array.
       
-    //   setProductList(productList.splice(rowIndex, 1))
+    setProductList(productList.splice(rowIndex, 1))
     // }
 
-    console.log(productList.splice(rowIndex, 1))
+    console.log(productList)
 
     
 
@@ -627,11 +627,11 @@ export default function Calculation({ item: items, order, rate }) {
             
 
             {/* <SearchbarDropdown 
-                // name="product_name" ref={register}
+                name="product_name" ref={register}
                 options={options} 
                 onInputChange={onInputChange} /> */}
 
-            {/* <Controller 
+            <Controller 
               render={(props) => (
                 <SearchbarDropdown 
                 options={options} 
@@ -642,9 +642,9 @@ export default function Calculation({ item: items, order, rate }) {
               control={control} 
               name="product_name" 
               // ref={register} 
-            /> */}
+            />
 
-            <InputGroup className="mb-3" className="no-print">
+            {/* <InputGroup className="mb-3" className="no-print">
               <InputGroup.Prepend>
                 <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
               </InputGroup.Prepend>
@@ -654,7 +654,7 @@ export default function Calculation({ item: items, order, rate }) {
                 aria-label="Item name"
                 aria-describedby="basic-addon1"
               />
-            </InputGroup>
+            </InputGroup> */}
 
             <InputGroup className="mb-3" className="no-print">
               <InputGroup.Prepend>
