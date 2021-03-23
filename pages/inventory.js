@@ -310,7 +310,7 @@ export default function Inventory({ item: items, brand: brands, model: models })
 
       <div class="button">
         <Button variant="primary" href="/additem/new" size="lg">เพิ่มสินค้า</Button>{' '}
-        <Button variant="secondary" size="lg">สแกนบาร์โค้ด</Button>{' '}
+        {/* <Button variant="secondary" size="lg">สแกนบาร์โค้ด</Button>{' '} */}
       </div>
 
     </div>

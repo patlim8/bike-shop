@@ -67,8 +67,8 @@ export default async (req, res) => {
       // let data1 = req.body
 
       let { product_name, code, brand, model, avi_model, purchase_price, qty, minStock, barcode_id, date } = data;
-      console.log("req body ใน PUT ========", { data })
-      console.log("object id ==== ", ObjectId(data._id))
+      // console.log("req body ใน PUT ========", { data })
+      // console.log("object id ==== ", ObjectId(data._id))
       let _id = ObjectId(data._id)
       delete data._id
       // not sure, _id is in data, let {_id, xxxx} = data
@@ -90,7 +90,7 @@ export default async (req, res) => {
               qty: Number(qty),
               minStock: Number(minStock),
               barcode_id: barcode_id,
-              date: Date(date)
+              date: date
             }
           },
           (err, result) => {

@@ -71,6 +71,8 @@ export default function Calculation({ item: items, order, rate }) {
 
   const [billList, setBillList] = useState([]);
 
+  const [orderNo, setOrderNo] = useState(makeid(16))
+
 
   // Dropdown component here 
   // const defaultOptions = [];
@@ -94,8 +96,10 @@ export default function Calculation({ item: items, order, rate }) {
   const [model, setModel] = useState('')
 
   const onChangeNameModel = (value) => {
+    // console.log("value==",value)
     // console.log(value.value)
     setName(value.value[0])
+    // console.log("name", name)
     setModel(value.value[1])
     // console.log(name)
     // console.log(model)
@@ -120,6 +124,8 @@ export default function Calculation({ item: items, order, rate }) {
       total = total + Number(p.totalP)
       setTotalPriceProducts(total)
     })
+
+    console.log("productList==", productList)
 
     // productList.forEach(p => {
     //   let q = { product_name: '', qty: 0, unit: '', price: 0, totalperProduct: 0 }
@@ -381,83 +387,123 @@ export default function Calculation({ item: items, order, rate }) {
 
     console.log("s == ",s)
 
+    productList.forEach(p => {
+      let q = { product_name: '', qty: 0, unit: '', price: 0, totalperProduct: 0 }
 
+      q.product_name = p.display_name
+      q.qty = p.qty
+      q.price = p.price
+      q.totalPriceProducts = p.totalP
+
+      setBillList(billList.push(q))
+
+    })
+    console.log('billList  ', billList)
+    // console.log('productList  ', productList)
 
     
 
 
+    let bill = { orderID: orderNo, date: '', productList: billList, total: data.total, receive: data.receive, change: data.change }
 
-    // productList.map(data => {
-    //   console.log(data)
-
-    //   fetch('/api/item/qty',
-    //     {
-    //       method: 'PUT',
-    //       mode: 'cors', // no-cors, *cors, same-origin
-    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //       credentials: 'same-origin', // include, *same-origin, omit
-    //       headers: {
-    //         'Content-Type': 'application/json'
-    //         // 'Content-Type': 'application/x-www-form-urlencoded',
-    //       },
-    //       redirect: 'follow', // manual, *follow, error
-    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       console.log(data);
-    //       alert("Response from server " + data.message)
-    //     });
-    // })
+    // s.totalprice_order = parseInt(q.totalprice_order)
+    // s.fix_service_price += parseFloat( data.fix_service_price)
+    // let date = new Date()
+    bill['date'] = format(date, 'yyyy-LL-dd')
 
 
+    fetch('/api/bill',
+      {
+        method: 'POST',
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(bill) // body data type must match "Content-Type" header
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert("Response from server " + data.message)
+      });
 
 
-    // fetch('/api/order2/sale',
-    //   {
-    //     method: 'POST',
-    //     mode: 'cors', // no-cors, *cors, same-origin
-    //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //     credentials: 'same-origin', // include, *same-origin, omit
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //       // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     redirect: 'follow', // manual, *follow, error
-    //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //     body: JSON.stringify(s) // body data type must match "Content-Type" header
-    //   })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     alert("Response from server " + data.message)
-    //   });
+    productList.map(data => {
+      console.log(data)
+
+      fetch('/api/item/qty',
+        {
+          method: 'PUT',
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
+    })
 
 
-    // productList.map(data => {
-    //   console.log(data)
 
-    //   fetch('/api/saleItem',
-    //     {
-    //       method: 'POST',
-    //       mode: 'cors', // no-cors, *cors, same-origin
-    //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //       credentials: 'same-origin', // include, *same-origin, omit
-    //       headers: {
-    //         'Content-Type': 'application/json'
-    //         // 'Content-Type': 'application/x-www-form-urlencoded',
-    //       },
-    //       redirect: 'follow', // manual, *follow, error
-    //       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //       body: JSON.stringify(data) // body data type must match "Content-Type" header
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       console.log(data);
-    //       alert("Response from server " + data.message)
-    //     });
-    // })
+
+    fetch('/api/order2/sale',
+      {
+        method: 'POST',
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(s) // body data type must match "Content-Type" header
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert("Response from server " + data.message)
+      });
+
+
+    productList.map(data => {
+      console.log(data)
+
+      fetch('/api/saleItem',
+        {
+          method: 'POST',
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          alert("Response from server " + data.message)
+        });
+    })
   }
 
 
@@ -536,13 +582,20 @@ export default function Calculation({ item: items, order, rate }) {
 
   const addItems = (data) => {
     // console.log('data === ',data)
-    
-    let p = { _id: '', display_name: '', product_name: name, code: '', barcode: data.barcode, brand: '', model: model, qty: data.qty, price: 0, totalP: 0 , action: ''}
+    console.log("data ", data)
 
+    console.log("items ", items)
+    
+
+    let p = { _id: '', display_name: '', product_name: name, code: '', barcode: data.barcode, brand: '', model: model, qty: data.qty, price: 0, totalP: 0 , action: ''}
     // let q = { product_name: '', qty: data.qty, unit: '', price: 0, totalperProduct: 0 }
 
-    items.forEach(r => {
-      if (r.product_name === p.product_name && r.model === p.model || r.barcode_id == p.barcode) {
+    items.map(r => {
+      // console.log("product name r == ",r.product_name, r.model)
+
+      if (r.product_name === p.product_name && r.model === p.model) {
+        console.log("condition 1")
+        // console.log("productname == ",p.product_name, p.model)
         p.display_name = r.product_name+' '+r.model
         // p.product_name = r.product_name 
         p._id = r._id
@@ -559,8 +612,28 @@ export default function Calculation({ item: items, order, rate }) {
         p.action = r._id
 
         productList.push(p)
+        // console.log("productList ", productList)
         
         // billList.push(q)
+      }else if(r.barcode_id == p.barcode){
+        console.log("condition 2")
+
+        p.display_name = r.product_name+' '+r.model
+        // p.product_name = r.product_name 
+        p._id = r._id
+        p.code = r.code
+        p.brand = r.brand
+        // p.model = r.model
+        p.price = r.purchase_price * rate
+        p.totalP = p.price * p.qty
+
+        // q.product_name = r.product_name + ' ' + r.model
+        // q.price = r.purchase_price * rate
+        // q.totalperProduct = q.price * q.qty
+
+        p.action = r._id
+
+        productList.push(p)
       }
     })
     
@@ -614,7 +687,7 @@ export default function Calculation({ item: items, order, rate }) {
 
 
 
-          <div>
+          <div className="no-print">
             
 
             
@@ -645,7 +718,7 @@ export default function Calculation({ item: items, order, rate }) {
               />
             </InputGroup> */}
 
-            <InputGroup className="mb-3" className="no-print">
+            {/* <InputGroup className="mb-3" className="no-print">
               <InputGroup.Prepend>
                 <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
               </InputGroup.Prepend>
@@ -655,7 +728,7 @@ export default function Calculation({ item: items, order, rate }) {
                 aria-label="Item name"
                 aria-describedby="basic-addon1"
               />
-            </InputGroup>
+            </InputGroup> */}
 
             {/* <BrandList brand={brand} />
           <ModelList model={model} /> */}
@@ -704,7 +777,7 @@ export default function Calculation({ item: items, order, rate }) {
               <tbody id="addressTbody">
                 <tr>
                   <td id="addressTd">ชื่อลูกค้า&emsp;&emsp;ร้านเทพประทานพร</td>
-                  <td id="addressTd">Order No.&emsp;&emsp;&ensp;3602</td>
+                  <td id="addressTd">Order No.&emsp;&emsp;&ensp;{orderNo}</td>
                 </tr>
                 <tr>
                   <td id="addressTd"></td>
@@ -823,7 +896,7 @@ export default function Calculation({ item: items, order, rate }) {
 
       </form>
 
-      <form onSubmit={handleSubmit2(onSubmitTest)}>
+      <form onSubmit={handleSubmit2(onSubmitToDatabase)}>
 
         <div className="no-print">
           
@@ -917,7 +990,7 @@ export default function Calculation({ item: items, order, rate }) {
 
         <div className="no-print">
           <ButtonGroup>
-            <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '}
+            {/* <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '} */}
             {/* <Button href="/payment" type="submit">จ่าย</Button>{' '} */}
             <button>จ่าย</button>{' '}
 

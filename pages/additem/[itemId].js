@@ -127,15 +127,15 @@ const modelListOptions = models.filter(m => m.brand === filter.id).map(model => 
     // in this case, use dummyData
     const dummyData = {
       // _id: tempID,
-      product_name: 'น้ำมันเครื่อง',
+      product_name: '',
       avi_model: [],
-      code: 'DW001',
-      brand: 'ptt',
-      model: '5w40',
-      barcode_id: '865406549874981987',
-      purchase_price: 100,
-      qty: 10,
-      minStock: 4,
+      code: '',
+      brand: '',
+      model: '',
+      barcode_id: '',
+      purchase_price: 0,
+      qty: 0,
+      minStock: 0,
       date: ""
     }
 
