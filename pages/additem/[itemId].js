@@ -6,24 +6,17 @@ import ButtonBar from '../../components/buttonBar';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Container from 'react-bootstrap/Container'
-// import BrandList from '../../../components/brandList';
-// import ModelList from '../../../components/modelList'
-// import AvailableList from '../../../components/availableList'
 
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { connectToDatabase } from "../../util/mongodb"
 import { ObjectId } from 'bson';
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
-import { colourOptions, groupStyles, groupBadgeStyles, animatedComponents, options, brandOptions } from '../../pages/data';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import React, { useState } from 'react';
 import hasNewItem from '../../pages/needItem'
 import hasNewItemStock from '../../pages/stock'
-import BrandList from '../../components/brandList';
-import ModelList from '../../components/modelList';
 
 import { format } from 'date-fns'
 // import _uniqueId from 'lodash/uniqueId';
@@ -317,16 +310,6 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
     // console.log(data)
 
   }
-
-
-  const formatGroupLabel = data => (
-    <div style={groupStyles}>
-      <span>{data.label}</span>
-      <span style={groupBadgeStyles}>{data.options.length}</span>
-    </div>
-  );
-
-
 
   console.log(brandOptions)
 
