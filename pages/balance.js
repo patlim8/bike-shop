@@ -6,9 +6,6 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
-//import BrandList from '../components/brandList';
-//import ModelList from '../components/modelList'
-//import AvailableList from '../components/availableList'
 import Table from 'react-bootstrap/Table'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';

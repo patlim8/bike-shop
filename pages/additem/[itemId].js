@@ -625,7 +625,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
           <Button variant="secondary" size="lg">สแกนบาร์โค้ด</Button>&emsp;
           <Button variant="danger" type="submit" id="del_item" size="lg">ลบสินค้า</Button>&emsp;
 
-          {data._id === undefined ? <Button type="submit" id="add_item" size="lg">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item">อัพเดต</Button>}&emsp;
+          {data._id === undefined ? <Button type="submit" id="add_item" size="lg">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item" size="lg">อัพเดต</Button>}&emsp;
 
 
           <Button variant="dark" size="lg">กลับ</Button>&emsp;

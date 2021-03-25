@@ -7,10 +7,6 @@ import FormControl from 'react-bootstrap/FormControl';
 import Modal from 'react-bootstrap/Modal';
 import Container from 'react-bootstrap/Container'
 
-
-import BrandList from '../components/brandList';
-import ModelList from '../components/modelList'
-import AvailableList from '../components/availableList';
 import SearchBar from '../components/search_name'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
@@ -27,7 +23,6 @@ import hasNewItemStock from '../pages/stock'
 
 import React, { useState, useEffect } from 'react';
 import ModelMgntList from '../components/modelMgntList'
-import BrandOP from './data'
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 // import Dropdown from 'react-bootstrap/Dropdown';
 
