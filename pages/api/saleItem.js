@@ -17,33 +17,19 @@ export default async (req, res) => {
   } else if (req.method === 'POST') {
     console.log("ADDING ", req.body)
     let data = req.body;
-    // data = JSON.parse(data);
-    // let title = data.title;
-    // let metacritic = data.metacritic;
+
 
     let {  product_name, qty, date } = data;
     
     
     // จะได้ objectID ถ้าใช้โค้ดล่าง อันบนเหมือนจะสร้าง _id เองได้
-    // let { product_name, code, brand, model, avi_model, purchase_price, qty, limit_qty, barcode_id, date } = data;
     // console.log(data._id)
     const { db } = await connectToDatabase();
     let doc = await db
       .collection('sale item')
       .updateOne(
         {
-          // _id: ObjectId(_id)
-        //   _id: _id
           product_name: product_name,
-          // code: code,
-          // brand: brand,
-          // model: model
-          // avi_model: avi_model,
-          // purchase_price: purchase_price,
-          // qty: qty,
-          // limit_qty: limit_qty,
-          // barcode_id: barcode_id,
-          // date: date
         },
         { $inc: {qty: + Number(data.qty)} },
         { upsert: true }
@@ -68,14 +54,7 @@ export default async (req, res) => {
         },
       )
     res.json({message: 'Update data', data: data });
-  } else if (req.method === 'DD') {
-    let data = req.body
-    let { product_name } = data;
-    const { db } = await connectToDatabase();
-    let doc = await db
-      .collection('item')
-      .deleteOne({ product_name: product_name})
-    res.json({ delete: true, message: 'Delete data', data: {} })
+  
   }else if (req.method === 'DELETE') {
     console.log("DD ", req.body)
     let data = req.body;

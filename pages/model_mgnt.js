@@ -5,6 +5,7 @@ import ButtonBar from '../components/buttonBar';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Modal from 'react-bootstrap/Modal';
+import Container from 'react-bootstrap/Container'
 
 
 import BrandList from '../components/brandList';
@@ -221,18 +222,11 @@ export default function modelManager({ brand: brands, model: models }) {
         let temp_avi = filter.avi_model
 
         if (value != null) {
-            // console.log("model ====", value.value)
             setFilter({ brand: temp_brand, id: temp_id, model: value.value, avi_model: temp_avi })
             console.log(filter)
         } else {
             setFilter({ brand: temp_brand, id: temp_id, model: '', avi_model: temp_avi })
         }
-
-    // useEffect(() => {
-    //     setItemModelList(brands)
-    //     setItemModelListDefault(brands)
-    // }, []);
-
     }
 
     const handleAviModelChange = (e) => {
@@ -243,12 +237,8 @@ export default function modelManager({ brand: brands, model: models }) {
         let temp_model = filter.model
 
         if (e != null) {
-
-
-            // console.log("model ====", value.value)
             setFilter({ brand: temp_brand, id: temp_id, model: temp_model, avi_model: e })
             console.log(filter)
-            // console.log(filter.avi_model.value)
             filter.avi_model.map(avi_model => console.log(avi_model.value))
         }
     }
@@ -260,163 +250,128 @@ export default function modelManager({ brand: brands, model: models }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
+            <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock} />
 
 
-
-            <main className={styles.main}>
-                <h1 className={styles.title}>
-                    จัดการรุ่นสินค้า
+            <Container>
+                <main className={styles.main}>
+                    <h1 className={styles.title}>
+                        จัดการรุ่นสินค้า
         </h1>
 
-                <br></br><br></br>
+                    <br></br><br></br>
 
-                <div>
+                    <div>
 
-                    ยี่ห้อสินค้า: <Select
-
-                        // options={brandOP}
-                        // defaultValue={inputBrand}
-                        options={brandOptions}
-                        isClearable={true}
-                        // isMulti
-                        // className="basic-multi-select"
-                        // classNamePrefix="select"
-                        // formatGroupLabel={formatGroupLabel}
-                        onChange={handleBrandChange}
-                    />
+                        ยี่ห้อสินค้า: <Select
+                            options={brandOptions}
+                            isClearable={true}
+                            onChange={handleBrandChange}
+                        />
 
                     รุ่นสินค้า: <Select
-                        options={modelListOptions}
-                        onChange={handleModelChange}
-                        isClearable={true}
-                    // value={inputModel}
-                    // options={modelOP}
-                    // formatGroupLabel={formatGroupLabel}
-                    />
+                            options={modelListOptions}
+                            onChange={handleModelChange}
+                            isClearable={true}
+                        />
 
           รุ่นที่ใช้ได้: <Controller
-                        name="avi_model"
-                        type="select"
-                        control={control}
+                            name="avi_model"
+                            type="select"
+                            control={control}
 
 
-                        render={({ onChange, onBlur, value }) => (
-                            <Select
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                value={value}  // this is what you need to do
-                                isMulti
-                                // options={groupedOptions}
-                                options={modelOptions}
-                                // options={option}
-                                ref={register}
-                            />
-                        )}
-                    />
+                            render={({ onChange, onBlur, value }) => (
+                                <Select
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}  // this is what you need to do
+                                    isMulti
+                                    options={modelOptions}
+                                    ref={register}
+                                />
+                            )}
+                        />
 
-                </div>
+                    </div>
 
+                    <br />
 
+                    <div>
+                        <ModelMgntList modelMgntList={Modelss} filter={filter} />
+                    </div>
 
+                </main>
 
                 <div>
-                    <ModelMgntList modelMgntList={Modelss} filter={filter} />
-                    {/*<Table striped bordered hover size="sm">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>รุ่นสินค้า</th>
-                                <th>ยี่ห้อสินค้า</th>
-                                <th>รุ่นที่ใช้ได้</th>
-                            </tr>
-                        </thead>
-                        {/* <tbody>
-                            {brand.map((p) => (model.map((i) => (i.brand == p._id) ?
-                                <tr>
-                                    <td>{i._id}</td>
-                                    <td>{i.name}</td>
-                                    <td>{p.name}</td>
-                                </tr>
-                                : null)
-                            ))}
-                        </tbody>
-                            </Table>*/}
-                </div>
+                    <Button variant="primary" onClick={handleShow2} size="lg">
+                        เพิ่มยี่ห้อสินค้า
+        </Button>&emsp;
 
-            </main>
+                    <Modal show={show2} onHide={handleClose2}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>เพิ่มยี่ห้อสินค้า</Modal.Title>
+                        </Modal.Header>
 
-            <div class="button">
-                <Button variant="primary" onClick={handleShow2}>
-                    เพิ่มยี่ห้อสินค้า
+                        <form onSubmit={handleSubmit(onSubmit_brand)}>
+                            <Modal.Body>
+
+
+
+                                ยี่ห้อที่ต้องการเพิ่ม: <input type="text" name="name" ref={register}>
+                                </input>
+
+
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleClose2}>
+                                    ปิด
+                </Button>
+                                <Button type="submit" variant="primary" onClick={handleClose2}>
+                                    บันทึก
+                </Button>
+                            </Modal.Footer>
+                        </form>
+                    </Modal>
+
+
+
+                    <Button variant="primary" onClick={handleShow} size="lg">
+                        เพิ่มรุ่นสินค้า
         </Button>
 
-                <Modal show={show2} onHide={handleClose2}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>เพิ่มยี่ห้อสินค้า</Modal.Title>
-                    </Modal.Header>
+                    <Modal show={show} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>เพิ่มรุ่นสินค้า</Modal.Title>
+                        </Modal.Header>
 
-                    <form onSubmit={handleSubmit(onSubmit_brand)}>
-                        <Modal.Body>
-
-
-
-                            ยี่ห้อที่ต้องการเพิ่ม: <input type="text" name="name" ref={register}>
-                            </input>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Modal.Body>
 
 
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose2}>
-                                ปิด
-                </Button>
-                            <Button type="submit" variant="primary" onClick={handleClose2}>
-                                บันทึก
-                </Button>
-                        </Modal.Footer>
-                    </form>
-                </Modal>
+                                ยี่ห้อสินค้า: <select name="brand" ref={register}>
+                                    {brands.map(data => (<option value={data._id}>{data.name}</option>))}
 
-
-
-                <Button variant="primary" onClick={handleShow}>
-                    เพิ่มรุ่นสินค้า
-        </Button>
-
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>เพิ่มรุ่นสินค้า</Modal.Title>
-                    </Modal.Header>
-
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Modal.Body>
-
-
-                            ยี่ห้อสินค้า: <select name="brand" ref={register}>
-                                {brands.map(data => (<option value={data._id}>{data.name}</option>))}
-
-                            </select><br></br>
+                                </select><br></br>
 
                 รุ่นที่ต้องการเพิ่ม: <input type="text" name="model" ref={register}>
-                            </input>
+                                </input>
 
 
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
-                                ปิด
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleClose}>
+                                    ปิด
                 </Button>
-                            <Button type="submit" variant="primary" onClick={handleClose}>
-                                บันทึก
+                                <Button type="submit" variant="primary" onClick={handleClose}>
+                                    บันทึก
                 </Button>
-                        </Modal.Footer>
-                    </form>
-                </Modal>
-
-
-                {/* <Button variant="primary" href="/" size="lg">เพิ่มรุ่นสินค้า</Button>{' '} */}
-                <Button variant="primary" href="/" size="lg">อัพเดตรุ่นที่ใช้ได้</Button>{' '}
-            </div>
+                            </Modal.Footer>
+                        </form>
+                    </Modal>
+                </div>
+                <br /><br /><br />
+            </Container>
         </div>
     )
 }

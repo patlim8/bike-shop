@@ -1,19 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
-import Link from 'next/link'
 
-
-
-// {brand.map((p) => (model.map((i) => (i.brand == p._id) ?
-//   <tr>
-//       <td>{i._id}</td>
-//       <td>{i.name}</td>
-//       <td>{p.name}</td>
-//   </tr>
-//   : null)
-// ))}
-
-//  const ItemList = ({ ItemList = [], filter = '', modelFilter = '' }) => {
 const ModelMgntList = ({ modelMgntList, filter='' }) => {
   let filteredList = modelMgntList
   console.log("ModelMgntList", modelMgntList)

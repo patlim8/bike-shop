@@ -4,16 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../components/buttonBar';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
-import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import hasNewItem from '../pages/needItem'
 import hasNewItemStock from '../pages/stock'
 
 function CustomToggle({ children, eventKey }) {
   const decoratedOnClick = useAccordionToggle(eventKey, () =>
-    // setPercent(eventKey.target.value),
     console.log("working ")
   );
 
@@ -34,14 +32,6 @@ function CustomToggle({ children, eventKey }) {
 export default function Sale() {
 
   const [percent, setPercent] = useState('')
-
-  // const updateInput = (e) => {
-
-  //     // percent = e.target.value
-  //     // setPercent(percent)
-  //     console.log("percent ===", e.target.value)
-
-  // }
   
   const handleKeyPress = (e) => {
     if (e.charCode === 13) {
@@ -69,12 +59,6 @@ export default function Sale() {
         <h1 className={styles.title}>
           Sale
         </h1>
-
-        {/* <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p> */}
-
         <div className={styles.grid}>
           <Card>
             <Card.Body>
@@ -91,19 +75,6 @@ export default function Sale() {
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  {/*<Form>
-                    <Form.Group>
-                      <Form.Label>คิดราคาเพิ่ม(%)</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="ใส่ % ที่ต้องการคิด"
-                        onChange={e => setPercent(e.target.value)}
-                        onKeyPress={handleKeyPress} />
-                    </Form.Group>
-                    <Button variant="primary" type="submit" href={`/sell/specialx${percent}`}>
-                      ตกลง
-                  </Button>
-                  </Form>*/}
                   <Button variant="secondary" value={10} onClick={Percent}>ราคาปลีก</Button>&nbsp;&nbsp;&nbsp;&nbsp;
                   <Button variant="secondary" value={20} onClick={Percent}>ราคาส่ง</Button><br /><br />
                   <Button variant="primary" href={`/sell/specialx${percent}`}>ตกลง</Button>

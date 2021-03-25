@@ -2,13 +2,10 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../components/buttonBar';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Table from 'react-bootstrap/Table'
-import Button from 'react-bootstrap/Button';
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-// import Dropdown from 'react-bootstrap/Dropdown';
 import { connectToDatabase } from "../util/mongodb";
 import hasNewItem from '../pages/needItem'
+import { Container } from 'react-bootstrap';
 
 export var hasNewItemStock = (check) =>{
   if(check != []){
@@ -26,7 +23,7 @@ export default function Stock({ item: items }) {
   let check = []
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>สินค้าค้างสต็อค</title>
         <link rel="icon" href="/favicon.ico" />
@@ -34,7 +31,7 @@ export default function Stock({ item: items }) {
 
       <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock} />
 
-
+<Container>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
@@ -63,7 +60,7 @@ export default function Stock({ item: items }) {
                   check.push(data)
                
                 return(
-              <tr>
+              <tr key={data.id}>
                 <td>{data.id}</td>
                 <td>{data.product_name}</td>
                 <td>{data.brand}</td>
@@ -78,11 +75,11 @@ export default function Stock({ item: items }) {
         </div>
       </main>
 
-      <ButtonGroup>
+      {/*<div>
         <Button variant="success">Save as Excel</Button>{' '}
         <Button variant="secondary">Print</Button>{' '}
-      </ButtonGroup>
-
+      </div>*/}
+      </Container>
     </div>
   )
 }

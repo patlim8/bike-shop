@@ -6,29 +6,21 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../../components/buttonBar';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import Modal from 'react-bootstrap/Modal';
 
-
-import BrandList from '../../components/brandList';
-import ModelList from '../../components/modelList'
 import hasNewItem from '../../pages/needItem'
 import hasNewItemStock from '../../pages/stock'
 
 
 // import Table from 'react-bootstrap/Table'
+import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form'
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useForm, Controller } from "react-hook-form";
 import { connectToDatabase } from "../../util/mongodb";
 import { ObjectID } from "mongodb";
-import { ObjectId } from 'bson';
 
 import { useTable, usePagination } from 'react-table'
 import Select from 'react-select';
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-// import Dropdown from 'react-bootstrap/Dropdown';
-import SearchbarDropdown from '../../components/searchDropdown'
+
 import { format } from 'date-fns'
 
 function makeid(length) {
@@ -60,7 +52,7 @@ export default function Calculation({ item: items, order, rate }) {
   const [rows, setRows] = useState([{ id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, price: 6 }]);
 
   
- 
+  
   // const newOrder = [];
   // const [newOrder, setNewOrder] = useState([]);
   const [totalPriceProducts, setTotalPriceProducts] = useState(0);
@@ -74,24 +66,6 @@ export default function Calculation({ item: items, order, rate }) {
   const [orderNo, setOrderNo] = useState(makeid(16))
 
 
-  // Dropdown component here 
-  // const defaultOptions = [];
-  // items.map(p =>{
-  //   defaultOptions.push(`${p.product_name} ${p.model} เหลือ ${p.qty} ชิ้น`)
-  // })
-
-  // const [options, setOptions] = useState([]);
-
-  // const onInputChange = (event) => {
-  //   setOptions(
-  //     defaultOptions.filter((option) => option.includes(event.target.value))
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   console.log('productList===', productList)
-    
-  // }, [productList]);
   const [name, setName] = useState('')
   const [model, setModel] = useState('')
 
@@ -127,24 +101,11 @@ export default function Calculation({ item: items, order, rate }) {
 
     console.log("productList==", productList)
 
-    // productList.forEach(p => {
-    //   let q = { product_name: '', qty: 0, unit: '', price: 0, totalperProduct: 0 }
-
-    //   q.product_name = p.display_name
-    //   q.qty = p.qty
-    //   q.price = p.price
-    //   q.totalPriceProducts = p.totalP
-
-    //   setBillList(billList.push(q))
-
-    // })
-    // console.log('billList  ', billList)
-    // console.log('productList  ', productList)
     
   }, [productList]);
 
 
-  
+
 
 
 
@@ -169,16 +130,6 @@ export default function Calculation({ item: items, order, rate }) {
       console.log('working OnBlur ==', index)
       updateMyData(index, id, value)
     }
-
-    // const onClick = (id) => {
-    //   // console.log('working OnBlur ==', index)
-    //   console.log("onClick value == ",id)
-    //   // console.log('working onclick')
-    //   // console.log("index",index)
-    //   // console.log(productList)
-
-    //   deleteRow(id)
-    // }
 
     // If the initialValue is changed external, sync it up with our state
     // initialValue = null
@@ -280,7 +231,7 @@ export default function Calculation({ item: items, order, rate }) {
         accessor: 'display_name'
 
       },
-      
+
       {
         Header: 'จำนวน',
         accessor: 'qty'
@@ -353,7 +304,7 @@ export default function Calculation({ item: items, order, rate }) {
 
     // console.log(productList)
 
-    
+
 
   }
 
@@ -364,7 +315,7 @@ export default function Calculation({ item: items, order, rate }) {
     setReceiveValue(receive)
   }
 
-  
+
 
 
 
@@ -380,7 +331,7 @@ export default function Calculation({ item: items, order, rate }) {
 
     // s.totalprice_order = parseInt(q.totalprice_order)
     // s.fix_service_price += parseFloat( data.fix_service_price)
-
+    
     let date = new Date()
     s['date'] = format(date, 'yyyy-LL-dd')
     
@@ -400,8 +351,8 @@ export default function Calculation({ item: items, order, rate }) {
     })
     console.log('billList  ', billList)
     // console.log('productList  ', productList)
-
     
+
 
 
     let bill = { orderID: orderNo, date: '', productList: billList, total: data.total, receive: data.receive, change: data.change }
@@ -508,28 +459,7 @@ export default function Calculation({ item: items, order, rate }) {
 
 
   const onSubmitTest = (data) => {
-   
-
-    // console.log(makeid(16))
-
-    // let billList = []
-
-    // productList.map(p => {
-    //   billList.push(q)
-    //   console.log("billList", billList)
-    // })
     
-
-    // productList.map((p, i) =>{
-    //   billList[i]['product_name'] = p.display_name
-    //   billList[i]['qty'] = p.qty
-    //   billList[i]['price'] = p.price
-    //   billList[i]['totalperProduct'] = p.totalP
-
-    //   console.log('i == ', i)
-    //   console.log("billList", billList)
-    // })
-
     productList.forEach(p => {
       let q = { product_name: '', qty: 0, unit: '', price: 0, totalperProduct: 0 }
 
@@ -585,7 +515,7 @@ export default function Calculation({ item: items, order, rate }) {
     console.log("data ", data)
 
     console.log("items ", items)
-    
+
 
     let p = { _id: '', display_name: '', product_name: name, code: '', barcode: data.barcode, brand: '', model: model, qty: data.qty, price: 0, totalP: 0 , action: ''}
     // let q = { product_name: '', qty: data.qty, unit: '', price: 0, totalperProduct: 0 }
@@ -614,32 +544,24 @@ export default function Calculation({ item: items, order, rate }) {
         productList.push(p)
         // console.log("productList ", productList)
         
-        // billList.push(q)
       }else if(r.barcode_id == p.barcode){
         console.log("condition 2")
 
         p.display_name = r.product_name+' '+r.model
-        // p.product_name = r.product_name 
         p._id = r._id
         p.code = r.code
         p.brand = r.brand
-        // p.model = r.model
         p.price = r.purchase_price * rate
         p.totalP = p.price * p.qty
-
-        // q.product_name = r.product_name + ' ' + r.model
-        // q.price = r.purchase_price * rate
-        // q.totalperProduct = q.price * q.qty
 
         p.action = r._id
 
         productList.push(p)
       }
     })
-    
+
     setProductList(productList)
-    // productList.push(p)
-    
+
 
     let total_price_products = 0
 
@@ -648,28 +570,14 @@ export default function Calculation({ item: items, order, rate }) {
       setTotalPriceProducts(total_price_products)
     })
 
-
-  
-
-    // setBillList(billList)
-    // setJsxBillList(newBillList)
-    
   }
-
-
-
-  
- 
-
-
-
 
 
   return (
     <div>
       <form onSubmit={handleSubmit(addItems)}>
         <Head>
-          <title>Calculation</title>
+          <title>Sale Calculation</title>
           <link rel="icon" href="/favicon.ico" />
 
           <link rel="stylesheet" href="/styles.css" />
@@ -679,142 +587,104 @@ export default function Calculation({ item: items, order, rate }) {
         <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock} />
 
 
-
-        <main className={styles.main}>
-          <h1 className={styles.title} className="no-print">
-            Sale - Calculation
+        <Container>
+          <main className={styles.main}>
+            <h1 className="no-print title">
+              Sale - Calculation
         </h1>
 
+        <br /><br />
+
+        <div className="no-print">
+          
+        ชื่อสินค้า: <Select
+          // defaultValue={array}
+          onChange={(e) => onChangeNameModel(e)}
+          // onBlur={onBlur}
+          // value={value}  // this is what you need to do
+          // isMulti
+          // options={groupedOptions}
+          options={itemsOptions}
+          // options={option}
+          // ref={register}
+        /><br />
+
+              <InputGroup className="mb-3" className="no-print">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  name="barcode" ref={register}
+                  placeholder="Barcode ID"
+                  aria-label="Item name"
+                  aria-describedby="basic-addon1"
+                />
+              </InputGroup><br />
+
+              <InputGroup className="mb-3" className="no-print">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  name="qty" ref={register}
+                  placeholder="จำนวน"
+                  type="number"
+                  defaultValue="1"
+                />
+              </InputGroup><br />
 
 
-          <div className="no-print">
-            
+              <Button className="no-print" variant="outline-secondary" type="submit">เพิ่มในรายการขาย</Button>
 
-            
+            </div>
 
-            
+          </main>
 
-              ชื่อสินค้า: <Select
-                // defaultValue={array}
-                onChange={(e) => onChangeNameModel(e)}
-                // onBlur={onBlur}
-                // value={value}  // this is what you need to do
-                // isMulti
-                // options={groupedOptions}
-                options={itemsOptions}
-                // options={option}
-                // ref={register}
-              />
-
-            {/* <InputGroup className="mb-3" className="no-print">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="basic-addon1">ชื่อสินค้า</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                name="product_name" ref={register}
-                placeholder="ชื่อสินค้า"
-                aria-label="Item name"
-                aria-describedby="basic-addon1"
-              />
-            </InputGroup> */}
-
-            {/* <InputGroup className="mb-3" className="no-print">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                name="code" ref={register}
-                placeholder="รหัสสินค้า"
-                aria-label="Item name"
-                aria-describedby="basic-addon1"
-              />
-            </InputGroup> */}
-
-            {/* <BrandList brand={brand} />
-          <ModelList model={model} /> */}
-
-            <InputGroup className="mb-3" className="no-print">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="basic-addon1">Barcode ID</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                name="barcode" ref={register}
-                placeholder="Barcode ID"
-                aria-label="Item name"
-                aria-describedby="basic-addon1"
-              />
-            </InputGroup>
-
-            <InputGroup className="mb-3" className="no-print">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="basic-addon1">จำนวน</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                name="qty" ref={register}
-                placeholder="จำนวน"
-                type="number"
-                defaultValue="1"
-              />
-            </InputGroup>
-
-
-            <button className="no-print">เพิ่มในรายการขาย</button>
-
-
-
-
-            
-
-
-          </div>
-
-        </main>
-
-        <main >
+          <main >
           <h1 className="text-center" className="print-only hide">ใบส่งของชั่วคราว</h1>
           <div className="print-only hide">
-            <table>
-              <tbody id="addressTbody">
-                <tr>
-                  <td id="addressTd">ชื่อลูกค้า&emsp;&emsp;ร้านเทพประทานพร</td>
-                  <td id="addressTd">Order No.&emsp;&emsp;&ensp;{orderNo}</td>
-                </tr>
-                <tr>
-                  <td id="addressTd"></td>
-                  <td id="addressTd">เลขที่ PO</td>
-                </tr>
-                <tr>
-                  <td id="addressTd">Tel.&emsp;&emsp;&emsp;&emsp;038531680, 08115113855</td>
-                  <td id="addressTd">Credit&emsp;&emsp;&emsp;&emsp;&ensp;0 วัน</td>
-                </tr>
-                <tr>
-                  <td id="addressTd">การจัดส่ง</td>
-                  <td id="addressTd">พนักงานขาย&emsp;&emsp;Admin</td>
-                </tr>
-                <tr>
-                  <td id="addressTd">ที่อยู่จัดส่ง</td>
-                  <td id="addressTd">ชำระโดย&emsp;&emsp;เงินสด</td>
-                </tr>
-                <tr>
-                  <td id="addressTd">&emsp;&emsp;</td>
-                  <td id="addressTd">&emsp;&emsp;</td>
-                </tr>
-                <tr>
-                  <td id="addressTd">หมายเหตุ</td>
-                  <td id="addressTd"></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div>
-              <Table
-                columns={columns}
-                data={productList}
-                updateMyData={updateMyData}
-                skipPageReset={skipPageReset}
-              />
+              <table>
+                <tbody id="addressTbody">
+                  <tr>
+                    <td id="addressTd">ชื่อลูกค้า&emsp;&emsp;ร้านเทพประทานพร</td>
+                    <td id="addressTd">Order No.&emsp;&emsp;&ensp;{orderNo}</td>
+                  </tr>
+                  <tr>
+                    <td id="addressTd"></td>
+                    <td id="addressTd">เลขที่ PO</td>
+                  </tr>
+                  <tr>
+                    <td id="addressTd">Tel.&emsp;&emsp;&emsp;&emsp;038531680, 08115113855</td>
+                    <td id="addressTd">Credit&emsp;&emsp;&emsp;&emsp;&ensp;0 วัน</td>
+                  </tr>
+                  <tr>
+                    <td id="addressTd">การจัดส่ง</td>
+                    <td id="addressTd">พนักงานขาย&emsp;&emsp;Admin</td>
+                  </tr>
+                  <tr>
+                    <td id="addressTd">ที่อยู่จัดส่ง</td>
+                    <td id="addressTd">ชำระโดย&emsp;&emsp;เงินสด</td>
+                  </tr>
+                  <tr>
+                    <td id="addressTd">&emsp;&emsp;</td>
+                    <td id="addressTd">&emsp;&emsp;</td>
+                  </tr>
+                  <tr>
+                    <td id="addressTd">หมายเหตุ</td>
+                    <td id="addressTd"></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+
+            <div>
+            <Table
+              columns={columns}
+              data={productList}
+              updateMyData={updateMyData}
+              skipPageReset={skipPageReset}
+            />
+          </div>
 
 
 
@@ -836,7 +706,7 @@ export default function Calculation({ item: items, order, rate }) {
 
 
 
-          {/* <div className="no-print">
+{/* <div className="no-print">
             <InputGroup className="mb-3">
               <InputGroup.Prepend>
                 <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
@@ -853,14 +723,14 @@ export default function Calculation({ item: items, order, rate }) {
           </div> */}
 
 
-          {/* </div> */}
-        </main>
-        <main>
-          <br />
+            {/* </div> */}
+          </main>
+          <main>
+            <br />
 
-          <div className="print-only hide">
-            <table id="orderTable">
-              {/* <thead>
+            <div className="print-only hide">
+              <table id="orderTable">
+                {/* <thead>
                 <tr>
 
                   <th>ชื่อสินค้า</th>
@@ -875,35 +745,38 @@ export default function Calculation({ item: items, order, rate }) {
               <tbody>
                 {jsxBillList}
               </tbody> */}
-              <tfoot>
-                <tr>
-                  <td id="addressTd" colSpan="4">รวมทั้งสิ้น</td>
-                  <td id="addressTd">{totalPriceProducts + Number(fixing_price)}</td>
-                </tr>
-                <tr>
-                  <td id="addressTd" colSpan="4">จำนวนที่ได้รับ</td>
-                  <td id="addressTd">{receive_value}</td>
-                </tr>
-                <tr>
-                  <td id="addressTd" colSpan="4">เงินทอน</td>
-                  <td id="addressTd">{receive_value - (totalPriceProducts + Number(fixing_price))}</td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+                <tfoot>
+                  <tr>
+                    <td id="addressTd" colSpan="4">รวมทั้งสิ้น</td>
+                    <td id="addressTd">{totalPriceProducts + Number(fixing_price)}</td>
+                  </tr>
+                  <tr>
+                    <td id="addressTd" colSpan="4">จำนวนที่ได้รับ</td>
+                    <td id="addressTd">{receive_value}</td>
+                  </tr>
+                  <tr>
+                    <td id="addressTd" colSpan="4">เงินทอน</td>
+                    <td id="addressTd">{receive_value - (totalPriceProducts + Number(fixing_price))}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
 
-        </main>
-
+          </main>
+          </Container>
+        
       </form>
+
+      <Container>
 
       <form onSubmit={handleSubmit2(onSubmitToDatabase)}>
 
         <div className="no-print">
-          
+
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">ค่าซ่อม</InputGroup.Text>
+            <InputGroup.Text id="basic-addon1">ค่าซ่อม</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               name="fix_service_price" ref={register2}
@@ -954,7 +827,7 @@ export default function Calculation({ item: items, order, rate }) {
           <button type="button" className="no-print" onClick={e => addReceive(5)}>5</button>
           <button type="button" className="no-print" onClick={e => addReceive(1)}>1</button>
 
-
+          <br /><br />
 
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
@@ -983,28 +856,31 @@ export default function Calculation({ item: items, order, rate }) {
           />
         </InputGroup> */}
 
-          
+
 
 
         </div>
 
+        <br /><br /><br />
+
         <div className="no-print">
-          <ButtonGroup>
+          
             {/* <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '} */}
             {/* <Button href="/payment" type="submit">จ่าย</Button>{' '} */}
-            <button>จ่าย</button>{' '}
+            <Button size="lg" variant="dark" type="submit">จ่าย</Button>&emsp;
 
-            <Button onClick={() => window.print()}>บิล</Button>{' '}
+            <Button size="lg" onClick={() => window.print()}>บิล</Button>&emsp;
 
 
 
-            <Button variant="danger" href="/sale">ย้อนกลับ</Button>{' '}
-          </ButtonGroup>
-
+            <Button variant="danger" href="/sale" size="lg">ย้อนกลับ</Button>&emsp;
+            <br /><br /><br />
+          
           {/* <button>จ่าย</button> */}
         </div>
 
       </form>
+      </Container>
     </div>
   )
 }

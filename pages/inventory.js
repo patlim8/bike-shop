@@ -8,8 +8,6 @@ import { connectToDatabase } from "../util/mongodb";
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
 import { Container, Row, Col } from 'react-bootstrap'
-import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../pages/data';
-import Link from 'next/link'
 import hasNewItem from '../pages/needItem'
 import hasNewItemStock from '../pages/stock'
 
@@ -105,7 +103,7 @@ export default function Inventory({ item: items, brand: brands, model: models })
 
   const modelListOptions = models.filter(m => m.brand === filter.id).map(model => (
     { label: '' + model.name, value: '' + model.name }
-    
+
   )
   )
 
@@ -120,9 +118,6 @@ export default function Inventory({ item: items, brand: brands, model: models })
   const updateInput = async (input) => {
     console.log("input ==== ", input)
     if (input != items.brand) {
-      // if(input == String && input.value != undefined ){
-
-
       const filtered = itemListDefault.filter(item => {
         return item.product_name.toLowerCase().includes(input.toLowerCase())
       })
@@ -131,15 +126,6 @@ export default function Inventory({ item: items, brand: brands, model: models })
       setItemList(filtered);
       console.log("itemList ==== ", itemList)
     }
-    // else{
-    //   const filtered = brandListDefault.filter(item => {
-    //     return item.brand.toLowerCase().includes(input.value.toLowerCase())
-    //    })
-    //    console.log("222222222222222222")
-    //    setInput(input);
-    //    setBrandList(filtered);
-    // }
-
   }
 
 
@@ -225,10 +211,7 @@ export default function Inventory({ item: items, brand: brands, model: models })
       obj.map(avi => newFilter.avi_model.push(avi.value))
 
       setFilter(newFilter)
-      // console.log('filter', filter)
-      // console.log(filter.avi_model.value)
-      // newFilter.avi_model.map(avi_model => console.log('--->', avi_model.value))
-    }else{
+    } else {
       setFilter({ brand: temp_brand, id: temp_id, model: temp_model, avi_model: [] })
     }
   }
@@ -236,13 +219,13 @@ export default function Inventory({ item: items, brand: brands, model: models })
 
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Inventory</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock}/>
+      <ButtonBar hasNewItem={hasNewItem} hasNewItemStock={hasNewItemStock} />
 
       <Container>
         <main className={styles.main}>
@@ -306,13 +289,11 @@ export default function Inventory({ item: items, brand: brands, model: models })
             <ItemList ItemList={itemList} filter={filter} />
           </div>
         </main>
+
+        <div>
+          <Button variant="primary" href="/additem/new" size="lg">เพิ่มสินค้า</Button>{' '}
+        </div>
       </Container>
-
-      <div class="button">
-        <Button variant="primary" href="/additem/new" size="lg">เพิ่มสินค้า</Button>{' '}
-        {/* <Button variant="secondary" size="lg">สแกนบาร์โค้ด</Button>{' '} */}
-      </div>
-
     </div>
   )
 }

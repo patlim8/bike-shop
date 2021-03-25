@@ -39,6 +39,17 @@ tr:nth-child(even) {
   display: none;
 }
 
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.balance-total {
+  background-color: rgb(185, 230, 184);
+}
+
 @media print {
   .no-print, .no-print *{
       display: none !important;
