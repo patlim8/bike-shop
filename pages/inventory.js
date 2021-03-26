@@ -231,7 +231,7 @@ export default function Inventory({ item: items, brand: brands, model: models })
         <main className={styles.main}>
           <Row>
             <Col sm={8}>
-              <h1 className={styles.title}>Stock Manangement</h1>
+              <h1 className={styles.title}>Inventory</h1>
             </Col>
           </Row>
 

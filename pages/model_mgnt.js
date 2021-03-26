@@ -2,29 +2,19 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../components/buttonBar';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
 import Modal from 'react-bootstrap/Modal';
 import Container from 'react-bootstrap/Container'
 
-import SearchBar from '../components/search_name'
-import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { connectToDatabase } from "../util/mongodb";
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select';
-// import { colourOptions, groupedOptions, groupStyles, groupBadgeStyles, animatedComponents, options } from '../pages/data';
-import Link from 'next/link'
-import { ObjectID } from 'bson';
 
 import hasNewItem from '../pages/needItem'
 import hasNewItemStock from '../pages/stock'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ModelMgntList from '../components/modelMgntList'
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-// import Dropdown from 'react-bootstrap/Dropdown';
 
 export async function getServerSideProps() {
     const { db } = await connectToDatabase();
@@ -157,6 +147,8 @@ export default function modelManager({ brand: brands, model: models }) {
     ), [{ label: 'empty', value: 'empty' }]
 
     )
+
+    console.log("brandOption", brandOptions)
 
     const modelOptions = models.map(model => (
         {

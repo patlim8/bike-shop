@@ -1,19 +1,19 @@
 import { connectToDatabase } from "../../../util/mongodb";
 
 export default async (req, res) => {
-  console.log("order2 API method " + req.method)
+  console.log("balance API method " + req.method)
 
   if (req.method === 'GET') {
     const { db } = await connectToDatabase();
-    const order2 = await db
-      .collection("order2")
+    const balance = await db
+      .collection("balance")
       .find({})
       .sort({})
       .limit(20)
       .toArray();
-    res.json(order2);
+    res.json(balance);
   } else if (req.method === 'POST') {
-    console.log("order2 REQ", req.body)
+    console.log("balance REQ", req.body)
     let data = req.body;
 
     // data = JSON.parse(data);
@@ -30,7 +30,7 @@ export default async (req, res) => {
     const { db } = await connectToDatabase();
 
         await db
-        .collection('order2')
+        .collection('balance')
         .insertOne(
             {
             
@@ -50,7 +50,7 @@ export default async (req, res) => {
             } else {
                 console.log('Newly inserted ID', result.insertedId)
                 res.json({
-                message: 'order2 added',
+                message: 'balance added',
                 _id: result.insertedId,
                 data: data
                 });        
@@ -66,7 +66,7 @@ export default async (req, res) => {
     let { id } = data;
     const { db } = await connectToDatabase();
     let doc = await db
-      .collection('order2')
+      .collection('balance')
       .deleteOne({ _id: id })
     res.json({ delete: true, message: 'Delete data', data: {} })
   }

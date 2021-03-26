@@ -11,7 +11,6 @@ import hasNewItem from '../../pages/needItem'
 import hasNewItemStock from '../../pages/stock'
 
 
-// import Table from 'react-bootstrap/Table'
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button';
 import { useForm, Controller } from "react-hook-form";
@@ -411,7 +410,7 @@ export default function Calculation({ item: items, order, rate }) {
 
 
 
-    fetch('/api/order2/sale',
+    fetch('/api/balance/sale',
       {
         method: 'POST',
         mode: 'cors', // no-cors, *cors, same-origin

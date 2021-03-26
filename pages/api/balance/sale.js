@@ -1,19 +1,19 @@
 import { connectToDatabase } from "../../../util/mongodb";
 
 export default async (req, res) => {
-  console.log("order2 API method " + req.method)
+  console.log("balance API method " + req.method)
 
   if (req.method === 'GET') {
     const { db } = await connectToDatabase();
-    const order2 = await db
-      .collection("order2")
+    const balance = await db
+      .collection("balance")
       .find({})
       .sort({})
       .limit(20)
       .toArray();
-    res.json(order2);
+    res.json(balance);
   } else if (req.method === 'POST') {
-    console.log("order2 REQ", req.body)
+    console.log("balance REQ", req.body)
     let data = req.body;
     // data = JSON.parse(data);
     // let title = data.title;
@@ -29,7 +29,7 @@ export default async (req, res) => {
     const { db } = await connectToDatabase();
     
       await db
-        .collection('order2')
+        .collection('balance')
         .insertOne(
           {
           
@@ -50,7 +50,7 @@ export default async (req, res) => {
             } else {
               console.log('Newly inserted ID', result.insertedId)
               res.json({
-                message: 'order2 added',
+                message: 'balance added',
                 _id: result.insertedId,
                 data: data
               });        
@@ -62,7 +62,7 @@ export default async (req, res) => {
 
 
   }  else if (req.method === 'PUT') {
-    console.log("order2 update ++++++++++", req.body)
+    console.log("balance update ++++++++++", req.body)
     let data = req.body
     let data1 = req.body
     let data2 = req.body
@@ -81,7 +81,7 @@ export default async (req, res) => {
 
     if(data.type === "Buy"){
       let doc = await db
-        .collection('order2')
+        .collection('balance')
         .updateOne({_id: id}, { $set: data1 },
           {
             new: true,
@@ -92,7 +92,7 @@ export default async (req, res) => {
       res.json({message: 'Update data', data: data1 });
     }else{
       let doc = await db
-        .collection('order2')
+        .collection('balance')
         .updateOne({_id: id2}, { $set: data2 },
           {
             new: true,
@@ -107,7 +107,7 @@ export default async (req, res) => {
     let { id } = data;
     const { db } = await connectToDatabase();
     let doc = await db
-      .collection('order2')
+      .collection('balance')
       .deleteOne({ _id: id })
     res.json({ delete: true, message: 'Delete data', data: {} })
   }

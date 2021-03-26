@@ -19,6 +19,7 @@ import hasNewItem from '../../pages/needItem'
 import hasNewItemStock from '../../pages/stock'
 
 import { format } from 'date-fns'
+import { Col, Row } from 'react-bootstrap';
 // import _uniqueId from 'lodash/uniqueId';
 
 export default function AddItem({ item: items, brand: brands, model: models }) {
@@ -116,25 +117,29 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
   var data = items;
 
+  const dummyData = {
+    // _id: tempID,
+    product_name: '',
+    avi_model: [],
+    code: '',
+    brand: '',
+    model: '',
+    barcode_id: '',
+    purchase_price: 0,
+    qty: 0,
+    minStock: 0,
+    date: ""
+  }
+
   if (items === null) {
     // Add new item, prepare blank form
     // in this case, use dummyData
-    const dummyData = {
-      // _id: tempID,
-      product_name: '',
-      avi_model: [],
-      code: '',
-      brand: '',
-      model: '',
-      barcode_id: '',
-      purchase_price: 0,
-      qty: 0,
-      minStock: 0,
-      date: ""
-    }
-
     data = dummyData
+  }
 
+  const setDefaultBlank = () => {
+    console.log("setDefaultBlank")
+    data = dummyData
   }
 
   let array = []
@@ -212,7 +217,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
       if (order.qty != 0) {
         console.log(order)
-        fetch('/api/order2/buy', {
+        fetch('/api/balance/buy', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -228,8 +233,8 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
           .then(response => response.json())
           .then(data => {
             console.log(data);
-            alert("Add Order2 :\nResponse from server " + data.message)
-            alert("Newly added _id in Order2", data._id)
+            alert("Add Balance :\nResponse from server " + data.message)
+            alert("Newly added _id in Balance", data._id)
           });
       }
 
@@ -258,7 +263,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
       if (order.qty != 0) {
         console.log(order)
-        fetch('/api/order2/buy', {
+        fetch('/api/balance/buy', {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -274,8 +279,8 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
           .then(response => response.json())
           .then(data => {
             console.log(data);
-            alert("Add Order2 :\nResponse from server " + data.message)
-            alert("Newly added _id in Order2", data._id)
+            alert("Add Balance :\nResponse from server " + data.message)
+            alert("Newly added _id in Balance", data._id)
           });
       }
 
@@ -621,16 +626,22 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
         </main>
 
-        <div>
-          <Button variant="secondary" size="lg">สแกนบาร์โค้ด</Button>&emsp;
-          <Button variant="danger" type="submit" id="del_item" size="lg">ลบสินค้า</Button>&emsp;
+        <Row>
 
-          {data._id === undefined ? <Button type="submit" id="add_item" size="lg">เพิ่ม</Button> : <Button variant="warning" type="submit" id="update_item" size="lg">อัพเดต</Button>}&emsp;
-
-
-          <Button variant="dark" size="lg">กลับ</Button>&emsp;
-          <br /><br /><br />
-        </div>
+          <div>
+            <Col>
+              {data._id === undefined ? <Button type="submit" id="add_item" size="lg">เพิ่ม</Button> :
+                <div>
+                  <Button variant="warning" type="submit" id="update_item" size="lg">อัพเดต</Button> <Button variant="danger" type="submit" id="del_item" size="lg">ลบสินค้า</Button>
+                </div>
+              }
+            </Col>
+            <Col>
+              <Button variant="dark" size="lg">กลับ</Button>&emsp;
+          </Col>
+            <br /><br /><br />
+          </div>
+        </Row>
       </Container>
     </form>
   )

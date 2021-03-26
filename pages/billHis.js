@@ -2,18 +2,12 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonBar from '../components/buttonBar';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table'
 import hasNewItem from '../pages/needItem'
 import hasNewItemStock from '../pages/stock'
-// import DropdownButton from 'react-bootstrap/DropdownButton';
-// import Dropdown from 'react-bootstrap/Dropdown';
 import { connectToDatabase } from "../util/mongodb";
 import { Container } from 'react-bootstrap';
-// import bill from './api/bill';
 
 
 function NewlineText(props) {
@@ -42,7 +36,7 @@ export default function TotalSale({ bill: bills }) {
 
           <br></br><br></br>
 
-          <InputGroup className="mb-3">
+          {/*<InputGroup className="mb-3">
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">เดือน</InputGroup.Text>
             </InputGroup.Prepend>
@@ -51,7 +45,7 @@ export default function TotalSale({ bill: bills }) {
               aria-label="Item name"
               aria-describedby="basic-addon1"
             />
-          </InputGroup>
+          </InputGroup>*/}
 
           <br></br>
 
