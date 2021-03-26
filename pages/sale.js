@@ -68,7 +68,7 @@ export default function Sale() {
             </Card.Body>
           </Card>
 
-          {<Accordion>
+          <Accordion>
             <Card>
               <Accordion.Toggle as={Card.Body} eventKey="0">
                 <CustomToggle eventKey="0"><h1>ลูกค้าช่าง</h1></CustomToggle>
@@ -81,7 +81,7 @@ export default function Sale() {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
-          </Accordion>}
+          </Accordion>
         </div>
       </main>
     </div>

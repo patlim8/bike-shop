@@ -51,11 +51,10 @@ export default function Balance({ balance: balances }) {
             <Table striped bordered hover size="sm">
               <thead>
                 <tr>
-                  <th>id</th>
                   <th>รายการ</th>
+                  <th>วันที่</th>
                   <th>รายรับ</th>
                   <th>รายจ่าย</th>
-                  <th>รวม</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,21 +62,19 @@ export default function Balance({ balance: balances }) {
                   if (data.type === "Buy") {
                     return (
                       <tr>
-                        <td>{data.id}</td>
                         <td>ซื้อ {data.product_name}</td>
+                        <td>{data.date}</td>
                         <td>0</td>
                         <td>{data.expense}</td>
-                        <td></td>
                       </tr>
                     )
                   } else if (data.type === "Sale") {
                     return (
                       <tr>
-                        <td>{data.id}</td>
                         <td>ขายสินค้า {data.date}</td>
+                        <td>{data.date}</td>
                         <td>{data.total}</td>
                         <td>0</td>
-                        <td></td>
                       </tr>
                     )
                   }
