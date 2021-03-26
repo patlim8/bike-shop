@@ -407,7 +407,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
           </InputGroup> */}
 
           {/* รหัสสินค้า: <input type="text" name="code" ref={register} /><br/> */}
-
+{/* 
           <InputGroup>
             <InputGroup.Prepend>
               <InputGroup.Text id="basic-addon1">รหัสสินค้า</InputGroup.Text>
@@ -420,7 +420,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
               defaultValue={data.code}
               ref={register}
             />
-          </InputGroup><br></br>
+          </InputGroup><br></br> */}
 
           {/* ยี่ห้อสินค้า: <select name="brand" ref={register} defaultValue={data.brand}>
           {brands.map((p) => (
@@ -630,7 +630,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
           <div>
             <Col>
-              {data._id === undefined ? <Button type="submit" id="add_item" size="lg">เพิ่ม</Button> :
+              {data._id === undefined ? <Button type="submit" id="add_item" size="lg" onClick={forceUpdate()}>เพิ่ม</Button> :
                 <div>
                   <Button variant="warning" type="submit" id="update_item" size="lg">อัพเดต</Button> <Button variant="danger" type="submit" id="del_item" size="lg">ลบสินค้า</Button>
                 </div>
