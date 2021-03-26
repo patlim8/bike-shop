@@ -131,6 +131,14 @@
   height: 1em;
 }
 
+.floatR {
+  float: right;
+}
+
+.floatL {
+  float:left;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;

@@ -626,22 +626,16 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
         </main>
 
-        <Row>
-
-          <div>
-            <Col>
-              {data._id === undefined ? <Button type="submit" id="add_item" size="lg">เพิ่ม</Button> :
-                <div>
-                  <Button variant="warning" type="submit" id="update_item" size="lg">อัพเดต</Button> <Button variant="danger" type="submit" id="del_item" size="lg">ลบสินค้า</Button>
-                </div>
-              }
-            </Col>
-            <Col>
-              <Button variant="dark" size="lg">กลับ</Button>&emsp;
-          </Col>
-            <br /><br /><br />
+        <div>
+        <Button variant="dark" size="lg" className={styles.floatL}>กลับ</Button>&emsp;
+          {data._id === undefined ? <Button type="submit" id="add_item" size="lg" className={styles.floatR}>เพิ่ม</Button> :
+            <div className={styles.floatR}>
+              <Button variant="warning" type="submit" id="update_item" size="lg">อัพเดต</Button> <Button variant="danger" type="submit" id="del_item" size="lg">ลบสินค้า</Button>
+            </div>
+          } &emsp;&emsp;&emsp;
+              
           </div>
-        </Row>
+        <br /><br /><br />
       </Container>
     </form>
   )

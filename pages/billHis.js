@@ -64,7 +64,7 @@ export default function TotalSale({ bill: bills }) {
               <tbody>
                 {bills.map(data => {
                   return (
-                    <tr>
+                    <tr key={data._id}>
                       <td>{data.orderID}</td>
                       <td>{data.date}</td>
                       {/* <td>{data.productList.map(list =>{

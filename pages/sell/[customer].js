@@ -23,11 +23,11 @@ import Select from 'react-select';
 import { format } from 'date-fns'
 
 function makeid(length) {
-  var result           = '';
-  var characters       = '0123456789';
+  var result = '';
+  var characters = '0123456789';
   var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
 }
@@ -50,8 +50,8 @@ export default function Calculation({ item: items, order, rate }) {
 
   const [rows, setRows] = useState([{ id: 0, product_name: 1, code: 2, brand: 3, model: 4, qty: 5, price: 6 }]);
 
-  
-  
+
+
   // const newOrder = [];
   // const [newOrder, setNewOrder] = useState([]);
   const [totalPriceProducts, setTotalPriceProducts] = useState(0);
@@ -78,21 +78,21 @@ export default function Calculation({ item: items, order, rate }) {
     // console.log(model)
   }
 
-  const itemsOptions = items.map(p =>(
+  const itemsOptions = items.map(p => (
     {
-        label: p.product_name+' '+p.model+' เหลือ '+p.qty, 
-        // value: ''+brand._id,
+      label: p.product_name + ' ' + p.model + ' เหลือ ' + p.qty,
+      // value: ''+brand._id,
       value: [p.product_name, p.model],
 
-    } 
-    )
-    
-)
+    }
+  )
+
+  )
 
 
   useEffect(() => {
     let total = 0
-  
+
     productList.map(p => {
       total = total + Number(p.totalP)
       setTotalPriceProducts(total)
@@ -100,7 +100,7 @@ export default function Calculation({ item: items, order, rate }) {
 
     console.log("productList==", productList)
 
-    
+
   }, [productList]);
 
 
@@ -136,11 +136,11 @@ export default function Calculation({ item: items, order, rate }) {
       setValue(initialValue)
     }, [initialValue])
 
-    if(id === 'qty' || id === 'totalP'){
-    return <input value={value} onChange={onChange} onBlur={onBlur} />
-    }else if(id === 'action'){
-      return <button type="button" onClick={() => deleteRow(value)} className="no-print">ลบ</button> 
-    }else{
+    if (id === 'qty' || id === 'totalP') {
+      return <input value={value} onChange={onChange} onBlur={onBlur} />
+    } else if (id === 'action') {
+      return <button type="button" onClick={() => deleteRow(value)} className="no-print">ลบ</button>
+    } else {
       return <td>{value}</td>
     }
 
@@ -271,7 +271,7 @@ export default function Calculation({ item: items, order, rate }) {
             [columnId]: value,
             ["totalP"]: value * old[rowIndex].price,
           }
-        }else if(index === rowIndex && columnId === 'totalP'){
+        } else if (index === rowIndex && columnId === 'totalP') {
           return {
             ...old[rowIndex],
             [columnId]: value,
@@ -284,16 +284,16 @@ export default function Calculation({ item: items, order, rate }) {
 
 
   const deleteRow = (id) => {
-    
+
     // if (rowIndex > -1) { //Make sure item is present in the array, without if condition, -n indexes will be considered from the end of the array.
-    console.log("productList == ",productList)
+    console.log("productList == ", productList)
     console.log("id == ", id)
     // let rowIndex = productList.findIndex((p) => p._id === id)
     let newArray = productList.filter(p => p.action !== id)
     // productList.filter(p => console.log(p.action))
 
     // console.log("row ",rowIndex)
-    
+
     // delete productList[rowIndex]
 
     setProductList(newArray)
@@ -330,12 +330,12 @@ export default function Calculation({ item: items, order, rate }) {
 
     // s.totalprice_order = parseInt(q.totalprice_order)
     // s.fix_service_price += parseFloat( data.fix_service_price)
-    
+
     let date = new Date()
     s['date'] = format(date, 'yyyy-LL-dd')
-    
 
-    console.log("s == ",s)
+
+    console.log("s == ", s)
 
     productList.forEach(p => {
       let q = { product_name: '', qty: 0, unit: '', price: 0, totalperProduct: 0 }
@@ -350,7 +350,7 @@ export default function Calculation({ item: items, order, rate }) {
     })
     console.log('billList  ', billList)
     // console.log('productList  ', productList)
-    
+
 
 
 
@@ -458,7 +458,7 @@ export default function Calculation({ item: items, order, rate }) {
 
 
   const onSubmitTest = (data) => {
-    
+
     productList.forEach(p => {
       let q = { product_name: '', qty: 0, unit: '', price: 0, totalperProduct: 0 }
 
@@ -473,7 +473,7 @@ export default function Calculation({ item: items, order, rate }) {
     console.log('billList  ', billList)
     // console.log('productList  ', productList)
 
-    
+
 
 
     let bill = { orderID: makeid(16), date: '', productList: billList, total: data.total, receive: data.receive, change: data.change }
@@ -516,7 +516,7 @@ export default function Calculation({ item: items, order, rate }) {
     console.log("items ", items)
 
 
-    let p = { _id: '', display_name: '', product_name: name, code: '', barcode: data.barcode, brand: '', model: model, qty: data.qty, price: 0, totalP: 0 , action: ''}
+    let p = { _id: '', display_name: '', product_name: name, code: '', barcode: data.barcode, brand: '', model: model, qty: data.qty, price: 0, totalP: 0, action: '' }
     // let q = { product_name: '', qty: data.qty, unit: '', price: 0, totalperProduct: 0 }
 
     items.map(r => {
@@ -525,7 +525,7 @@ export default function Calculation({ item: items, order, rate }) {
       if (r.product_name === p.product_name && r.model === p.model) {
         console.log("condition 1")
         // console.log("productname == ",p.product_name, p.model)
-        p.display_name = r.product_name+' '+r.model
+        p.display_name = r.product_name + ' ' + r.model
         // p.product_name = r.product_name 
         p._id = r._id
         p.code = r.code
@@ -542,11 +542,11 @@ export default function Calculation({ item: items, order, rate }) {
 
         productList.push(p)
         // console.log("productList ", productList)
-        
-      }else if(r.barcode_id == p.barcode){
+
+      } else if (r.barcode_id == p.barcode) {
         console.log("condition 2")
 
-        p.display_name = r.product_name+' '+r.model
+        p.display_name = r.product_name + ' ' + r.model
         p._id = r._id
         p.code = r.code
         p.brand = r.brand
@@ -564,7 +564,7 @@ export default function Calculation({ item: items, order, rate }) {
 
     let total_price_products = 0
 
-    productList.map(p =>{
+    productList.map(p => {
       total_price_products = Number(total_price_products) + Number(p.totalP)
       setTotalPriceProducts(total_price_products)
     })
@@ -592,21 +592,21 @@ export default function Calculation({ item: items, order, rate }) {
               Sale - Calculation
         </h1>
 
-        <br /><br />
+            <br /><br />
 
-        <div className="no-print">
-          
-        ชื่อสินค้า: <Select
-          // defaultValue={array}
-          onChange={(e) => onChangeNameModel(e)}
-          // onBlur={onBlur}
-          // value={value}  // this is what you need to do
-          // isMulti
-          // options={groupedOptions}
-          options={itemsOptions}
-          // options={option}
-          // ref={register}
-        /><br />
+            <div className="no-print">
+
+              ชื่อสินค้า: <Select
+                // defaultValue={array}
+                onChange={(e) => onChangeNameModel(e)}
+                // onBlur={onBlur}
+                // value={value}  // this is what you need to do
+                // isMulti
+                // options={groupedOptions}
+                options={itemsOptions}
+              // options={option}
+              // ref={register}
+              /><br />
 
               <InputGroup className="mb-3" className="no-print">
                 <InputGroup.Prepend>
@@ -640,8 +640,8 @@ export default function Calculation({ item: items, order, rate }) {
           </main>
 
           <main >
-          <h1 className="text-center" className="print-only hide">ใบส่งของชั่วคราว</h1>
-          <div className="print-only hide">
+            <h1 className="text-center" className="print-only hide">ใบส่งของชั่วคราว</h1>
+            <div className="print-only hide">
               <table>
                 <tbody id="addressTbody">
                   <tr>
@@ -677,13 +677,13 @@ export default function Calculation({ item: items, order, rate }) {
             </div>
 
             <div>
-            <Table
-              columns={columns}
-              data={productList}
-              updateMyData={updateMyData}
-              skipPageReset={skipPageReset}
-            />
-          </div>
+              <Table
+                columns={columns}
+                data={productList}
+                updateMyData={updateMyData}
+                skipPageReset={skipPageReset}
+              />
+            </div>
 
 
 
@@ -705,7 +705,7 @@ export default function Calculation({ item: items, order, rate }) {
 
 
 
-{/* <div className="no-print">
+            {/* <div className="no-print">
             <InputGroup className="mb-3">
               <InputGroup.Prepend>
                 <InputGroup.Text id="basic-addon1">ราคารวม</InputGroup.Text>
@@ -762,89 +762,89 @@ export default function Calculation({ item: items, order, rate }) {
             </div>
 
           </main>
-          </Container>
-        
+        </Container>
+
       </form>
 
       <Container>
 
-      <form onSubmit={handleSubmit2(onSubmitToDatabase)}>
+        <form onSubmit={handleSubmit2(onSubmitToDatabase)}>
 
-        <div className="no-print">
-
-
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-            <InputGroup.Text id="basic-addon1">ค่าซ่อม</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              name="fix_service_price" ref={register2}
-              placeholder="ราคา"
-              type="number"
-              onChange={e => setFixingPrice(e.target.value)}
-            />
-          </InputGroup>
+          <div className="no-print">
 
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">จำนวนที่ต้องชำระ</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              readOnly
-              name="total" ref={register2}
-              placeholder=""
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              value={totalPriceProducts + Number(fixing_price)}
-            />
-          </InputGroup>
+            <InputGroup className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="basic-addon1">ค่าซ่อม</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                name="fix_service_price" ref={register2}
+                placeholder="ราคา"
+                type="number"
+                onChange={e => setFixingPrice(e.target.value)}
+              />
+            </InputGroup>
 
 
-
-
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              name="receive" ref={register2}
-              placeholder=""
-              type="number"
-              onChange={e => setReceiveValue(e.target.value)}
-              value={receive_value}
-            />
-          </InputGroup>
-
-          <button type="button" className="no-print" onClick={e => addReceive(5000)}>5000</button>
-          <button type="button" className="no-print" onClick={e => addReceive(1000)}>1000</button>
-          <button type="button" className="no-print" onClick={e => addReceive(500)}>500</button>
-          <button type="button" className="no-print" onClick={e => addReceive(100)}>100</button>
-          <button type="button" className="no-print" onClick={e => addReceive(50)}>50</button>
-          <button type="button" className="no-print" onClick={e => addReceive(20)}>20</button>
-          <button type="button" className="no-print" onClick={e => addReceive(10)}>10</button>
-          <button type="button" className="no-print" onClick={e => addReceive(5)}>5</button>
-          <button type="button" className="no-print" onClick={e => addReceive(1)}>1</button>
-
-          <br /><br />
-
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">เงินทอน</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              readOnly
-              name="change" ref={register2}
-              placeholder=""
-              aria-label="Item name"
-              aria-describedby="basic-addon1"
-              value={receive_value - (totalPriceProducts + Number(fixing_price))}
-            />
-          </InputGroup>
+            <InputGroup className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="basic-addon1">จำนวนที่ต้องชำระ</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                readOnly
+                name="total" ref={register2}
+                placeholder=""
+                aria-label="Item name"
+                aria-describedby="basic-addon1"
+                value={totalPriceProducts + Number(fixing_price)}
+              />
+            </InputGroup>
 
 
 
-          {/* <InputGroup className="mb-3">
+
+            <InputGroup className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                name="receive" ref={register2}
+                placeholder=""
+                type="number"
+                onChange={e => setReceiveValue(e.target.value)}
+                value={receive_value}
+              />
+            </InputGroup>
+
+            <button type="button" className="no-print" onClick={e => addReceive(5000)}>5000</button>
+            <button type="button" className="no-print" onClick={e => addReceive(1000)}>1000</button>
+            <button type="button" className="no-print" onClick={e => addReceive(500)}>500</button>
+            <button type="button" className="no-print" onClick={e => addReceive(100)}>100</button>
+            <button type="button" className="no-print" onClick={e => addReceive(50)}>50</button>
+            <button type="button" className="no-print" onClick={e => addReceive(20)}>20</button>
+            <button type="button" className="no-print" onClick={e => addReceive(10)}>10</button>
+            <button type="button" className="no-print" onClick={e => addReceive(5)}>5</button>
+            <button type="button" className="no-print" onClick={e => addReceive(1)}>1</button>
+
+            <br /><br />
+
+            <InputGroup className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="basic-addon1">เงินทอน</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                readOnly
+                name="change" ref={register2}
+                placeholder=""
+                aria-label="Item name"
+                aria-describedby="basic-addon1"
+                value={receive_value - (totalPriceProducts + Number(fixing_price))}
+              />
+            </InputGroup>
+
+
+
+            {/* <InputGroup className="mb-3">
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">จำนวนที่ได้รับ</InputGroup.Text>
           </InputGroup.Prepend>
@@ -858,27 +858,21 @@ export default function Calculation({ item: items, order, rate }) {
 
 
 
-        </div>
+          </div>
 
-        <br /><br /><br />
+          <br /><br />
 
-        <div className="no-print">
-          
-            {/* <Button variant="secondary">สแกนบาร์โค้ด</Button>{' '} */}
-            {/* <Button href="/payment" type="submit">จ่าย</Button>{' '} */}
-            <Button size="lg" variant="dark" type="submit">จ่าย</Button>&emsp;
+          <div className="no-print">
 
-            <Button size="lg" onClick={() => window.print()}>บิล</Button>&emsp;
+            <Button variant="dark" href="/sale" size="lg" className={styles.floatL}>ย้อนกลับ</Button>&emsp;
+            <div className={styles.floatR}>
+              <Button size="lg" variant="danger" type="submit">จ่าย</Button>&emsp;
+              <Button size="lg" onClick={() => window.print()}>บิล</Button>&emsp;
+            </div>
 
-
-
-            <Button variant="danger" href="/sale" size="lg">ย้อนกลับ</Button>&emsp;
-            <br /><br /><br />
-          
-          {/* <button>จ่าย</button> */}
-        </div>
-
-      </form>
+          </div>
+          <br /><br /><br />
+        </form>
       </Container>
     </div>
   )

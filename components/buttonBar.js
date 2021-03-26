@@ -21,7 +21,7 @@ export default function ButtonBar({hasNewItem, hasNewItemStock}) {
     newItemStock = true
   }
 
-  const navDropdownTitle = (<h6>การแจ้งเตือน{newItem == true || newItemStock == true ? <Badge variant="secondary">New</Badge> : null}</h6>);
+  const navDropdownTitle = (<h7>การแจ้งเตือน{newItem == true || newItemStock == true ? <Badge variant="secondary">New</Badge> : null}</h7>);
 
   return (
     <div>
