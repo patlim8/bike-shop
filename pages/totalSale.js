@@ -58,7 +58,6 @@ export default function TotalSale({ item: items }) {
                 {items.map(data => {
                   return (
                     <tr key={data._id}>
-                      
                       <td>{data.product_name}</td>
                       <td>{data.brand}</td>
                       <td>{data.model}</td>

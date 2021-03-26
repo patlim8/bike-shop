@@ -61,7 +61,7 @@ export default function Balance({ balance: balances }) {
                 {balances.map(data => {
                   if (data.type === "Buy") {
                     return (
-                      <tr>
+                      <tr key={data._id}>
                         <td>ซื้อ {data.product_name}</td>
                         <td>{data.date}</td>
                         <td>0</td>
@@ -70,7 +70,7 @@ export default function Balance({ balance: balances }) {
                     )
                   } else if (data.type === "Sale") {
                     return (
-                      <tr>
+                      <tr key={data._id}>
                         <td>ขายสินค้า {data.date}</td>
                         <td>{data.date}</td>
                         <td>{data.total}</td>
