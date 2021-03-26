@@ -17,9 +17,11 @@ export default async (req, res) => {
   } else if (req.method === 'POST') {
     console.log("ADDING ", req.body)
     let data = req.body;
+    
 
 
-    let {  product_name, qty, date } = data;
+    let {  product_name, brand, model, qty, date } = data;
+    console.log("data == ", data)
     
     
     // จะได้ objectID ถ้าใช้โค้ดล่าง อันบนเหมือนจะสร้าง _id เองได้
@@ -30,6 +32,9 @@ export default async (req, res) => {
       .updateOne(
         {
           product_name: product_name,
+          brand: brand,
+          model: model
+
         },
         { $inc: {qty: + Number(data.qty)} },
         { upsert: true }

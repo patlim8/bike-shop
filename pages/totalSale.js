@@ -44,9 +44,10 @@ export default function TotalSale({ item: items }) {
           </InputGroup>*/}
 
           <div>
-            <Table striped bordered hover size="sm">
+            <Table striped bordered hover size="sm" >
               <thead>
                 <tr>
+                  
                   <th>ชื่อสินค้า</th>
                   <th>ยี่ห้อสินค้า</th>
                   <th>รุ่นสินค้า</th>
