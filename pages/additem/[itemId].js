@@ -32,6 +32,8 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [selectedModel, setSelectedModel] = useState([]);
 
+  const [brand, setBrand] = useState([]);
+  const [model, setModel] = useState([]);
   const [aviArray, setAviArray] = useState([]);
 
 
@@ -116,7 +118,9 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
 
   var data = items;
+  // setModel(data.model)
 
+  
   const dummyData = {
     // _id: tempID,
     product_name: '',
@@ -130,23 +134,24 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
     minStock: 0,
     date: ""
   }
-
+  
   if (items === null) {
     // Add new item, prepare blank form
     // in this case, use dummyData
     data = dummyData
   }
 
-  const setDefaultBlank = () => {
-    console.log("setDefaultBlank")
-    data = dummyData
-  }
+  // const setDefaultBlank = () => {
+  //   console.log("setDefaultBlank")
+  //   data = dummyData
+  // }
 
   let array = []
 
-  data.avi_model.map(avi => array.push(modelOptions[modelOptions.findIndex((model) => model.value == avi)]))
+  data.avi_model.map(avi => array.push(modelOptions[modelOptions.findIndex((model) => model.value == avi)], setAviArray(array) ))
+  
 
-  console.log(array)
+  // console.log(array)
 
   // console.log("id ==", data._id)
 
@@ -160,9 +165,16 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
     data['avi_model'] = []
 
     // temp_avi.map(avi => data['avi_model'].push(avi.value))
+    if(selectedBrand != '' && selectedModel != ''){
+      console.log("ok")
+      data['brand'] = selectedBrand
+      data['model'] = selectedModel
+    }else{
+      data['brand'] = brand
+      data['model'] = model
+    }
 
-    data['brand'] = selectedBrand
-    data['model'] = selectedModel
+    // console.log(data['brand'])
 
     let date = new Date()
     data['date'] = format(date, 'yyyy-LL-dd')
@@ -316,14 +328,14 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
   }
 
-  console.log(brandOptions)
+  // console.log(brandOptions)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Head>
         <title>
           {data._id === undefined ? 'New Item' : 'Edit'}
-          {console.log('data == ', data)}
+          {/* {console.log('data == ', data)} */}
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -446,7 +458,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
               <Select
                 onChange={(e) => props.onChange(handleBrandChange(e))}
                 options={brandOptions}
-                defaultValue={brandOptions[brandOptions.findIndex((brand) => brand.value == data.brand)]}
+                defaultValue={brandOptions[brandOptions.findIndex((brand) => brand.value == data.brand, setBrand(data.brand))]}
                 // value={props.onChange}
                 ref={register} />
             )}
@@ -479,7 +491,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
               <Select
                 onChange={(e) => props.onChange(handleModelChange(e))}
                 options={modelListOptions}
-                defaultValue={modelOptions[modelOptions.findIndex((model) => model.value == data.model)]}
+                defaultValue={modelOptions[modelOptions.findIndex((model) => model.value == data.model, setModel(data.model))]}
 
                 // value={props.onChange}
                 ref={register} />
@@ -514,7 +526,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
 
 
 
-        รุ่นที่ใช้ได้: <Controller
+        {/* รุ่นที่ใช้ได้: <Controller
             name="avi_model"
             type="select"
             control={control}
@@ -534,7 +546,20 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
                 ref={register}
               />
             )}
-          />
+          /> */}
+
+        รุ่นที่ใช้ได้: <Select
+                defaultValue={array}
+                
+                  // this is what you need to do
+                isMulti
+                // options={groupedOptions}
+                options={modelOptions}
+                // options={option}
+                ref={register}
+              />
+            
+          
 
           {/* รุ่นที่ใช้ได้: <Select
             name="avi_model"
