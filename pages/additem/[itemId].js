@@ -652,7 +652,7 @@ export default function AddItem({ item: items, brand: brands, model: models }) {
         </main>
 
         <div>
-        <Button variant="dark" size="lg" className={styles.floatL}>กลับ</Button>&emsp;
+        <Button variant="dark" size="lg" className={styles.floatL} href="/inventory">กลับ</Button>&emsp;
           {data._id === undefined ? <Button type="submit" id="add_item" size="lg" className={styles.floatR}>เพิ่ม</Button> :
             <div className={styles.floatR}>
               <Button variant="warning" type="submit" id="update_item" size="lg">อัพเดต</Button> <Button variant="danger" type="submit" id="del_item" size="lg">ลบสินค้า</Button>
