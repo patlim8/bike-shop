@@ -932,17 +932,25 @@ export async function getServerSideProps({ query }, props) {
       },
     };
   }
-  else if (query.customer === 'special') {
+  else if (query.customer === 'special1') {
 
-    let percent = query.customer
-    // percent.split("x")
-    console.log("percent === ", percent.split("x"))
-    console.log("number === ", percent.split("x")[1])
+    
     return {
       props: {
         item: JSON.parse(JSON.stringify(item)),
         order: JSON.parse(JSON.stringify(order)),
-        rate: JSON.parse(Number(1 + Number(percent.split("x")[1]) / 100))
+        rate: JSON.parse(1.1)
+      },
+    };
+  }
+  else if (query.customer === 'special2') {
+
+    
+    return {
+      props: {
+        item: JSON.parse(JSON.stringify(item)),
+        order: JSON.parse(JSON.stringify(order)),
+        rate: JSON.parse(1.1)
       },
     };
   }

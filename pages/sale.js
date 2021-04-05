@@ -75,9 +75,9 @@ export default function Sale() {
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <Button variant="secondary" value={10} onClick={Percent}>ราคาปลีก</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                  <Button variant="secondary" value={20} onClick={Percent}>ราคาส่ง</Button><br /><br />
-                  <Button variant="primary" href={`/sell/specialx${percent}`}>ตกลง</Button>
+                  <Button variant="secondary" href={`/sell/special1`}>ราคาปลีก</Button>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <Button variant="secondary" href={`/sell/special2`}>ราคาส่ง</Button><br /><br />
+                  {/* <Button variant="primary" href={`/sell/specialx${percent}`}>ตกลง</Button> */}
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
